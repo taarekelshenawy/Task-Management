@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import signUpSchema from "../utils/SignupValidate";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Signup } from "../Store/AuthSlice";
+import { useAppDispatch } from "../Store/hooks";
+import { useAppSelector } from "../Store/hooks";
 
 
 type Inputs = {
@@ -16,6 +19,8 @@ type Inputs = {
 };
 
 export default function SignUp() {
+    const dispatch=useAppDispatch();
+    const {loading,error}=useAppSelector((state)=>state.Auth)
   const {
     register,
     handleSubmit,
@@ -24,7 +29,15 @@ export default function SignUp() {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = (data) =>{
+   const result= dispatch(Signup(data));
+   if(Signup.fulfilled.match(result)){
+    alert('success')
+   }else{
+    alert(error)
+   }
+
+  };
 
   return (
     <div className="bg-[#F9F9FF] pb-14">
@@ -174,7 +187,8 @@ export default function SignUp() {
             type="submit"
             className="bg-[#003D9B] text-white p-3 rounded-sm font-semibold"
           >
-            Create Account
+            {loading ? '...loading' : 'Create Account'}
+           
           </button>
         </div>
 
