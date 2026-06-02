@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 
+
 type signUpData = {
   email: string;
   password: string;
@@ -24,7 +25,7 @@ export const Signup = createAsyncThunk(
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-             apikey: "sb_publishable_U3Wle88gCYWWTUPzW2XL-A_2Egw6YkF"
+             apikey:import.meta.env.VITE_API_KEY
           
           },
           body: JSON.stringify(payload),
