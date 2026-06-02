@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Signup } from "../Store/AuthSlice";
 import { useAppDispatch } from "../Store/hooks";
 import { useAppSelector } from "../Store/hooks";
+import { toast } from "react-toastify";
 
 
 type Inputs = {
@@ -32,9 +33,9 @@ export default function SignUp() {
   const onSubmit: SubmitHandler<Inputs> = (data) =>{
    const result= dispatch(Signup(data));
    if(Signup.fulfilled.match(result)){
-    alert('success')
+       toast.success("Account created successfully 🎉");
    }else{
-    alert(error)
+    toast.error(error)
    }
 
   };

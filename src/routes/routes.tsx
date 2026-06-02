@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import SignUp from "../pages/SignUp";
 import Layout from "../Layout";
+import { ToastContainer } from 'react-toastify';
 
 export default function routes() {
    const router = createBrowserRouter([
@@ -21,6 +22,10 @@ export default function routes() {
   },
 ]);
   return (
+    <>
+      <ToastContainer/>
   <RouterProvider router={router}/>
+    </>
+  
   )
 }
