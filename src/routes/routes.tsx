@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import SignUp from "../pages/SignUp";
+import Login from "../pages/Login";
 import Layout from "../Layout";
 import { ToastContainer } from 'react-toastify';
 
@@ -16,6 +17,10 @@ export default function routes() {
       {
         path:'signUp',
         element: <SignUp/>,
+      },
+      {
+        path:'login',
+        element: <Login/>,
       },
      
     ],

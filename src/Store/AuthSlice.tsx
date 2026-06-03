@@ -12,6 +12,12 @@ type signUpData = {
   };
 };
 
+type loginData = {
+  email: string;
+  password: string;
+ 
+};
+
 export const Signup = createAsyncThunk(
   "sign-up/Auth",
   async (payload:signUpData, thunkAPI) => {
@@ -53,10 +59,65 @@ export const Signup = createAsyncThunk(
     }
   }
 );
-const initialState = {
+
+// login function
+export const signIn =createAsyncThunk('login/Auth',
+  async(data:loginData,thunkAPI)=>{
+    console.log(data)
+    const{rejectWithValue}=thunkAPI;
+    try{
+      const response = await fetch("https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/token?grant_type=password",{
+         method: "POST", // Specify HTTP method
+        headers: {
+              "Content-Type": "application/json",
+              apikey:import.meta.env.VITE_API_KEY
+            
+            },
+          body: JSON.stringify(data)
+          })
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        return rejectWithValue(
+            errorData?.msg ||
+            errorData?.error ||
+            "Signup failed"
+        );
+      }
+      console.log(response)
+      return response;
+
+    }
+    catch(error){
+      if(error instanceof Error){
+        return rejectWithValue(error.message)
+      }
+
+    }
+
+  }
+)
+
+
+
+
+
+
+type stateProps={
+   loading: boolean,
+  error: null | string,
+  success: boolean,
+  token:string,
+
+}
+
+
+
+const initialState:stateProps = {
   loading: false,
   error: null as string | null,
   success: false,
+  token:'',
 };
 
 const Auth =createSlice({
@@ -76,6 +137,25 @@ const Auth =createSlice({
       })
 
       .addCase(Signup.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string|| "Something went wrong";
+        state.success = false;
+      });
+
+      /// login 
+       builder.addCase(signIn.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+        state.success = false;
+      })
+
+      .addCase(signIn.fulfilled, (state,action) => {
+        state.loading = false;
+        // state.token=action.payload as string
+        state.success = true;
+      })
+
+      .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string|| "Something went wrong";
         state.success = false;
