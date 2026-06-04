@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 import SignUpIcon from "../../assets/Icon.svg";
+import { useAppDispatch } from "../../Store/hooks";
+import { logoutLocal } from "../../Store/AuthSlice";
+import { useNavigate } from "react-router-dom";
 import {
   FolderKanban,
   ListTodo,
@@ -10,7 +13,19 @@ import {
   LogOut,
 } from "lucide-react";
 
+
 export default function Sidebar() {
+    const dispatch =useAppDispatch();
+    const navigate =useNavigate()
+    
+    async function SignOut(){
+       await dispatch(logoutLocal());
+       navigate('/login')
+    //    if(logoutLocal.fulfilled.match(result)){
+    //     navigate('/login')
+
+    //    }
+    }
   return (
     <aside className="w-64 h-screen bg-[#F1F3FF] flex flex-col">
       {/* Logo */}
@@ -84,6 +99,7 @@ export default function Sidebar() {
         </button>
 
         <button
+        onClick={()=>SignOut()}
           className="w-full flex items-center font-semibold gap-3 p-3 rounded-lg text-red-600 hover:bg-red-50"
         >
           <LogOut size={20} />
