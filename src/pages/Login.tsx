@@ -7,6 +7,7 @@ import { signIn } from "../Store/AuthSlice";
 import { useAppDispatch } from "../Store/hooks";
 import { useAppSelector } from "../Store/hooks";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 
 type Inputs = {
@@ -16,6 +17,7 @@ type Inputs = {
 
 export default function Login() {
     const dispatch=useAppDispatch();
+    const navigate =useNavigate()
     const {loading,error}=useAppSelector((state)=>state.Auth)
   const {
     register,
@@ -28,6 +30,7 @@ export default function Login() {
   const onSubmit: SubmitHandler<Inputs> = async(data) =>{
    const result= await dispatch(signIn(data));
    if(signIn.fulfilled.match(result)){
+    navigate("/")
        toast.success("Login successful 🎉");
    }
    if (signIn.rejected.match(result)) {

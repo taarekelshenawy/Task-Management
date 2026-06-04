@@ -86,7 +86,7 @@ export const signIn =createAsyncThunk('login/Auth',
         );
       }
       const info = await response.json();
-      console.log(info)
+      localStorage.setItem("token",info.access_token)
       return info;
 
     }
@@ -168,7 +168,7 @@ const initialState:stateProps = {
   loading: false,
   error: null as string | null,
   success: false,
-  token:'',
+  token: localStorage.getItem('token') || '',
 };
 
 const Auth =createSlice({
@@ -202,7 +202,7 @@ const Auth =createSlice({
 
       .addCase(signIn.fulfilled, (state,action) => {
         state.loading = false;
-        // state.token=action.payload as string
+        state.token=action.payload as string;
         state.success = true;
       })
 
