@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { json } from "zod";
 
 
 
@@ -84,8 +85,9 @@ export const signIn =createAsyncThunk('login/Auth',
             "Signup failed"
         );
       }
-      console.log(response)
-      return response;
+      const info = await response.json();
+      console.log(info)
+      return info;
 
     }
     catch(error){
@@ -98,6 +100,55 @@ export const signIn =createAsyncThunk('login/Auth',
   }
 )
 
+
+// forgot password
+
+type forgotPasswordData = {
+  email: string;
+};
+
+export const forgotPassword = createAsyncThunk(
+  "forgotPassword/Auth",
+  async (data: forgotPasswordData, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
+    
+
+    try {
+      const response = await fetch(
+        "https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/recover",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_API_KEY,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.log(errorData)
+
+        return rejectWithValue(
+          errorData?.msg ||
+            errorData?.error_description ||
+            errorData?.error ||
+            "Failed to send reset email"
+        );
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.log(error)
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+
+      return rejectWithValue("Unknown error");
+    }
+  }
+);
 
 
 
@@ -160,6 +211,21 @@ const Auth =createSlice({
         state.error = action.payload as string|| "Something went wrong";
         state.success = false;
       });
+
+      // forgot 
+      builder
+  .addCase(forgotPassword.pending, (state) => {
+    state.loading = true;
+    state.error = null;
+  })
+  .addCase(forgotPassword.fulfilled, (state) => {
+    state.loading = false;
+    state.success = true;
+  })
+  .addCase(forgotPassword.rejected, (state, action) => {
+    state.loading = false;
+    state.error = action.payload as string;
+  });
     }
 })
 

@@ -38,6 +38,13 @@ department: z.string().default("")
   path: ["confirmPassword"],
 });
 
+export const EmailSchema = z.object({
+  email: z
+    .string()
+    .min(1, "Email is required")
+    .email("Please enter a valid email"),
+});
+
 export const LoginSchema = z
   .object({
      email: z.string().email("Invalid email format"),
