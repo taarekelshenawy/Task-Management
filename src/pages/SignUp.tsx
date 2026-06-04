@@ -1,7 +1,7 @@
 import SignUpIcon from "../assets/Icon.svg";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import signUpSchema from "../utils/SignupValidate";
+import signUpSchema from "../utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Signup } from "../Store/AuthSlice";
 import { useAppDispatch } from "../Store/hooks";

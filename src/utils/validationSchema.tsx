@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const signUpSchema = z
   .object({
-     email: z.string().email("Invalid email format"),
+   email: z.string().email("Invalid email format"),
   password: z
     .string()
     .min(8, "Password must be at least 8 characters")
@@ -29,7 +29,7 @@ const signUpSchema = z
         message: "No leading or trailing spaces",
       }),
 
-department: z.string().default("")
+department: z.string()
    
   })
 
@@ -60,6 +60,25 @@ export const LoginSchema = z
 
 });
 
+export const reset=z
+  .object({
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters")
+    .max(64, "Password must be at most 64 characters")
+    .regex(/^\S+$/, "Password must not contain spaces")
+    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
+    .regex(/[a-z]/, "Must contain at least one lowercase letter")
+    .regex(/[0-9]/, "Must contain at least one number")
+    .regex(/[!@#$%^&*]/, "Must contain at least one special character"),
+ confirmPassword: z.string().min(1, "Confirm password is required"),
+ 
 
-  export default signUpSchema
+  }).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
+});
+
+
+  export default signUpSchema;
   

@@ -6,6 +6,7 @@ import Forgetpassword from "../pages/Forgetpassword";
 import { ToastContainer } from 'react-toastify';
 import Dashboard from "../pages/Dashboard";
 import Guard from "../Componenets/Guard/Guard";
+import Resetpassword from "../pages/Resetpassword";
 
 
 export default function routes() {
@@ -34,6 +35,10 @@ export default function routes() {
        {
         path:'forgot-password',
         element: <Forgetpassword/>,
+      },
+      {
+        path:'reset-password',
+        element: <Resetpassword/>,
       },
      
     ],

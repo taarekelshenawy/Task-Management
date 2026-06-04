@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../Store/hooks";
 import { forgotPassword } from "../Store/AuthSlice";
-import { EmailSchema } from "../utils/SignupValidate";
+import { EmailSchema } from "../utils/validationSchema";
 import { toast } from "react-toastify";
 
 type Inputs = {
@@ -17,7 +17,6 @@ export default function Forgetpassword() {
   const dispatch = useAppDispatch();
 
   const { loading} = useAppSelector((state) => state.Auth);
-
   const [showMessage, setShowMessage] = useState(false);
   const [email, setEmail] = useState("");
   const [timeLeft, setTimeLeft] = useState(300);

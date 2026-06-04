@@ -1,13 +1,13 @@
 import SignUpIcon from "../assets/Icon.svg";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
-import { LoginSchema } from "../utils/SignupValidate";
+import { LoginSchema } from "../utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "../Store/AuthSlice";
 import { useAppDispatch } from "../Store/hooks";
 import { useAppSelector } from "../Store/hooks";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 type Inputs = {
@@ -18,7 +18,8 @@ type Inputs = {
 export default function Login() {
     const dispatch=useAppDispatch();
     const navigate =useNavigate()
-    const {loading,error}=useAppSelector((state)=>state.Auth)
+    const {loading}=useAppSelector((state)=>state.Auth);
+    
   const {
     register,
     handleSubmit,
@@ -110,9 +111,9 @@ export default function Login() {
         {/* LOGIN LINK */}
         <p className="text-center text-sm text-gray-600 mt-8">
          Don't have an account?{" "}
-          <a href="/login" className="text-blue-600 font-medium hover:underline">
+          <Link to="/signUP" className="text-blue-600 font-medium hover:underline">
           Sign Up
-          </a>
+          </Link>
         </p>
       </form>
     </div>

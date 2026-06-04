@@ -12,17 +12,16 @@ export default function Dashboard() {
     const {user,loading}=useAppSelector((state)=>state.User)
 
     useEffect(()=>{
-        dispatch(getUser())
+    dispatch(getUser())
     },[dispatch])
-    console.log(user)
-const userName =`${user?.user_metadata.name.split(' ')[0].slice(0,1).toUpperCase()}
- ${user?.user_metadata.name.split(' ')[1].slice(0,1).toUpperCase()}`;
- console.log(userName)
+  
+    const userName =`${user?.user_metadata.name.split(' ')[0].slice(0,1).toUpperCase()}
+    ${user?.user_metadata.name.split(' ')[1].slice(0,1).toUpperCase()}`;
+
 
   return (
     <div className="flex">
         <Sidebar/>
-       
         <div className="w-full flex flex-col ">
              {loading ? <div className="p-4">...loading </div> :
                <div className="w-full  bg-[#F9F9FF] flex justify-end p-3">
