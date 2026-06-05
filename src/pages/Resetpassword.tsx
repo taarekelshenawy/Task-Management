@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../Store/hooks";
 import {reset } from "../utils/validationSchema";
-import { resetPassword } from "../Store/AuthSlice";
+import { resetPassword } from "../Store/Auth/act/Resetpassword";
 import { toast } from "react-toastify";
 
 
@@ -17,7 +17,6 @@ type Inputs = {
 
 export default function Resetpassword() {
   const dispatch = useAppDispatch();
-
   const { loading} = useAppSelector((state) => state.Auth);
 
 
@@ -36,7 +35,7 @@ export default function Resetpassword() {
     const {confirmPassword, ...payload } = data;
     const result= await dispatch(resetPassword(payload))
     if(resetPassword.fulfilled.match(result)){
-        toast.success("success reset")
+        toast.success("Your password has been updated successfully.")
     }
    
   };
@@ -64,9 +63,7 @@ export default function Resetpassword() {
 
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
-              {/* PASSWORD + CONFIRM */}
-          {/* <div className="flex gap-5 items-center max-sm:flex-col max-sm:items-start"> */}
-            {/* PASSWORD */}
+         
             <div className="flex flex-col gap-2 w-full">
               <label className="text-[#4F5F7B] font-bold">Password</label>
 
@@ -85,7 +82,6 @@ export default function Resetpassword() {
               )}
             </div>
 
-            {/* CONFIRM PASSWORD */}
             <div className="flex flex-col gap-2 w-full">
               <label className="text-[#4F5F7B] font-bold">
                 Confirm Password
@@ -107,10 +103,10 @@ export default function Resetpassword() {
             </div>
 
             <div>
-                    {/* PASSWORD RULES UI */}
+
           <ul className="space-y-2 bg-[#E8EDFF] p-4 rounded-xl text-[#434654]">
             <li className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full border-2 border-green-500 flex items-center justify-center text-[8px] text-green-500">
+              <span className="w-3 h-3 rounded-full border-2 border-green-500 flex items-center justify-center text-[8px] text-green-500">
                 ✔
               </span>
               <span>8 - 64 characters</span>
@@ -128,9 +124,6 @@ export default function Resetpassword() {
           </ul>
 
             </div>
-
-
-          {/* </div> */}
           </div>
 
           <button

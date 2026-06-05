@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { LoginSchema } from "../utils/validationSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "../Store/AuthSlice";
+import { signIn } from "../Store/Auth/act/Signin";
 import { useAppDispatch } from "../Store/hooks";
 import { useAppSelector } from "../Store/hooks";
 import { toast } from "react-toastify";
@@ -19,7 +19,7 @@ export default function Login() {
     const dispatch=useAppDispatch();
     const navigate =useNavigate()
     const {loading}=useAppSelector((state)=>state.Auth);
-    
+
   const {
     register,
     handleSubmit,
@@ -52,7 +52,7 @@ export default function Login() {
         className="flex flex-col max-w-141.75 mx-auto p-12 bg-[#FFFFFF] mt-20"
       >
         <div className="text-center mb-6">
-          <h2 className="text-3xl font-bold">Create your workspace</h2>
+          <h2 className="text-3xl font-bold">Welcome Back</h2>
           <p className="text-[#4F5F7B] font-medium">
             Join the editorial approach to task management.
           </p>
@@ -98,7 +98,15 @@ export default function Login() {
             )}
         </div>
 
-          {/* SUBMIT */}
+          <div className="flex justify-between items-center w-full">
+            <div className="flex items-center gap-2">
+              <input type="checkbox" id="remember" />
+              <label htmlFor="remember" className="text-[#434654] font-semibold">Remember me</label>
+            </div>
+
+            <Link to="/forgot-password"  className="text-[#003D9B] font-semibold">Forgot Password?</Link>
+          </div>
+     
           <button
             type="submit"
             className="cursor-pointer bg-[#003D9B] text-white p-3 rounded-sm font-semibold"
@@ -108,7 +116,6 @@ export default function Login() {
           </button>
         </div>
 
-        {/* LOGIN LINK */}
         <p className="text-center text-sm text-gray-600 mt-8">
          Don't have an account?{" "}
           <Link to="/signUP" className="text-blue-600 font-medium hover:underline">

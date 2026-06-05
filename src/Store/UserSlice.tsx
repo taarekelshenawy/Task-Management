@@ -1,8 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-/* =======================
-   TYPES
-======================= */
 
 type User = {
   id: string;
@@ -17,9 +14,7 @@ type stateProps = {
   token: string;
 };
 
-/* =======================
-   INITIAL STATE
-======================= */
+
 
 const initialState: stateProps = {
   loading: false,
@@ -28,9 +23,7 @@ const initialState: stateProps = {
   token: "",
 };
 
-/* =======================
-   GET USER
-======================= */
+
 
 export const getUser = createAsyncThunk(
   "auth/getUser",
@@ -39,7 +32,6 @@ export const getUser = createAsyncThunk(
 
     try {
       const state = getState() as { Auth: stateProps };
-      console.log(state.Auth.token)
 
       if (!state.Auth.token) {
         return rejectWithValue("No token found");
@@ -74,23 +66,12 @@ export const getUser = createAsyncThunk(
   }
 );
 
-/* =======================
-   SLICE
-======================= */
 
 const User = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setToken: (state, action) => {
-      state.token = action.payload;
-    },
-
-    logout: (state) => {
-      state.token = "";
-      state.user = null;
-      state.error = null;
-    },
+    
   },
   extraReducers: (builder) => {
     builder
@@ -109,5 +90,4 @@ const User = createSlice({
   },
 });
 
-export const { setToken, logout } = User.actions;
 export default User.reducer;

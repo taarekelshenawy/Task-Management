@@ -15,8 +15,6 @@ export default function Guard({children}:{children:React.ReactNode}) {
     
     if(!token) return;
 
-
-   
   return (
     <div>{children}</div>
   )
