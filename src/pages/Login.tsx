@@ -1,4 +1,4 @@
-import SignUpIcon from '../assets/Icon.svg';
+
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { LoginSchema } from '../utils/validationSchema';
@@ -8,6 +8,7 @@ import { useAppDispatch } from '../Store/hooks';
 import { useAppSelector } from '../Store/hooks';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
+import Header from '../Componenets/Header/Header';
 
 type Inputs = {
   email: string;
@@ -40,11 +41,7 @@ export default function Login() {
 
   return (
     <div className=" min-h-screen pb-14">
-      <div className="flex items-center  gap-2 font-bold px-10 py-8 ">
-        <img src={SignUpIcon} />
-        <h1 className="text-slate-dark text-xl">TASKLY</h1>
-      </div>
-
+      <Header/>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="shadow-form flex flex-col max-w-141.75 mx-auto p-12 bg-white mt-2"
@@ -125,7 +122,7 @@ export default function Login() {
         <p className="text-center text-sm text-gray-600 mt-8">
           Don't have an account?{' '}
           <Link
-            to="/signUP"
+            to="/sign-up"
             className="text-blue-600 font-medium hover:underline"
           >
             Sign Up

@@ -1,4 +1,4 @@
-import SignUpIcon from '../assets/Icon.svg';
+
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import signUpSchema from '../utils/validationSchema';
@@ -7,6 +7,7 @@ import { Signup } from '../Store/Auth/act/Signup';
 import { useAppDispatch } from '../Store/hooks';
 import { useAppSelector } from '../Store/hooks';
 import { toast } from 'react-toastify';
+import Header from '../Componenets/Header/Header';
 
 type Inputs = {
   email: string;
@@ -40,10 +41,7 @@ export default function SignUp() {
 
   return (
     <div className="bg-[#F9F9FF] pb-14">
-      <div className="flex items-center bg-[#F9F9FF] gap-2 font-bold px-10 py-8 fixed top-0 left-0 right-0">
-        <img src={SignUpIcon} />
-        <h1 className="text-[#041B3C] text-xl">TASKLY</h1>
-      </div>
+    <Header/>
 
       <form
         onSubmit={handleSubmit(onSubmit)}

@@ -23,7 +23,7 @@ export default function routes() {
           ),
         },
         {
-          path: 'signUp',
+          path: 'sign-up',
           element: <SignUp />,
         },
         {
