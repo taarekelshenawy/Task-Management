@@ -1,5 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 type loginData = {
   email: string;
@@ -11,29 +10,27 @@ type LoginResponse = {
 };
 
 export const signIn = createAsyncThunk(
-  "auth/login",
+  'auth/login',
   async (data: loginData, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
 
     try {
       const response = await fetch(
-        "https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/token?grant_type=password",
+        'https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/token?grant_type=password',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             apikey: import.meta.env.VITE_API_KEY,
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       const result = await response.json();
 
       if (!response.ok) {
-        return rejectWithValue(
-          result?.msg || result?.error || "Login failed"
-        );
+        return rejectWithValue(result?.msg || result?.error || 'Login failed');
       }
 
       return result as LoginResponse;
@@ -41,7 +38,7 @@ export const signIn = createAsyncThunk(
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       }
-      return rejectWithValue("Unknown error");
+      return rejectWithValue('Unknown error');
     }
-  }
+  },
 );

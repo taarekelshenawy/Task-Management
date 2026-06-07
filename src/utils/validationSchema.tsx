@@ -1,84 +1,78 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 const signUpSchema = z
   .object({
-   email: z.string().email("Invalid email format"),
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must be at most 64 characters")
-    .regex(/^\S+$/, "Password must not contain spaces")
-    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Must contain at least one number")
-    .regex(/[!@#$%^&*]/, "Must contain at least one special character"),
- confirmPassword: z.string().min(1, "Confirm password is required"),
-  data: z.object({
-    name: z
+    email: z.string().email('Invalid email format'),
+    password: z
       .string()
-      .min(3, "Name must be at least 3 characters")
-      .max(50, "Name must be at most 50 characters")
-      .regex(
-        /^[A-Za-zÀ-ÖØ-öø-ÿ\u0600-\u06FF ]+$/,
-        "Invalid characters in name"
-      )
-      .refine((val) => !/\s{2,}/.test(val), {
-        message: "No multiple consecutive spaces allowed",
-      })
-      .refine((val) => !/^\s|\s$/.test(val), {
-        message: "No leading or trailing spaces",
-      }),
+      .min(8, 'Password must be at least 8 characters')
+      .max(64, 'Password must be at most 64 characters')
+      .regex(/^\S+$/, 'Password must not contain spaces')
+      .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
+      .regex(/[a-z]/, 'Must contain at least one lowercase letter')
+      .regex(/[0-9]/, 'Must contain at least one number')
+      .regex(/[!@#$%^&*]/, 'Must contain at least one special character'),
+    confirmPassword: z.string().min(1, 'Confirm password is required'),
+    data: z.object({
+      name: z
+        .string()
+        .min(3, 'Name must be at least 3 characters')
+        .max(50, 'Name must be at most 50 characters')
+        .regex(
+          /^[A-Za-zÀ-ÖØ-öø-ÿ\u0600-\u06FF ]+$/,
+          'Invalid characters in name',
+        )
+        .refine((val) => !/\s{2,}/.test(val), {
+          message: 'No multiple consecutive spaces allowed',
+        })
+        .refine((val) => !/^\s|\s$/.test(val), {
+          message: 'No leading or trailing spaces',
+        }),
 
-department: z.string()
-   
+      department: z.string(),
+    }),
   })
-
-  }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
 export const EmailSchema = z.object({
   email: z
     .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email"),
+    .min(1, 'Email is required')
+    .email('Please enter a valid email'),
 });
 
-export const LoginSchema = z
-  .object({
-     email: z.string().email("Invalid email format"),
+export const LoginSchema = z.object({
+  email: z.string().email('Invalid email format'),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must be at most 64 characters")
-    .regex(/^\S+$/, "Password must not contain spaces")
-    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Must contain at least one number")
-    .regex(/[!@#$%^&*]/, "Must contain at least one special character"),
-
+    .min(8, 'Password must be at least 8 characters')
+    .max(64, 'Password must be at most 64 characters')
+    .regex(/^\S+$/, 'Password must not contain spaces')
+    .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
+    .regex(/[a-z]/, 'Must contain at least one lowercase letter')
+    .regex(/[0-9]/, 'Must contain at least one number')
+    .regex(/[!@#$%^&*]/, 'Must contain at least one special character'),
 });
 
-export const reset=z
+export const reset = z
   .object({
-  password: z
-    .string()
-    .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must be at most 64 characters")
-    .regex(/^\S+$/, "Password must not contain spaces")
-    .regex(/[A-Z]/, "Must contain at least one uppercase letter")
-    .regex(/[a-z]/, "Must contain at least one lowercase letter")
-    .regex(/[0-9]/, "Must contain at least one number")
-    .regex(/[!@#$%^&*]/, "Must contain at least one special character"),
- confirmPassword: z.string().min(1, "Confirm password is required"),
- 
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters')
+      .max(64, 'Password must be at most 64 characters')
+      .regex(/^\S+$/, 'Password must not contain spaces')
+      .regex(/[A-Z]/, 'Must contain at least one uppercase letter')
+      .regex(/[a-z]/, 'Must contain at least one lowercase letter')
+      .regex(/[0-9]/, 'Must contain at least one number')
+      .regex(/[!@#$%^&*]/, 'Must contain at least one special character'),
+    confirmPassword: z.string().min(1, 'Confirm password is required'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmPassword'],
+  });
 
-  }).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords do not match",
-  path: ["confirmPassword"],
-});
-
-
-  export default signUpSchema;
-  
+export default signUpSchema;

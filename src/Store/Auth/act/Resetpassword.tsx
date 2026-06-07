@@ -1,5 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 type stateProps = {
   loading: boolean;
@@ -11,25 +10,24 @@ type stateProps = {
   logoutSuccess: boolean;
 };
 
-
 export const resetPassword = createAsyncThunk(
-  "auth/resetPassword",
+  'auth/resetPassword',
   async (data: { password: string }, thunkAPI) => {
-    const { rejectWithValue,getState } = thunkAPI;
-      const state = getState() as {Auth:stateProps}
+    const { rejectWithValue, getState } = thunkAPI;
+    const state = getState() as { Auth: stateProps };
 
     try {
       const response = await fetch(
-        "https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/user",
+        'https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/user',
         {
-          method: "PUT",
+          method: 'PUT',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             apikey: import.meta.env.VITE_API_KEY,
             Authorization: `Bearer ${state.Auth.token}`,
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       const result = await response.json();
@@ -38,7 +36,7 @@ export const resetPassword = createAsyncThunk(
         return rejectWithValue(
           result?.error_description ||
             result?.error ||
-            "Failed to send reset email"
+            'Failed to send reset email',
         );
       }
 
@@ -47,7 +45,7 @@ export const resetPassword = createAsyncThunk(
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       }
-      return rejectWithValue("Unknown error");
+      return rejectWithValue('Unknown error');
     }
-  }
+  },
 );

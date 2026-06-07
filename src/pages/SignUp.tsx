@@ -1,13 +1,12 @@
-import SignUpIcon from "../assets/Icon.svg";
-import { useForm } from "react-hook-form";
-import type { SubmitHandler } from "react-hook-form";
-import signUpSchema from "../utils/validationSchema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Signup } from "../Store/Auth/act/Signup";
-import { useAppDispatch } from "../Store/hooks";
-import { useAppSelector } from "../Store/hooks";
-import { toast } from "react-toastify";
-
+import SignUpIcon from '../assets/Icon.svg';
+import { useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
+import signUpSchema from '../utils/validationSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Signup } from '../Store/Auth/act/Signup';
+import { useAppDispatch } from '../Store/hooks';
+import { useAppSelector } from '../Store/hooks';
+import { toast } from 'react-toastify';
 
 type Inputs = {
   email: string;
@@ -20,8 +19,8 @@ type Inputs = {
 };
 
 export default function SignUp() {
-    const dispatch=useAppDispatch();
-    const {loading,error}=useAppSelector((state)=>state.Auth)
+  const dispatch = useAppDispatch();
+  const { loading, error } = useAppSelector((state) => state.Auth);
   const {
     register,
     handleSubmit,
@@ -30,14 +29,13 @@ export default function SignUp() {
     resolver: zodResolver(signUpSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) =>{
-   const result= dispatch(Signup(data));
-   if(Signup.fulfilled.match(result)){
-       toast.success("Account created successfully ");
-   }else{
-    toast.error(error)
-   }
-
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const result = dispatch(Signup(data));
+    if (Signup.fulfilled.match(result)) {
+      toast.success('Account created successfully ');
+    } else {
+      toast.error(error);
+    }
   };
 
   return (
@@ -59,13 +57,12 @@ export default function SignUp() {
         </div>
 
         <div className="flex flex-col gap-6">
-
           {/* NAME */}
           <div className="flex flex-col gap-2">
             <label className="text-[#4F5F7B] font-bold">Name</label>
 
             <input
-              {...register("data.name")}
+              {...register('data.name')}
               type="text"
               className="bg-[#D7E2FF] h-10 rounded px-3"
               placeholder="Enter full Name"
@@ -84,7 +81,7 @@ export default function SignUp() {
             <label className="text-[#4F5F7B] font-bold">Email</label>
 
             <input
-              {...register("email")}
+              {...register('email')}
               type="email"
               className="bg-[#D7E2FF] h-10 rounded px-3"
               placeholder="yourname@company.com"
@@ -105,7 +102,7 @@ export default function SignUp() {
             </label>
 
             <input
-              {...register("data.department")}
+              {...register('data.department')}
               type="text"
               className="bg-[#D7E2FF] h-10 rounded px-3"
               placeholder="e.g. Project Manager"
@@ -121,13 +118,12 @@ export default function SignUp() {
 
           {/* PASSWORD + CONFIRM */}
           <div className="flex gap-5 items-center max-sm:flex-col max-sm:items-start">
-
             {/* PASSWORD */}
             <div className="flex flex-col gap-2 w-full">
               <label className="text-[#4F5F7B] font-bold">Password</label>
 
               <input
-                {...register("password")}
+                {...register('password')}
                 type="password"
                 className="bg-[#D7E2FF] w-full h-10 rounded px-3"
                 placeholder="enter password"
@@ -148,7 +144,7 @@ export default function SignUp() {
               </label>
 
               <input
-                {...register("confirmPassword")}
+                {...register('confirmPassword')}
                 type="password"
                 className="bg-[#D7E2FF] h-10 rounded px-3"
                 placeholder="confirm password"
@@ -189,14 +185,16 @@ export default function SignUp() {
             className="bg-[#003D9B] text-white p-3 rounded-sm font-semibold"
           >
             {loading ? '...loading' : 'Create Account'}
-           
           </button>
         </div>
 
         {/* LOGIN LINK */}
         <p className="text-center text-sm text-gray-600 mt-8">
-          Already have an account?{" "}
-          <a href="/login" className="text-blue-600 font-medium hover:underline">
+          Already have an account?{' '}
+          <a
+            href="/login"
+            className="text-blue-600 font-medium hover:underline"
+          >
             Log in
           </a>
         </p>
@@ -204,24 +202,3 @@ export default function SignUp() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

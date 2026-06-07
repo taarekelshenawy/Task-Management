@@ -1,8 +1,8 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import SignUpIcon from "../../assets/Icon.svg";
-import { useAppDispatch } from "../../Store/hooks";
-import { logoutLocal } from "../../Store/Auth/AuthSlice";
+import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import SignUpIcon from '../../assets/Icon.svg';
+import { useAppDispatch } from '../../Store/hooks';
+import { logoutLocal } from '../../Store/Auth/AuthSlice';
 
 import {
   FolderKanban,
@@ -12,7 +12,7 @@ import {
   Flag,
   ChevronLeft,
   LogOut,
-} from "lucide-react";
+} from 'lucide-react';
 
 export default function Sidebar() {
   const dispatch = useAppDispatch();
@@ -22,22 +22,20 @@ export default function Sidebar() {
 
   function SignOut() {
     dispatch(logoutLocal());
-    navigate("/login");
+    navigate('/login');
   }
 
   return (
     <aside
       className={`h-screen bg-[#F1F3FF] flex flex-col transition-all duration-300 ${
-        collapsed ? "w-20" : "w-64"
+        collapsed ? 'w-20' : 'w-64'
       }`}
     >
       {/* Logo */}
       <div className="flex items-center gap-2 font-bold px-4 py-8">
         <img src={SignUpIcon} alt="Logo" />
 
-        {!collapsed && (
-          <h1 className="text-[#041B3C] text-xl">TASKLY</h1>
-        )}
+        {!collapsed && <h1 className="text-[#041B3C] text-xl">TASKLY</h1>}
       </div>
 
       {/* Navigation */}
@@ -104,7 +102,7 @@ export default function Sidebar() {
           <ChevronLeft
             size={20}
             className={`transition-transform duration-300 ${
-              collapsed ? "rotate-180" : ""
+              collapsed ? 'rotate-180' : ''
             }`}
           />
 
@@ -123,17 +121,3 @@ export default function Sidebar() {
     </aside>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

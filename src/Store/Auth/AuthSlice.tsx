@@ -1,9 +1,8 @@
-import {  createSlice } from "@reduxjs/toolkit";
-import { signIn } from "./act/Signin";
-import { Signup } from "./act/Signup";
-import { forgotPassword } from "./act/Forgotpassword";
-import { resetPassword } from "./act/Resetpassword";
-
+import { createSlice } from '@reduxjs/toolkit';
+import { signIn } from './act/Signin';
+import { Signup } from './act/Signup';
+import { forgotPassword } from './act/Forgotpassword';
+import { resetPassword } from './act/Resetpassword';
 
 type stateProps = {
   loading: boolean;
@@ -15,26 +14,23 @@ type stateProps = {
   logoutSuccess: boolean;
 };
 
-
 const initialState: stateProps = {
   loading: false,
   error: null,
-  token: localStorage.getItem("token") || "",
+  token: localStorage.getItem('token') || '',
   signupSuccess: false,
   loginSuccess: false,
   forgotSuccess: false,
   logoutSuccess: false,
 };
 
-
-
 const Auth = createSlice({
-  name: "Authentication",
+  name: 'Authentication',
   initialState,
   reducers: {
     logoutLocal: (state) => {
-      state.token = "";
-      localStorage.removeItem("token");
+      state.token = '';
+      localStorage.removeItem('token');
 
       state.loginSuccess = false;
       state.signupSuccess = false;
@@ -57,7 +53,7 @@ const Auth = createSlice({
       })
       .addCase(Signup.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || "Signup failed";
+        state.error = (action.payload as string) || 'Signup failed';
       });
 
     /* ================= LOGIN ================= */
@@ -74,11 +70,11 @@ const Auth = createSlice({
         // ✅ FIX: correct token extraction
         state.token = action.payload.access_token;
 
-        localStorage.setItem("token", action.payload.access_token);
+        localStorage.setItem('token', action.payload.access_token);
       })
       .addCase(signIn.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || "Login failed";
+        state.error = (action.payload as string) || 'Login failed';
       });
 
     /* ================= FORGOT ================= */
@@ -94,10 +90,10 @@ const Auth = createSlice({
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || "Failed";
+        state.error = (action.payload as string) || 'Failed';
       });
 
-         /* ================= Reset ================= */
+    /* ================= Reset ================= */
     builder
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
@@ -105,19 +101,13 @@ const Auth = createSlice({
       })
       .addCase(resetPassword.fulfilled, (state) => {
         state.loading = false;
-       
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
-        state.error = (action.payload as string) || "Failed";
+        state.error = (action.payload as string) || 'Failed';
       });
   },
 });
 
 export const { logoutLocal } = Auth.actions;
 export default Auth.reducer;
-
-
-
-
-

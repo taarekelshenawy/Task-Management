@@ -1,21 +1,21 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const forgotPassword = createAsyncThunk(
-  "auth/forgotPassword",
+  'auth/forgotPassword',
   async (data: { email: string }, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
 
     try {
       const response = await fetch(
-        "https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/recover",
+        'https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/recover',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             apikey: import.meta.env.VITE_API_KEY,
           },
           body: JSON.stringify(data),
-        }
+        },
       );
 
       const result = await response.json();
@@ -24,7 +24,7 @@ export const forgotPassword = createAsyncThunk(
         return rejectWithValue(
           result?.error_description ||
             result?.error ||
-            "Failed to send reset email"
+            'Failed to send reset email',
         );
       }
 
@@ -33,7 +33,7 @@ export const forgotPassword = createAsyncThunk(
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       }
-      return rejectWithValue("Unknown error");
+      return rejectWithValue('Unknown error');
     }
-  }
+  },
 );

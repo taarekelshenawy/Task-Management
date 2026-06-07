@@ -1,5 +1,4 @@
-
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 type signUpData = {
   email: string;
@@ -12,31 +11,27 @@ type signUpData = {
 };
 
 export const Signup = createAsyncThunk(
-  "auth/signup",
+  'auth/signup',
   async (payload: signUpData, thunkAPI) => {
-    const { rejectWithValue} = thunkAPI;
-  
+    const { rejectWithValue } = thunkAPI;
 
     try {
       const response = await fetch(
-        "https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/signup",
+        'https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/signup',
         {
-          method: "POST",
+          method: 'POST',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
             apikey: import.meta.env.VITE_API_KEY,
-          
           },
           body: JSON.stringify(payload),
-        }
+        },
       );
 
       const data = await response.json();
 
       if (!response.ok) {
-        return rejectWithValue(
-          data?.msg || data?.error || "Signup failed"
-        );
+        return rejectWithValue(data?.msg || data?.error || 'Signup failed');
       }
 
       return data;
@@ -44,7 +39,7 @@ export const Signup = createAsyncThunk(
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       }
-      return rejectWithValue("Unknown error");
+      return rejectWithValue('Unknown error');
     }
-  }
+  },
 );
