@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../Store/hooks';
 import { reset } from '../utils/validationSchema';
-import { resetPassword } from '../Store/Auth/act/Resetpassword';
+import { resetPassword } from '../Store/Auth/thunks/Resetpassword';
 import { toast } from 'react-toastify';
 
 type Inputs = {
@@ -20,10 +20,12 @@ export default function Resetpassword() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(reset),
   });
+  const password = watch('password') || '';
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { confirmPassword, ...payload } = data;
@@ -92,22 +94,52 @@ export default function Resetpassword() {
             </div>
 
             <div>
-              <ul className="space-y-2 bg-[#E8EDFF] p-4 rounded-xl text-[#434654]">
-                <li className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full border-2 border-green-500 flex items-center justify-center text-[8px] text-green-500">
-                    ✔
+              {/* PASSWORD RULES UI */}
+              <ul className="space-y-3 bg-slate-lighter p-5 rounded-xl text-[#434654]">
+                {/* LENGTH */}
+                <li className="flex items-center gap-3">
+                  <span
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs
+                ${password.length >= 8 ? 'border-green-500 text-green-500 bg-green-50' : 'border-gray-400'}`}
+                  >
+                    {password.length >= 8 && '✓'}
                   </span>
-                  <span>8 - 64 characters</span>
+                  <span className="text-sm">At least 8 characters</span>
                 </li>
 
-                <li className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full border-2 border-gray-400"></span>
-                  <span>Uppercase & Lowercase</span>
+                {/* MIXED CASE + NUMBER */}
+                <li className="flex items-center gap-3">
+                  <span
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs
+                ${
+                  /[A-Z]/.test(password) &&
+                  /[a-z]/.test(password) &&
+                  /[0-9]/.test(password)
+                    ? 'border-green-500 text-green-500 bg-green-50'
+                    : 'border-gray-400'
+                }`}
+                  >
+                    {/[A-Z]/.test(password) &&
+                      /[a-z]/.test(password) &&
+                      /[0-9]/.test(password) &&
+                      '✓'}
+                  </span>
+
+                  <span className="text-sm">
+                    One uppercase, lowercase, and digit
+                  </span>
                 </li>
 
-                <li className="flex items-center gap-2">
-                  <span className="w-3 h-3 rounded-full border-2 border-gray-400"></span>
-                  <span>At least one digit</span>
+                {/* SPECIAL CHARACTER */}
+                <li className="flex items-center gap-3">
+                  <span
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs
+                ${/[!@#$%^&*]/.test(password) ? 'border-green-500 text-green-500 bg-green-50' : 'border-gray-400'}`}
+                  >
+                    {/[!@#$%^&*]/.test(password) && '✓'}
+                  </span>
+
+                  <span className="text-sm">One special character</span>
                 </li>
               </ul>
             </div>

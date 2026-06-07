@@ -1,9 +1,8 @@
-
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { LoginSchema } from '../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from '../Store/Auth/act/Signin';
+import { signIn } from '../Store/Auth/thunks/Signin';
 import { useAppDispatch } from '../Store/hooks';
 import { useAppSelector } from '../Store/hooks';
 import { toast } from 'react-toastify';
@@ -41,7 +40,7 @@ export default function Login() {
 
   return (
     <div className=" min-h-screen pb-14">
-      <Header/>
+      <Header />
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="shadow-form flex flex-col max-w-141.75 mx-auto p-12 bg-white mt-2"
@@ -103,10 +102,7 @@ export default function Login() {
               </label>
             </div>
 
-            <Link
-              to="/forgot-password"
-              className="text-primary font-semibold"
-            >
+            <Link to="/forgot-password" className="text-primary font-semibold">
               Forgot Password?
             </Link>
           </div>

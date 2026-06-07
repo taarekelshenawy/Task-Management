@@ -1,9 +1,8 @@
-
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import signUpSchema from '../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Signup } from '../Store/Auth/act/Signup';
+import { Signup } from '../Store/Auth/thunks/Signup';
 import { useAppDispatch } from '../Store/hooks';
 import { useAppSelector } from '../Store/hooks';
 import { toast } from 'react-toastify';
@@ -30,8 +29,8 @@ export default function SignUp() {
   } = useForm<Inputs>({
     resolver: zodResolver(signUpSchema),
   });
-  
-const password = watch("password") || "";
+
+  const password = watch('password') || '';
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const result = dispatch(Signup(data));
@@ -44,7 +43,7 @@ const password = watch("password") || "";
 
   return (
     <div className=" pb-14">
-    <Header/>
+      <Header />
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -161,16 +160,14 @@ const password = watch("password") || "";
           </div>
 
           {/* PASSWORD RULES UI */}
-       
           <ul className="space-y-3 bg-slate-lighter p-5 rounded-xl text-[#434654]">
-
             {/* LENGTH */}
             <li className="flex items-center gap-3">
               <span
                 className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs
-                ${password.length >= 8 ? "border-green-500 text-green-500 bg-green-50" : "border-gray-400"}`}
+                ${password.length >= 8 ? 'border-green-500 text-green-500 bg-green-50' : 'border-gray-400'}`}
               >
-                {password.length >= 8 && "✓"}
+                {password.length >= 8 && '✓'}
               </span>
               <span className="text-sm">At least 8 characters</span>
             </li>
@@ -183,13 +180,14 @@ const password = watch("password") || "";
                   /[A-Z]/.test(password) &&
                   /[a-z]/.test(password) &&
                   /[0-9]/.test(password)
-                    ? "border-green-500 text-green-500 bg-green-50"
-                    : "border-gray-400"
+                    ? 'border-green-500 text-green-500 bg-green-50'
+                    : 'border-gray-400'
                 }`}
               >
-                {(/[A-Z]/.test(password) &&
+                {/[A-Z]/.test(password) &&
                   /[a-z]/.test(password) &&
-                  /[0-9]/.test(password)) && "✓"}
+                  /[0-9]/.test(password) &&
+                  '✓'}
               </span>
 
               <span className="text-sm">
@@ -201,18 +199,14 @@ const password = watch("password") || "";
             <li className="flex items-center gap-3">
               <span
                 className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs
-                ${/[!@#$%^&*]/.test(password) ? "border-green-500 text-green-500 bg-green-50" : "border-gray-400"}`}
+                ${/[!@#$%^&*]/.test(password) ? 'border-green-500 text-green-500 bg-green-50' : 'border-gray-400'}`}
               >
-                {/[!@#$%^&*]/.test(password) && "✓"}
+                {/[!@#$%^&*]/.test(password) && '✓'}
               </span>
 
-              <span className="text-sm">
-                One special character
-              </span>
+              <span className="text-sm">One special character</span>
             </li>
-
           </ul>
-       
 
           {/* SUBMIT */}
           <button

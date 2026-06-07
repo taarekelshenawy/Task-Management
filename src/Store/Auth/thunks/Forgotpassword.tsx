@@ -1,30 +1,20 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import getBaseUrl from '../../../utils/api';
 
-type stateProps = {
-  loading: boolean;
-  error: string | null;
-  token: string;
-  signupSuccess: boolean;
-  loginSuccess: boolean;
-  forgotSuccess: boolean;
-  logoutSuccess: boolean;
-};
 
-export const resetPassword = createAsyncThunk(
-  'auth/resetPassword',
-  async (data: { password: string }, thunkAPI) => {
-    const { rejectWithValue, getState } = thunkAPI;
-    const state = getState() as { Auth: stateProps };
+export const forgotPassword = createAsyncThunk(
+  'auth/forgotPassword',
+  async (data: { email: string }, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI;
 
     try {
       const response = await fetch(
-        'https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/user',
+        getBaseUrl('auth/v1/recover'),
         {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             apikey: import.meta.env.VITE_API_KEY,
-            Authorization: `Bearer ${state.Auth.token}`,
           },
           body: JSON.stringify(data),
         },

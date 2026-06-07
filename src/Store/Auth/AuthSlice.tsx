@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signIn } from './act/Signin';
-import { Signup } from './act/Signup';
-import { forgotPassword } from './act/Forgotpassword';
-import { resetPassword } from './act/Resetpassword';
+import { signIn } from './thunks/Signin';
+import { Signup } from './thunks/Signup';
+import { forgotPassword } from './thunks/Forgotpassword';
+import { resetPassword } from './thunks/Resetpassword';
 
 type stateProps = {
   loading: boolean;

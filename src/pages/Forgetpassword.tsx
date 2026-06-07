@@ -5,7 +5,7 @@ import type { SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../Store/hooks';
-import { forgotPassword } from '../Store/Auth/act/Forgotpassword';
+import { forgotPassword } from '../Store/Auth/thunks/Forgotpassword';
 import { EmailSchema } from '../utils/validationSchema';
 import { toast } from 'react-toastify';
 

@@ -1,8 +1,6 @@
 @import 'tailwindcss';
 @config "../tailwind.config.js";
 
-
-
 /* Css Vaiables */
 :root {
   --background: #f9f9ff;
@@ -31,10 +29,9 @@
   --error-background: #ffdad6;
   --warning: #ffb300;
 
-    /* shadow */
+  /* shadow */
   --app-shadow: 0 1px 2px 0px #0000000d;
   --form-shadow: 0 24px 48px 0 #041b3c0f;
-
 }
 
 /*^-------------------------- tailwind theme --------------------------- */
@@ -42,7 +39,7 @@
   /* Action Blue & Tonal Range */
   --color-primary: var(--primary);
   --color-primary-container: var(--primary-container);
-  --color-secondary : var(--secondary);
+  --color-secondary: var(--secondary);
   --color-surface-high: var(--surface-high);
   --color-surface-low: var(--surface-low);
   --color-background: var(--background);
@@ -64,12 +61,9 @@
   --color-error-background: var(--error-background);
   --color-warning: var(--warning);
 
-    /* shadow */
-  --shadow-form: var(--form-shadow)
-
-
+  /* shadow */
+  --shadow-form: var(--form-shadow);
 }
-
 
 body {
   background: var(--background);

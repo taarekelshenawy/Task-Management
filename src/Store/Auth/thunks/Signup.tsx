@@ -1,39 +1,41 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
+import getBaseUrl from '../../../utils/api';
 
-type loginData = {
+type signUpData = {
   email: string;
   password: string;
+  confirmPassword: string;
+  data: {
+    name: string;
+    department: string;
+  };
 };
 
-type LoginResponse = {
-  access_token: string;
-};
-
-export const signIn = createAsyncThunk(
-  'auth/login',
-  async (data: loginData, thunkAPI) => {
+export const Signup = createAsyncThunk(
+  'auth/signup',
+  async (payload: signUpData, thunkAPI) => {
     const { rejectWithValue } = thunkAPI;
 
     try {
       const response = await fetch(
-        'https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/token?grant_type=password',
+        getBaseUrl('auth/v1/signup'),
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             apikey: import.meta.env.VITE_API_KEY,
           },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload),
         },
       );
 
-      const result = await response.json();
+      const data = await response.json();
 
       if (!response.ok) {
-        return rejectWithValue(result?.msg || result?.error || 'Login failed');
+        return rejectWithValue(data?.msg || data?.error || 'Signup failed');
       }
 
-      return result as LoginResponse;
+      return data;
     } catch (error) {
       if (error instanceof Error) {
         return rejectWithValue(error.message);
