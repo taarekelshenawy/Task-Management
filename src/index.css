@@ -1,2 +1,78 @@
 @import 'tailwindcss';
 @config "../tailwind.config.js";
+
+
+
+/* Css Vaiables */
+:root {
+  --background: #f9f9ff;
+  /* Action Blue & Tonal Range */
+  --primary: #003d9b;
+  --primary-container: #0052cc;
+  --secondary: #434654;
+  --surface-high: #d7e2ff;
+  --surface-low: #f1f3ff;
+  --background: #f9f9ff;
+  --secondary-background: #f0f1f5;
+  --border: #f1f3ff;
+  --accent: #6b7280;
+
+  /* Slate Neutrals */
+  --slate-dark: #041b3c;
+  --slate-md: #4f5f7b;
+  --slate-light: #c3c6d6;
+  --slate-lighter: #e8edff;
+
+  /* semantic colors */
+  --success: #82f9be;
+  --success-text: #005235;
+  --error: #ba1a1a;
+  --error-dark: #93000a;
+  --error-background: #ffdad6;
+  --warning: #ffb300;
+
+    /* shadow */
+  --app-shadow: 0 1px 2px 0px #0000000d;
+  --form-shadow: 0 24px 48px 0 #041b3c0f;
+
+}
+
+/*^-------------------------- tailwind theme --------------------------- */
+@theme inline {
+  /* Action Blue & Tonal Range */
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-secondary : var(--secondary)
+  --color-surface-high: var(--surface-high);
+  --color-surface-low: var(--surface-low);
+  --color-background: var(--background);
+  --color-secondary-background: var(--secondary-background);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+
+  /* Slate Neutrals */
+  --color-slate-dark: var(--slate-dark);
+  --color-slate-md: var(--slate-md);
+  --color-slate-light: var(--slate-light);
+  --color-slate-lighter: var(--slate-lighter);
+
+  /* Semantic Colors */
+  --color-success: var(--success);
+  --color-success-text: var(--success-text);
+  --color-error: var(--error);
+  --color-error-dark: var(--error-dark);
+  --color-error-background: var(--error-background);
+  --color-warning: var(--warning);
+
+    /* shadow */
+  --shadow-form: var(--form-shadow)
+
+
+}
+
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 14px;
+}

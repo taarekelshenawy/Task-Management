@@ -39,19 +39,19 @@ export default function Login() {
   };
 
   return (
-    <div className="bg-[#F9F9FF] pb-14">
-      <div className="flex items-center bg-[#F9F9FF] gap-2 font-bold px-10 py-8 fixed top-0 left-0 right-0">
+    <div className=" min-h-screen pb-14">
+      <div className="flex items-center  gap-2 font-bold px-10 py-8 ">
         <img src={SignUpIcon} />
-        <h1 className="text-[#041B3C] text-xl">TASKLY</h1>
+        <h1 className="text-slate-dark text-xl">TASKLY</h1>
       </div>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col max-w-141.75 mx-auto p-12 bg-[#FFFFFF] mt-20"
+        className="shadow-form flex flex-col max-w-141.75 mx-auto p-12 bg-white mt-2"
       >
         <div className="text-center mb-6">
           <h2 className="text-3xl font-bold">Welcome Back</h2>
-          <p className="text-[#4F5F7B] font-medium">
+          <p className="text-slate-md font-medium">
             Join the editorial approach to task management.
           </p>
         </div>
@@ -59,12 +59,12 @@ export default function Login() {
         <div className="flex flex-col gap-6">
           {/* EMAIL */}
           <div className="flex flex-col gap-2">
-            <label className="text-[#4F5F7B] font-bold">Email</label>
+            <label className="text-slate-md font-bold">Email</label>
 
             <input
               {...register('email')}
               type="email"
-              className="bg-[#D7E2FF] h-10 rounded px-3"
+              className="bg-surface-high h-10 rounded px-3"
               placeholder="yourname@company.com"
             />
 
@@ -78,12 +78,12 @@ export default function Login() {
 
           {/* PASSWORD */}
           <div className="flex flex-col gap-2 w-full">
-            <label className="text-[#4F5F7B] font-bold">Password</label>
+            <label className="text-slate-md font-bold">Password</label>
 
             <input
               {...register('password')}
               type="password"
-              className="bg-[#D7E2FF] w-full h-10 rounded px-3"
+              className="bg-surface-high  w-full h-10 rounded px-3"
               placeholder="enter password"
             />
 
@@ -100,7 +100,7 @@ export default function Login() {
               <input type="checkbox" id="remember" />
               <label
                 htmlFor="remember"
-                className="text-[#434654] font-semibold"
+                className="text-secondary font-semibold"
               >
                 Remember me
               </label>
@@ -108,7 +108,7 @@ export default function Login() {
 
             <Link
               to="/forgot-password"
-              className="text-[#003D9B] font-semibold"
+              className="text-primary font-semibold"
             >
               Forgot Password?
             </Link>
@@ -116,7 +116,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="cursor-pointer bg-[#003D9B] text-white p-3 rounded-sm font-semibold"
+            className="cursor-pointer bg-primary text-white p-3 rounded-sm font-semibold"
           >
             {loading ? '...loading' : 'Log in'}
           </button>
