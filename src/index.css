@@ -42,7 +42,7 @@
   /* Action Blue & Tonal Range */
   --color-primary: var(--primary);
   --color-primary-container: var(--primary-container);
-  --color-secondary : var(--secondary)
+  --color-secondary : var(--secondary);
   --color-surface-high: var(--surface-high);
   --color-surface-low: var(--surface-low);
   --color-background: var(--background);
