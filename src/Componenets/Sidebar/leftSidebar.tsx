@@ -1,8 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 import { useState } from 'react';
 import SignUpIcon from '../../assets/Icon.svg';
-import { useAppDispatch } from '../../Store/hooks';
-import { logoutLocal } from '../../Store/Auth/AuthSlice';
+import { logoutFunction } from '../../services/authService';
+
 
 import {
   FolderKanban,
@@ -15,15 +15,13 @@ import {
 } from 'lucide-react';
 
 export default function Sidebar() {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+
 
   const [collapsed, setCollapsed] = useState(false);
 
-  function SignOut() {
-    dispatch(logoutLocal());
-    navigate('/login');
-  }
+  function handleLogout() {
+  logoutFunction()
+}
 
   return (
     <aside
@@ -110,7 +108,7 @@ export default function Sidebar() {
         </button>
 
         <button
-          onClick={SignOut}
+          onClick={handleLogout}
           className="w-full flex items-center gap-3 p-3 rounded-lg text-red-600 hover:bg-red-50 transition"
         >
           <LogOut size={20} />

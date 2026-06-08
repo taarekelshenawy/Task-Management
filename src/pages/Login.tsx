@@ -2,12 +2,11 @@ import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { LoginSchema } from '../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from '../Store/Auth/thunks/Signin';
-import { useAppDispatch } from '../Store/hooks';
-import { useAppSelector } from '../Store/hooks';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../Componenets/Header/Header';
+import { loginFunction } from '../services/authService';
+import { useState } from 'react';
 
 type Inputs = {
   email: string;
@@ -15,9 +14,10 @@ type Inputs = {
 };
 
 export default function Login() {
-  const dispatch = useAppDispatch();
+  const [loading,setLoading]=useState(false);
+
   const navigate = useNavigate();
-  const { loading } = useAppSelector((state) => state.Auth);
+ 
 
   const {
     register,
@@ -28,14 +28,20 @@ export default function Login() {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const result = await dispatch(signIn(data));
-    if (signIn.fulfilled.match(result)) {
-      navigate('/');
-      toast.success('Login successful 🎉');
-    }
-    if (signIn.rejected.match(result)) {
-      toast.error(result.payload as string);
-    }
+    try {
+    setLoading(true)
+    await loginFunction(data);
+
+    toast.success('Login success');
+    setLoading(false)
+    navigate('/');
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Something went wrong';
+
+    toast.error(message);
+  }
+   
   };
 
   return (

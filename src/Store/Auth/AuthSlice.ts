@@ -1,8 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signIn } from './thunks/Signin';
+// import { signIn } from './thunks/loginthunk';
 import { Signup } from './thunks/Signup';
 import { forgotPassword } from './thunks/Forgotpassword';
 import { resetPassword } from './thunks/Resetpassword';
+// import { loginThunk } from './authThunks';
 
 type stateProps = {
   loading: boolean;
@@ -57,25 +58,21 @@ const Auth = createSlice({
       });
 
     /* ================= LOGIN ================= */
-    builder
-      .addCase(signIn.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-        state.loginSuccess = false;
-      })
-      .addCase(signIn.fulfilled, (state, action) => {
-        state.loading = false;
-        state.loginSuccess = true;
+    // builder
+    //   .addCase(loginThunk.pending, (state) => {
+    //     state.loading = true;
+    //     state.error = null;
+    //   })
+    //   .addCase(loginThunk.fulfilled, (state, action) => {
+    //     state.loading = false;
+    //     state.token = action.payload.access_token;
 
-        // ✅ FIX: correct token extraction
-        state.token = action.payload.access_token;
-
-        localStorage.setItem('token', action.payload.access_token);
-      })
-      .addCase(signIn.rejected, (state, action) => {
-        state.loading = false;
-        state.error = (action.payload as string) || 'Login failed';
-      });
+    //     // localStorage.setItem('token', action.payload.access_token);
+    //   })
+    //   .addCase(loginThunk.rejected, (state, action) => {
+    //     state.loading = false;
+    //     state.error = (action.payload as string) || 'Login failed';
+    //   });
 
     /* ================= FORGOT ================= */
     builder

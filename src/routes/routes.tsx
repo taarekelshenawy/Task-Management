@@ -5,7 +5,6 @@ import Layout from '../Layout';
 import Forgetpassword from '../pages/Forgetpassword';
 import { ToastContainer } from 'react-toastify';
 import Dashboard from '../pages/Dashboard';
-import Guard from '../Componenets/Guard/Guard';
 import Resetpassword from '../pages/Resetpassword';
 
 export default function routes() {
@@ -17,9 +16,7 @@ export default function routes() {
         {
           index: true,
           element: (
-            <Guard>
               <Dashboard />
-            </Guard>
           ),
         },
         {
