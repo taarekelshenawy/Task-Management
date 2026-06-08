@@ -182,3 +182,106 @@ export const registerFunction = async (
     throw new Error('Unknown error');
   }
 };
+
+
+type ForgotPasswordResponse = {
+  message?: string;
+};
+type ForgotPasswordData = {
+  email: string;
+};
+
+export const forgotPassword = async (
+  data: ForgotPasswordData,
+): Promise<ForgotPasswordResponse> => {
+  try {
+    const response = await fetch(
+      getBaseUrl('auth/v1/recover'),
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: import.meta.env.VITE_API_KEY,
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    const result: ForgotPasswordResponse = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        (result as any)?.error_description ||
+        (result as any)?.error ||
+        'Failed to send reset email',
+      );
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error('Unknown error');
+  }
+};
+
+
+
+
+
+
+
+
+
+type ResetPasswordData = {
+  password: string;
+};
+
+type ResetPasswordResponse = {
+  message?: string;
+};
+
+export const resetPassword = async (
+  data: ResetPasswordData,
+): Promise<ResetPasswordResponse> => {
+  try {
+    const token = Cookies.get('access_token');
+
+    if (!token) {
+      throw new Error('Unauthorized');
+    }
+
+    const response = await fetch(
+      getBaseUrl('auth/v1/user'),
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          apikey: import.meta.env.VITE_API_KEY,
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    const result: ResetPasswordResponse = await response.json();
+
+    if (!response.ok) {
+      throw new Error(
+        (result as any)?.error_description ||
+        (result as any)?.error ||
+        'Failed to reset password',
+      );
+    }
+
+    return result;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error('Unknown error');
+  }
+};

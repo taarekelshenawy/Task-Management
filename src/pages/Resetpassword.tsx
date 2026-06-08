@@ -3,10 +3,10 @@ import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../Store/hooks';
 import { reset } from '../utils/validationSchema';
-import { resetPassword } from '../Store/Auth/thunks/Resetpassword';
+import { resetPassword } from '../services/authService';
 import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 type Inputs = {
   password: string;
@@ -14,8 +14,7 @@ type Inputs = {
 };
 
 export default function Resetpassword() {
-  const dispatch = useAppDispatch();
-  const { loading } = useAppSelector((state) => state.Auth);
+  const [loading,setLoading]=useState(false)
 
   const {
     register,
@@ -29,11 +28,21 @@ export default function Resetpassword() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { confirmPassword, ...payload } = data;
-    const result = await dispatch(resetPassword(payload));
-    if (resetPassword.fulfilled.match(result)) {
-      toast.success('Your password has been updated successfully.');
+  try {
+    setLoading(true)
+  await resetPassword(payload);
+
+  toast.success('Password updated successfully');
+  setLoading(false)
+} catch (err) {
+  toast.error(err instanceof Error ? err.message : 'Something went wrong');
+}
+
+
     }
-  };
+   
+  
+
 
   return (
     <div className="bg-[#F9F9FF] pb-14 min-h-screen">
