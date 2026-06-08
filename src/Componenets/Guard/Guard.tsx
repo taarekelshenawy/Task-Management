@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
-import { useAppSelector } from '../../Store/hooks';
 import { useNavigate } from 'react-router-dom';
+import { getAccessToken } from '../../utils/cookies';
 
 export default function Guard({ children }: { children: React.ReactNode }) {
-  const { token } = useAppSelector((state) => state.Auth);
+  const token =getAccessToken()
   const navigate = useNavigate();
 
   useEffect(() => {

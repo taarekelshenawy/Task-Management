@@ -7,6 +7,8 @@ import { useAppDispatch } from '../Store/hooks';
 import { useAppSelector } from '../Store/hooks';
 import { toast } from 'react-toastify';
 import Header from '../Componenets/Header/Header';
+import { registerFunction } from '../services/authService';
+import { useNavigate } from 'react-router-dom';
 
 type Inputs = {
   email: string;
@@ -20,6 +22,7 @@ type Inputs = {
 
 export default function SignUp() {
   const dispatch = useAppDispatch();
+  const navigate =useNavigate()
   const { loading, error } = useAppSelector((state) => state.Auth);
   const {
     register,
@@ -32,13 +35,25 @@ export default function SignUp() {
 
   const password = watch('password') || '';
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => {
-    const result = dispatch(Signup(data));
-    if (Signup.fulfilled.match(result)) {
-      toast.success('Account created successfully ');
-    } else {
-      toast.error(error);
+  const onSubmit: SubmitHandler<Inputs> = async(data) => {
+    try{
+      await registerFunction(data);
+      toast('Account created successfully ');
+      navigate('/')
+      
+
+    }catch(error){
+      if(error instanceof Error){
+        toast(error.message)
+      }
+
     }
+    // const result = dispatch(Signup(data));
+    // if (Signup.fulfilled.match(result)) {
+    //   toast.success('Account created successfully ');
+    // } else {
+    //   toast.error(error);
+    // }
   };
 
   return (
