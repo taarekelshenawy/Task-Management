@@ -2,13 +2,11 @@ import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import signUpSchema from '../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Signup } from '../Store/Auth/thunks/Signup';
-import { useAppDispatch } from '../Store/hooks';
-import { useAppSelector } from '../Store/hooks';
 import { toast } from 'react-toastify';
 import Header from '../Componenets/Header/Header';
 import { registerFunction } from '../services/authService';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 type Inputs = {
   email: string;
@@ -21,9 +19,8 @@ type Inputs = {
 };
 
 export default function SignUp() {
-  const dispatch = useAppDispatch();
-  const navigate =useNavigate()
-  const { loading, error } = useAppSelector((state) => state.Auth);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -35,18 +32,17 @@ export default function SignUp() {
 
   const password = watch('password') || '';
 
-  const onSubmit: SubmitHandler<Inputs> = async(data) => {
-    try{
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      setLoading(true);
       await registerFunction(data);
       toast('Account created successfully ');
-      navigate('/')
-      
-
-    }catch(error){
-      if(error instanceof Error){
-        toast(error.message)
+      setLoading(false);
+      navigate('/');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast(error.message);
       }
-
     }
     // const result = dispatch(Signup(data));
     // if (Signup.fulfilled.match(result)) {

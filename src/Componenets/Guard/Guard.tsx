@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getAccessToken } from '../../utils/cookies';
 
 export default function Guard({ children }: { children: React.ReactNode }) {
-  const token =getAccessToken()
+  const token = getAccessToken();
   const navigate = useNavigate();
 
   useEffect(() => {

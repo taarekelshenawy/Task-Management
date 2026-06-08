@@ -14,7 +14,7 @@ type Inputs = {
 };
 
 export default function Resetpassword() {
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -28,21 +28,16 @@ export default function Resetpassword() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { confirmPassword, ...payload } = data;
-  try {
-    setLoading(true)
-  await resetPassword(payload);
+    try {
+      setLoading(true);
+      await resetPassword(payload);
 
-  toast.success('Password updated successfully');
-  setLoading(false)
-} catch (err) {
-  toast.error(err instanceof Error ? err.message : 'Something went wrong');
-}
-
-
+      toast.success('Password updated successfully');
+      setLoading(false);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Something went wrong');
     }
-   
-  
-
+  };
 
   return (
     <div className="bg-[#F9F9FF] pb-14 min-h-screen">

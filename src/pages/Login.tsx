@@ -14,10 +14,9 @@ type Inputs = {
 };
 
 export default function Login() {
-  const [loading,setLoading]=useState(false);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
- 
 
   const {
     register,
@@ -29,19 +28,18 @@ export default function Login() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-    setLoading(true)
-    await loginFunction(data);
+      setLoading(true);
+      await loginFunction(data);
 
-    toast.success('Login success');
-    setLoading(false)
-    navigate('/');
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message : 'Something went wrong';
+      toast.success('Login success');
+      setLoading(false);
+      navigate('/');
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Something went wrong';
 
-    toast.error(message);
-  }
-   
+      toast.error(message);
+    }
   };
 
   return (

@@ -1,4 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import getBaseUrl from '../utils/api';
+import { apiClient } from '../utils/apiClient';
 
 type User = {
   id: string;
@@ -10,42 +12,23 @@ type stateProps = {
   loading: boolean;
   error: string | null;
   user: User | null;
-  token: string;
 };
 
 const initialState: stateProps = {
   loading: false,
   error: null,
   user: null,
-  token: '',
 };
 
 export const getUser = createAsyncThunk('auth/getUser', async (_, thunkAPI) => {
-  const { rejectWithValue, getState } = thunkAPI;
+  const { rejectWithValue } = thunkAPI;
 
   try {
-    const state = getState() as { Auth: stateProps };
-
-    if (!state.Auth.token) {
-      return rejectWithValue('No token found');
-    }
-
-    const response = await fetch(
-      'https://ajqszvxwvobaedtlpewk.supabase.co/auth/v1/user',
-      {
-        method: 'GET',
-        headers: {
-          apikey: import.meta.env.VITE_API_KEY,
-          Authorization: `Bearer ${state.Auth.token}`,
-        },
-      },
-    );
-
-    const data = await response.json();
-
+    const response = await apiClient(getBaseUrl('auth/v1/user'));
     if (!response.ok) {
       return rejectWithValue(data?.msg || data?.error || 'Failed to get user');
     }
+    const data = await response.json();
 
     return data;
   } catch (error) {

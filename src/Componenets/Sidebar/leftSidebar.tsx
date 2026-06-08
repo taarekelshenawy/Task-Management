@@ -1,8 +1,7 @@
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import SignUpIcon from '../../assets/Icon.svg';
 import { logoutFunction } from '../../services/authService';
-
 
 import {
   FolderKanban,
@@ -15,13 +14,11 @@ import {
 } from 'lucide-react';
 
 export default function Sidebar() {
-
-
   const [collapsed, setCollapsed] = useState(false);
 
   function handleLogout() {
-  logoutFunction()
-}
+    logoutFunction();
+  }
 
   return (
     <aside

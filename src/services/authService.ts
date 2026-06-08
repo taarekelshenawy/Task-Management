@@ -12,7 +12,9 @@ type LoginResponse = {
   expires_at: number;
 };
 
-export const loginFunction = async (data: loginData): Promise<LoginResponse> => {
+export const loginFunction = async (
+  data: loginData,
+): Promise<LoginResponse> => {
   try {
     const response = await fetch(
       getBaseUrl('auth/v1/token?grant_type=password'),
@@ -48,7 +50,7 @@ export const loginFunction = async (data: loginData): Promise<LoginResponse> => 
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Unknown error')
+    throw new Error('Unknown error');
   }
 };
 
@@ -106,7 +108,6 @@ export const refreshToken = async (): Promise<RefreshResponse> => {
     throw new Error('Unknown error');
   }
 };
- 
 
 export const logoutFunction = () => {
   Cookies.remove('access_token');
@@ -115,7 +116,6 @@ export const logoutFunction = () => {
 
   window.location.href = '/login';
 };
-
 
 type signUpData = {
   email: string;
@@ -128,29 +128,25 @@ type signUpData = {
 };
 
 type SignUpResponse = {
-access_token: string;
+  access_token: string;
   refresh_token: string;
   expires_at: number;
-//   user?: any;
-//   session?: any;
-  
+  //   user?: any;
+  //   session?: any;
 };
 
 export const registerFunction = async (
   payload: signUpData,
 ): Promise<SignUpResponse> => {
   try {
-    const response = await fetch(
-      getBaseUrl('auth/v1/signup'),
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          apikey: import.meta.env.VITE_API_KEY,
-        },
-        body: JSON.stringify(payload),
+    const response = await fetch(getBaseUrl('auth/v1/signup'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: import.meta.env.VITE_API_KEY,
       },
-    );
+      body: JSON.stringify(payload),
+    });
 
     const data: SignUpResponse = await response.json();
 
@@ -183,7 +179,6 @@ export const registerFunction = async (
   }
 };
 
-
 type ForgotPasswordResponse = {
   message?: string;
 };
@@ -195,25 +190,22 @@ export const forgotPassword = async (
   data: ForgotPasswordData,
 ): Promise<ForgotPasswordResponse> => {
   try {
-    const response = await fetch(
-      getBaseUrl('auth/v1/recover'),
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          apikey: import.meta.env.VITE_API_KEY,
-        },
-        body: JSON.stringify(data),
+    const response = await fetch(getBaseUrl('auth/v1/recover'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: import.meta.env.VITE_API_KEY,
       },
-    );
+      body: JSON.stringify(data),
+    });
 
     const result: ForgotPasswordResponse = await response.json();
 
     if (!response.ok) {
       throw new Error(
         (result as any)?.error_description ||
-        (result as any)?.error ||
-        'Failed to send reset email',
+          (result as any)?.error ||
+          'Failed to send reset email',
       );
     }
 
@@ -226,14 +218,6 @@ export const forgotPassword = async (
     throw new Error('Unknown error');
   }
 };
-
-
-
-
-
-
-
-
 
 type ResetPasswordData = {
   password: string;
@@ -253,26 +237,23 @@ export const resetPassword = async (
       throw new Error('Unauthorized');
     }
 
-    const response = await fetch(
-      getBaseUrl('auth/v1/user'),
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          apikey: import.meta.env.VITE_API_KEY,
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
+    const response = await fetch(getBaseUrl('auth/v1/user'), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: import.meta.env.VITE_API_KEY,
+        Authorization: `Bearer ${token}`,
       },
-    );
+      body: JSON.stringify(data),
+    });
 
     const result: ResetPasswordResponse = await response.json();
 
     if (!response.ok) {
       throw new Error(
         (result as any)?.error_description ||
-        (result as any)?.error ||
-        'Failed to reset password',
+          (result as any)?.error ||
+          'Failed to reset password',
       );
     }
 

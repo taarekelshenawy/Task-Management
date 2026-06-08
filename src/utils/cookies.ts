@@ -4,7 +4,6 @@ export const getAccessToken = () => {
   return Cookies.get('access_token');
 };
 
-
 export const isTokenExpired = () => {
   const expiresAt = Cookies.get('expires_at');
 

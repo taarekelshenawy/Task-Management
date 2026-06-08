@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
-import {useAppSelector } from '../Store/hooks';
 import { EmailSchema } from '../utils/validationSchema';
 import { toast } from 'react-toastify';
 import { forgotPassword } from '../services/authService';
@@ -14,12 +13,12 @@ type Inputs = {
 };
 
 export default function Forgetpassword() {
-  const { loading } = useAppSelector((state) => state.Auth);
   const [showMessage, setShowMessage] = useState(false);
   const [email, setEmail] = useState('');
   const [timeLeft, setTimeLeft] = useState(300);
   const [resendCount, setResendCount] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -49,40 +48,33 @@ export default function Forgetpassword() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setEmail(data.email);
-   try {
-  await forgotPassword(data);
+    try {
+      setLoading(true);
+      await forgotPassword(data);
       setShowMessage(true);
 
-  toast.success('Reset email sent successfully');
-} catch (error) {
-  toast.error(error instanceof Error ? error.message : 'Something went wrong');
-}
-
+      toast.success('Reset email sent successfully');
+      setLoading(false);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Something went wrong',
+      );
+    }
   };
 
   const handleResend = async () => {
     if (resendCount >= 3) return;
-     try {
-  await forgotPassword({email});
+    try {
+      await forgotPassword({ email });
       setShowMessage(true);
-            setResendCount((prev) => prev + 1);
+      setResendCount((prev) => prev + 1);
 
-  toast.success('Reset email sent successfully');
-} catch (error) {
-  toast.error(error instanceof Error ? error.message : 'Something went wrong');
-}
-
-    // const result = await dispatch(
-    //   forgotPassword({
-    //     email,
-    //   }),
-    // );
-
-    // if (forgotPassword.fulfilled.match(result)) {
-    //   setResendCount((prev) => prev + 1);
-    //   setTimeLeft(300);
-    //   setIsTimerRunning(true);
-    // }
+      toast.success('Reset email sent successfully');
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : 'Something went wrong',
+      );
+    }
   };
 
   const minutes = String(Math.floor(timeLeft / 60)).padStart(2, '0');
