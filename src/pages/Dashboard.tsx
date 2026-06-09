@@ -3,6 +3,7 @@ import Sidebar from '../Componenets/Sidebar/leftSidebar';
 import { useAppDispatch } from '../Store/hooks';
 import { getUser } from '../Store/UserSlice';
 import { useAppSelector } from '../Store/hooks';
+import { Outlet } from 'react-router-dom';
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
@@ -22,11 +23,12 @@ export default function Dashboard() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="w-full flex flex-col ">
+      <div className='flex flex-col w-full'>
+    
         {loading ? (
           <div className="p-4">...loading </div>
         ) : (
-          <div className="w-full  bg-[#F9F9FF] flex justify-end p-3">
+          <div className="flex justify-end p-3">
             <div className="flex items-center gap-2 ">
               <div>
                 <h2 className="font-bold">{user?.user_metadata.name}</h2>
@@ -40,7 +42,13 @@ export default function Dashboard() {
             </div>
           </div>
         )}
+        
+     
+         {/* add project */}
+        <Outlet/>
+
       </div>
+     
     </div>
   );
 }

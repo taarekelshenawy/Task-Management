@@ -7,28 +7,24 @@ import { ToastContainer } from 'react-toastify';
 import Dashboard from '../pages/Dashboard';
 import Resetpassword from '../pages/Resetpassword';
 import Guard from '../Componenets/Guard/Guard';
+import AddProject from '../Componenets/AddProject/AddProject';
 
-export default function routes() {
-  const router = createBrowserRouter([
+const router = createBrowserRouter([
     {
       path: '/',
       element: <Layout />,
       children: [
         {
           index: true,
-          element: (
-            <Guard>
-              <Dashboard />
-            </Guard>
-          ),
-        },
-        {
-          path: 'sign-up',
-          element: <SignUp />,
+          element: <Login />,
         },
         {
           path: 'login',
           element: <Login />,
+        },
+        {
+          path: 'sign-up',
+          element: <SignUp />,
         },
         {
           path: 'forgot-password',
@@ -38,9 +34,25 @@ export default function routes() {
           path: 'reset-password',
           element: <Resetpassword />,
         },
+        {
+          path: 'project',
+          element: (
+            <Guard>
+              <Dashboard />
+            </Guard>
+          ),
+          children: [
+            {
+              path: 'add',
+              element: <AddProject />,
+            },
+          ],
+        },
       ],
     },
   ]);
+
+export default function Routes() {
   return (
     <>
       <ToastContainer />
