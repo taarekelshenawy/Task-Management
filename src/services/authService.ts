@@ -1,11 +1,10 @@
 import Cookies from 'js-cookie';
 import getBaseUrl from '../utils/api';
 
-
 type loginData = {
   email: string;
   password: string;
-  rememberMe:boolean;
+  rememberMe: boolean;
 };
 
 type LoginResponse = {
@@ -17,7 +16,7 @@ type LoginResponse = {
 export const loginFunction = async (
   data: loginData,
 ): Promise<LoginResponse> => {
-    const {email,password,rememberMe}=data;
+  const { email, password, rememberMe } = data;
   try {
     const response = await fetch(
       getBaseUrl('auth/v1/token?grant_type=password'),
@@ -27,7 +26,7 @@ export const loginFunction = async (
           'Content-Type': 'application/json',
           apikey: import.meta.env.VITE_API_KEY,
         },
-        body: JSON.stringify({email,password}),
+        body: JSON.stringify({ email, password }),
       },
     );
 
@@ -43,7 +42,7 @@ export const loginFunction = async (
     });
 
     Cookies.set('refresh_token', result.refresh_token, {
-      expires: rememberMe ? 30 :1,
+      expires: rememberMe ? 30 : 1,
     });
 
     Cookies.set('expires_at', result.expires_at.toString());

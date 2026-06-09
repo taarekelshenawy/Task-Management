@@ -11,51 +11,51 @@ import AddProject from '../Componenets/AddProject/AddProject';
 import Projects from '../Componenets/Projects/Projects';
 
 const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <Layout />,
-      children: [
-        {
-          index: true,
-          element: <Login />,
-        },
-        {
-          path: 'login',
-          element: <Login />,
-        },
-        {
-          path: 'sign-up',
-          element: <SignUp />,
-        },
-        {
-          path: 'forgot-password',
-          element: <Forgetpassword />,
-        },
-        {
-          path: 'reset-password',
-          element: <Resetpassword />,
-        },
-        {
-          path: 'project',
-          element: (
-            <Guard>
-              <Dashboard />
-            </Guard>
-          ),
-          children: [
-            {
-              path: 'add',
-              element: <AddProject />,
-            },
-             {
-              path: 'projects',
-              element: <Projects />,
-            },
-          ],
-        },
-      ],
-    },
-  ]);
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Login />,
+      },
+      {
+        path: 'login',
+        element: <Login />,
+      },
+      {
+        path: 'sign-up',
+        element: <SignUp />,
+      },
+      {
+        path: 'forgot-password',
+        element: <Forgetpassword />,
+      },
+      {
+        path: 'reset-password',
+        element: <Resetpassword />,
+      },
+      {
+        path: 'project',
+        element: (
+          <Guard>
+            <Dashboard />
+          </Guard>
+        ),
+        children: [
+          {
+            path: 'add',
+            element: <AddProject />,
+          },
+          {
+            path: 'projects',
+            element: <Projects />,
+          },
+        ],
+      },
+    ],
+  },
+]);
 
 export default function Routes() {
   return (

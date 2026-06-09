@@ -15,7 +15,7 @@ type Inputs = {
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const [rememberMe,setRememberMe]=useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ export default function Login() {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const payload = {rememberMe,...data}
+    const payload = { rememberMe, ...data };
     try {
       setLoading(true);
       await loginFunction(payload);
@@ -99,7 +99,11 @@ export default function Login() {
 
           <div className="flex justify-between items-center w-full">
             <div className="flex items-center gap-2">
-              <input type="checkbox" id="remember" onChange={()=>setRememberMe(true)} />
+              <input
+                type="checkbox"
+                id="remember"
+                onChange={() => setRememberMe(true)}
+              />
               <label
                 htmlFor="remember"
                 className="text-secondary font-semibold"

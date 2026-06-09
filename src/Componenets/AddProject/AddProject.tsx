@@ -9,40 +9,38 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 
-
 type Inputs = {
   name: string;
- description: string;
+  description: string;
 };
 
 export default function AddProject() {
-   const {
-      register,
-      handleSubmit,
-      reset,
-      formState: { errors },
-    } = useForm<Inputs>({
-      resolver: zodResolver(AddProjectSchema),
-    });
-  
-    const onSubmit: SubmitHandler<Inputs> = async (data) => {
-  try {
-    await CreateProject(data);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: zodResolver(AddProjectSchema),
+  });
 
-    toast.success("Project created successfully 🚀");
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      await CreateProject(data);
 
-    reset(); // يمسح الفورم بعد النجاح
-  } catch (error) {
-    if (error instanceof Error) {
-      toast.error(`Failed to create project: ${error.message}`);
-    } else {
-      toast.error("Something went wrong");
+      toast.success('Project created successfully 🚀');
+
+      reset(); // يمسح الفورم بعد النجاح
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(`Failed to create project: ${error.message}`);
+      } else {
+        toast.error('Something went wrong');
+      }
     }
-  }
-};
+  };
   return (
     <main className="p-7">
-
       <header className="flex items-center gap-2 max-sm:hidden">
         <p className="font-bold text-secondary">PROJECTS</p>
         <img src={arrowIcon} className="w-2" />
@@ -65,7 +63,6 @@ export default function AddProject() {
           onSubmit={handleSubmit(onSubmit)}
           className="shadow-form flex flex-col max-w-2xl mx-auto p-8 bg-white mt-9"
         >
-
           {/* FORM HEADER */}
           <header className="flex items-center gap-2 mb-9">
             <div className="max-sm:hidden w-11 h-11 bg-primary-container/10 flex justify-center items-center">
@@ -73,9 +70,7 @@ export default function AddProject() {
             </div>
 
             <div>
-              <h2 className="text-3xl font-semibold">
-                Initialize New Project
-              </h2>
+              <h2 className="text-3xl font-semibold">Initialize New Project</h2>
               <p className="text-slate-md font-medium">
                 Define the scope and foundational details of your project.
               </p>
@@ -84,10 +79,12 @@ export default function AddProject() {
 
           {/* FORM CONTENT */}
           <section className="flex flex-col gap-6">
-
             {/* Project Title */}
             <div className="flex flex-col gap-2">
-              <label className="text-slate-md font-bold" htmlFor="project-title">
+              <label
+                className="text-slate-md font-bold"
+                htmlFor="project-title"
+              >
                 Project TITLE
               </label>
 
@@ -99,12 +96,12 @@ export default function AddProject() {
                 placeholder="Pr"
               />
 
-               {errors.name && (
-              <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-                {errors.name.message}
-              </p>
-            )}
+              {errors.name && (
+                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                  {errors.name.message}
+                </p>
+              )}
             </div>
 
             {/* Description */}
@@ -119,14 +116,13 @@ export default function AddProject() {
                 className="bg-surface-high w-full h-37 rounded px-3 p-2"
                 placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
               />
-               {errors.description && (
-              <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-                {errors.description.message}
-              </p>
-            )}
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                  {errors.description.message}
+                </p>
+              )}
             </div>
-
           </section>
 
           {/* FORM FOOTER */}
@@ -147,15 +143,12 @@ export default function AddProject() {
           <aside className="w-full bg-surface-low p-2 flex gap-1 mt-3">
             <img src={TipIcon} className="w-3 h-4" />
             <p className="font-bold text-slate-md text-[11px]">
-              Pro Tip: You can invite project members and assign epics immediately after the initial creation process.
+              Pro Tip: You can invite project members and assign epics
+              immediately after the initial creation process.
             </p>
           </aside>
-
         </form>
       </section>
-
     </main>
   );
 }
-
-

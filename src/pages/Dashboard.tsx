@@ -23,8 +23,7 @@ export default function Dashboard() {
   return (
     <div className="flex">
       <Sidebar />
-      <div className='flex flex-col w-full'>
-    
+      <div className="flex flex-col w-full">
         {loading ? (
           <div className="p-4">...loading </div>
         ) : (
@@ -42,13 +41,10 @@ export default function Dashboard() {
             </div>
           </div>
         )}
-        
-     
-         {/* add project */}
-        <Outlet/>
 
+        {/* add project */}
+        <Outlet />
       </div>
-     
     </div>
   );
 }

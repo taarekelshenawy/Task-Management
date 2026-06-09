@@ -1,10 +1,13 @@
-import { apiClient } from "../utils/apiClient"
-import getBaseUrl from "../utils/api";
+import { apiClient } from '../utils/apiClient';
+import getBaseUrl from '../utils/api';
 
-export const CreateProject =async(data:{name:string,description:string})=>{
+export const CreateProject = async (data: {
+  name: string;
+  description: string;
+}) => {
   try {
-    const response = await apiClient(getBaseUrl("rest/v1/projects"), {
-      method: "POST",
+    const response = await apiClient(getBaseUrl('rest/v1/projects'), {
+      method: 'POST',
       body: JSON.stringify({
         name: data.name,
         description: data.description,
@@ -21,21 +24,14 @@ export const CreateProject =async(data:{name:string,description:string})=>{
     }
 
     throw new Error('Unknown error');
-  
   }
-
-}
-
-
+};
 
 export const GetProjects = async () => {
   try {
-    const response = await apiClient(
-      getBaseUrl("rest/v1/rpc/get_projects"),
-      {
-        method: "POST",
-      }
-    );
+    const response = await apiClient(getBaseUrl('rest/v1/rpc/get_projects'), {
+      method: 'POST',
+    });
 
     return response;
   } catch (error) {
@@ -43,6 +39,6 @@ export const GetProjects = async () => {
       throw error;
     }
 
-    throw new Error("Unknown error");
+    throw new Error('Unknown error');
   }
 };
