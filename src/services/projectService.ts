@@ -25,3 +25,24 @@ export const CreateProject =async(data:{name:string,description:string})=>{
   }
 
 }
+
+
+
+export const GetProjects = async () => {
+  try {
+    const response = await apiClient(
+      getBaseUrl("rest/v1/rpc/get_projects"),
+      {
+        method: "POST",
+      }
+    );
+
+    return response;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error("Unknown error");
+  }
+};

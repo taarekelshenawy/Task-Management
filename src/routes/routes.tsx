@@ -8,6 +8,7 @@ import Dashboard from '../pages/Dashboard';
 import Resetpassword from '../pages/Resetpassword';
 import Guard from '../Componenets/Guard/Guard';
 import AddProject from '../Componenets/AddProject/AddProject';
+import Projects from '../Componenets/Projects/Projects';
 
 const router = createBrowserRouter([
     {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
             {
               path: 'add',
               element: <AddProject />,
+            },
+             {
+              path: 'projects',
+              element: <Projects />,
             },
           ],
         },
