@@ -35,7 +35,7 @@ export default function Login() {
 
       toast.success('Login success');
       setLoading(false);
-      navigate('/project');
+      navigate('/project/add');
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Something went wrong';

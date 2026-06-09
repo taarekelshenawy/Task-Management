@@ -2,22 +2,44 @@ import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
-
 import BentoIcon from '../../assets/BentoIcon.png';
-import TipIcon from '../../assets/TipIcon.png'
+import TipIcon from '../../assets/TipIcon.png';
+import { AddProjectSchema } from '../../utils/validationSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { CreateProject } from '../../services/projectService';
+import { toast } from 'react-toastify';
+
+
+type Inputs = {
+  name: string;
+ description: string;
+};
 
 export default function AddProject() {
    const {
       register,
       handleSubmit,
+      reset,
       formState: { errors },
     } = useForm<Inputs>({
-      // resolver: zodResolver(),
+      resolver: zodResolver(AddProjectSchema),
     });
   
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-     console.log(data)
-    };
+  try {
+    await CreateProject(data);
+
+    toast.success("Project created successfully 🚀");
+
+    reset(); // يمسح الفورم بعد النجاح
+  } catch (error) {
+    if (error instanceof Error) {
+      toast.error(`Failed to create project: ${error.message}`);
+    } else {
+      toast.error("Something went wrong");
+    }
+  }
+};
   return (
     <main className="p-7">
 
@@ -70,11 +92,19 @@ export default function AddProject() {
               </label>
 
               <input
+                {...register('name')}
                 id="project-title"
-                type="email"
+                type="text"
                 className="bg-surface-high h-13 rounded px-3"
                 placeholder="Pr"
               />
+
+               {errors.name && (
+              <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                {errors.name.message}
+              </p>
+            )}
             </div>
 
             {/* Description */}
@@ -84,10 +114,17 @@ export default function AddProject() {
               </label>
 
               <textarea
+                {...register('description')}
                 id="description"
                 className="bg-surface-high w-full h-37 rounded px-3 p-2"
                 placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
               />
+               {errors.description && (
+              <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
+                {errors.description.message}
+              </p>
+            )}
             </div>
 
           </section>
