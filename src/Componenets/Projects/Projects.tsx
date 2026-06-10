@@ -3,6 +3,7 @@ import { GetProjects } from '../../services/projectService';
 import EmptyIcon from '../../assets/EmptyIcon.png';
 import arrowRight from '../../assets/arrowRight.png';
 import arrowLeft from '../../assets/arrowleft.png';
+import { Link } from 'react-router-dom';
 
 type Project = {
   id?: string;
@@ -163,7 +164,9 @@ export default function Projects() {
       {/* Projects Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
         {projects.map((project) => (
-          <div
+          <Link to={`/project/${project.id}/epics`}>
+            <div
+          
             key={project.id || `${project.name}-${project.created_at}`}
             className="bg-white max-w-76 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-[220px]"
           >
@@ -185,6 +188,8 @@ export default function Projects() {
               </time>
             </div>
           </div>
+          </Link>
+          
         ))}
       </div>
 

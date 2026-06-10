@@ -3,6 +3,7 @@ import { useState } from "react";
 import SignUpIcon from "../../assets/Icon.svg";
 import { logoutFunction } from "../../services/authService";
 
+
 import {
   FolderKanban,
   ListTodo,
@@ -18,6 +19,9 @@ import {
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+
+ 
+
 
   function handleLogout() {
     logoutFunction();
@@ -42,7 +46,8 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar */}
-      <aside
+     
+            <aside
         className={`
           fixed lg:static top-0 left-0 bottom-0 z-50  bg-[#F1F3FF]
           flex flex-col transition-transform duration-300
@@ -73,7 +78,7 @@ export default function Sidebar() {
           <ul className="space-y-2">
             <li>
               <Link
-                to="/projects"
+                to="/project"
                 onClick={() => setIsMobileOpen(false)}
                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
               >
@@ -82,9 +87,9 @@ export default function Sidebar() {
               </Link>
             </li>
 
-            <li>
+            {/* <li>
               <Link
-                to="/projects/epics"
+                to="/project/epics"
                 onClick={() => setIsMobileOpen(false)}
                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
               >
@@ -106,25 +111,25 @@ export default function Sidebar() {
 
             <li>
               <Link
-                to="/projects/members"
+                to="/project/members"
                 onClick={() => setIsMobileOpen(false)}
                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
               >
                 <Users size={20} />
                 {!collapsed && <span>Project Members</span>}
               </Link>
-            </li>
+            </li> */}
 
-            <li>
+            {/* <li>
               <Link
-                to="/projects/details"
+                to="/project/details"
                 onClick={() => setIsMobileOpen(false)}
                 className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
               >
                 <Info size={20} />
                 {!collapsed && <span>Project Details</span>}
               </Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
 
@@ -152,6 +157,8 @@ export default function Sidebar() {
           </button>
         </div>
       </aside>
+    
+
     </>
   );
 }
