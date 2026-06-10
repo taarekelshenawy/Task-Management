@@ -5,10 +5,6 @@ import { logoutFunction } from '../../services/authService';
 
 import {
   FolderKanban,
-  ListTodo,
-  Users,
-  Info,
-  Flag,
   ChevronLeft,
   LogOut,
   Menu,

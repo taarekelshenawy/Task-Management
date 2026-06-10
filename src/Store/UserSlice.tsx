@@ -25,10 +25,11 @@ export const getUser = createAsyncThunk('auth/getUser', async (_, thunkAPI) => {
 
   try {
     const response = await apiClient(getBaseUrl('auth/v1/user'));
+      const data = await response.json();
     if (!response.ok) {
       return rejectWithValue(data?.msg || data?.error || 'Failed to get user');
     }
-    const data = await response.json();
+  
 
     return data;
   } catch (error) {

@@ -9,6 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 
+
 type Inputs = {
   name: string;
   description: string;
