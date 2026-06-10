@@ -101,7 +101,8 @@ export default function Projects() {
           <img src={EmptyIcon} className="max-w-[288px]" />
           <h1 className="font-bold text-2xl">No Projects</h1>
           <p>
-            You don’t have any projects yet. Start by creating your first workspace.
+            You don’t have any projects yet. Start by creating your first
+            workspace.
           </p>
 
           <div className="flex justify-center">
@@ -115,39 +116,38 @@ export default function Projects() {
   }
 
   const getVisiblePages = (current: number, total: number) => {
-  const pages: number[] = [];
+    const pages: number[] = [];
 
-  let start = current;
-  let end = start + windowSize - 1;
+    let start = current;
+    let end = start + windowSize - 1;
 
-  // لو قربنا من النهاية نرجع النافذة لورا
-  if (end > total) {
-    end = total;
-    start = Math.max(1, end - windowSize + 1);
-  }
+    // لو قربنا من النهاية نرجع النافذة لورا
+    if (end > total) {
+      end = total;
+      start = Math.max(1, end - windowSize + 1);
+    }
 
-  for (let i = start; i <= end; i++) {
-    pages.push(i);
-  }
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
 
-  return pages;
-};
+    return pages;
+  };
 
   return (
     <div className="p-7 flex flex-col gap-12">
       {/* Header */}
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <div>
-          <h1 className="text-4xl font-semibold text-slate-dark">
-            Projects
-          </h1>
+          <h1 className="text-4xl font-semibold text-slate-dark">Projects</h1>
           <p className="font-medium text-secondary">
             Manage and curate your projects
           </p>
         </div>
 
         <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
-          <span className="font-bold">+ Create New Project</span>
+          <Link to="add">  <span className="font-bold">+ Create New Project</span></Link>
+        
         </button>
       </section>
 
@@ -157,39 +157,35 @@ export default function Projects() {
       )}
 
       {/* Error */}
-      {error && (
-        <p className="text-center text-red-500">{error}</p>
-      )}
+      {error && <p className="text-center text-red-500">{error}</p>}
 
       {/* Projects Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
         {projects.map((project) => (
           <Link to={`/project/${project.id}/epics`}>
             <div
-          
-            key={project.id || `${project.name}-${project.created_at}`}
-            className="bg-white max-w-76 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-[220px]"
-          >
-            <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-2">
-                {project.name}
-              </h3>
+              key={project.id || `${project.name}-${project.created_at}`}
+              className="bg-white max-w-76 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-[220px]"
+            >
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                  {project.name}
+                </h3>
 
-              <p className="text-sm text-slate-600 font-bold">
-                {project.description || 'No description provided'}
-              </p>
+                <p className="text-sm text-slate-600 font-bold">
+                  {project.description || 'No description provided'}
+                </p>
+              </div>
+
+              <div className="pt-4 flex justify-between">
+                <p className="text-xs text-slate-500">Created at</p>
+
+                <time className="text-sm font-medium text-slate-700">
+                  {formatDate(project.created_at)}
+                </time>
+              </div>
             </div>
-
-            <div className="pt-4 flex justify-between">
-              <p className="text-xs text-slate-500">Created at</p>
-
-              <time className="text-sm font-medium text-slate-700">
-                {formatDate(project.created_at)}
-              </time>
-            </div>
-          </div>
           </Link>
-          
         ))}
       </div>
 
@@ -224,18 +220,18 @@ export default function Projects() {
             </button>
           ))} */}
           {getVisiblePages(currentPage, totalPages).map((page) => (
-  <button
-    key={page}
-    onClick={() => setCurrentPage(page)}
-    className={`w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer ${
-      currentPage === page
-        ? 'bg-primary text-white'
-        : 'hover:bg-gray-100'
-    }`}
-  >
-    {page}
-  </button>
-))}
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={`w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer ${
+                currentPage === page
+                  ? 'bg-primary text-white'
+                  : 'hover:bg-gray-100'
+              }`}
+            >
+              {page}
+            </button>
+          ))}
 
           {/* Next */}
           <button
@@ -250,14 +246,6 @@ export default function Projects() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
 
 // import { useEffect, useState } from 'react';
 // import { GetProjects } from '../../services/projectService';
@@ -286,13 +274,11 @@ export default function Projects() {
 // const totalPages =Math.ceil(Number(total)/limit);
 // console.log(totalPages)
 
- 
-
 //   useEffect(() => {
 //     const fetchProjects = async () => {
 //       try {
 //         const response = await GetProjects({limit,offset});
-    
+
 //         const data = await response.json();
 //       setContentRange(response.headers.get('Content-Range'))
 
@@ -376,7 +362,7 @@ export default function Projects() {
 //           <div className='flex justify-between bg-white p-4 items-center'>
 //             <p className='font-bold text-secondary'>Showing {displayedCount} of {total} active projects</p>
 //             <div className='flex items-center gap-2'>
-//               <button onClick={()=>setCurrentPage(currentPage-1)} disabled={currentPage===1} 
+//               <button onClick={()=>setCurrentPage(currentPage-1)} disabled={currentPage===1}
 //               className=' w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer '>
 //                 <img src={arrowLeft} className='w-1 h-2'></img>
 //               </button>
@@ -385,7 +371,7 @@ export default function Projects() {
 //                                 {index + 1}
 //                               </button>
 //               ))}
-                          
+
 //               <button onClick={()=>setCurrentPage(currentPage+1)} disabled={currentPage===totalPages}  className='w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer '>
 //                 <img src={arrowRight}  className='w-1 h-2'></img>
 //               </button>
@@ -397,5 +383,3 @@ export default function Projects() {
 //     </>
 //   );
 // }
-
-

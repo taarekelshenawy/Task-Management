@@ -41,6 +41,7 @@ export default function Login() {
         error instanceof Error ? error.message : 'Something went wrong';
 
       toast.error(message);
+        setLoading(false);
     }
   };
 

@@ -45,45 +45,42 @@ const router = createBrowserRouter([
           </Guard>
         ),
         children: [
-           {
-            index:true,
+          {
+            index: true,
             element: <Projects />,
           },
           {
             path: 'add',
             element: <AddProject />,
           },
-    
-        
-         
         ],
       },
       {
-  path: 'project/:projectId',
-  element: (
-    <Guard>
-      <ProjectLayout />
-    </Guard>
-  ),
-  children: [
-    {
-      path: 'tasks',
-      element: <div>Tasks Page</div>,
-    },
-    {
-      path: 'epics',
-      element: <Epics />,
-    },
-    {
-      path: 'members',
-      element: <div>Members Page</div>,
-    },
-    {
-      path: 'edit',
-      element: <div>Edit Project</div>,
-    },
-  ],
-}
+        path: 'project/:projectId',
+        element: (
+          <Guard>
+            <ProjectLayout />
+          </Guard>
+        ),
+        children: [
+          {
+            path: 'tasks',
+            element: <div>Tasks Page</div>,
+          },
+          {
+            path: 'epics',
+            element: <Epics />,
+          },
+          {
+            path: 'members',
+            element: <div>Members Page</div>,
+          },
+          {
+            path: 'edit',
+            element: <div>Edit Project</div>,
+          },
+        ],
+      },
     ],
   },
 ]);

@@ -1,8 +1,7 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
-import SignUpIcon from "../../assets/Icon.svg";
-import { logoutFunction } from "../../services/authService";
-
+import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import SignUpIcon from '../../assets/Icon.svg';
+import { logoutFunction } from '../../services/authService';
 
 import {
   FolderKanban,
@@ -14,14 +13,11 @@ import {
   LogOut,
   Menu,
   X,
-} from "lucide-react";
+} from 'lucide-react';
 
 export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
- 
-
 
   function handleLogout() {
     logoutFunction();
@@ -46,29 +42,24 @@ export default function Sidebar() {
       )}
 
       {/* Sidebar */}
-     
-            <aside
+
+      <aside
         className={`
           fixed lg:static top-0 left-0 bottom-0 z-50  bg-[#F1F3FF]
-          flex flex-col transition-transform duration-300
-          ${collapsed ? "w-20" : "w-64"}
-          ${isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+          flex flex-col transition-transform duration-300  min-h-screen
+          ${collapsed ? 'w-20' : 'w-64'}
+          ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
       >
         {/* Top */}
         <div className="flex items-center justify-between px-4 py-8">
           <div className="flex items-center gap-2 font-bold">
             <img src={SignUpIcon} alt="Logo" />
-            {!collapsed && (
-              <h1 className="text-[#041B3C] text-xl">TASKLY</h1>
-            )}
+            {!collapsed && <h1 className="text-[#041B3C] text-xl">TASKLY</h1>}
           </div>
 
           {/* close button (mobile only) */}
-          <button
-            className="lg:hidden"
-            onClick={() => setIsMobileOpen(false)}
-          >
+          <button className="lg:hidden" onClick={() => setIsMobileOpen(false)}>
             <X size={24} />
           </button>
         </div>
@@ -142,7 +133,7 @@ export default function Sidebar() {
           >
             <ChevronLeft
               size={20}
-              className={`${collapsed ? "rotate-180" : ""}`}
+              className={`${collapsed ? 'rotate-180' : ''}`}
             />
             {!collapsed && <span>Collapse</span>}
           </button>
@@ -157,18 +148,9 @@ export default function Sidebar() {
           </button>
         </div>
       </aside>
-    
-
     </>
   );
 }
-
-
-
-
-
-
-
 
 // import { Link } from "react-router-dom";
 // import { useState } from "react";
@@ -325,17 +307,6 @@ export default function Sidebar() {
 //     </>
 //   );
 // }
-
-
-
-
-
-
-
-
-
-
-
 
 // import { Link } from 'react-router-dom';
 // import { useState } from 'react';
