@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { GetProjects } from '../../services/projectService';
 import { data } from 'react-router-dom';
 import EmptyIcon from '../../assets/EmptyIcon.png';
+import arrowRight from '../../assets/arrowRight.png';
+import arrowLeft from '../../assets/arrowleft.png';
 
 type Project = {
   name: string;
@@ -54,7 +56,7 @@ export default function Projects() {
           </div>
         </div>
       ) : (
-        <div className="p-7">
+        <div className="p-7 flex flex-col gap-12">
           <section className="max-sm:hidden flex justify-between items-center mt-7">
             <div>
               <h1 className="text-4xl font-semibold text-slate-dark">
@@ -94,6 +96,20 @@ export default function Projects() {
                 </div>
               </div>
             ))}
+          </div>
+          <div className='flex justify-between bg-white p-4 items-center'>
+            <p className='font-bold text-secondary'>Showing 5 of 24 active projects</p>
+            <div className='flex items-center gap-2'>
+              <button className=' w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer '>
+                <img src={arrowLeft} className='w-1 h-2'></img>
+              </button>
+              <button className=' bg-primary  text-white w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer '>1</button>
+              <button className='w-8 h-8 border hover:bg-slate-100 border-slate-light flex justify-center items-center cursor-pointer '>2</button>
+              <button className='w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer '>
+                <img src={arrowRight}  className='w-1 h-2'></img>
+              </button>
+            </div>
+
           </div>
         </div>
       )}

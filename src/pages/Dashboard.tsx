@@ -27,7 +27,7 @@ export default function Dashboard() {
         {loading ? (
           <div className="p-4">...loading </div>
         ) : (
-          <div className="flex justify-end p-3">
+          <div className="flex justify-end p-3 ">
             <div className="flex items-center gap-2 ">
               <div>
                 <h2 className="font-bold">{user?.user_metadata.name}</h2>
