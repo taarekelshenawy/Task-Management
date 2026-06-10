@@ -27,10 +27,15 @@ export const CreateProject = async (data: {
   }
 };
 
-export const GetProjects = async () => {
-  try {
-    const response = await apiClient(getBaseUrl('rest/v1/rpc/get_projects'), {
+export const GetProjects = async (data) => {
+    const {limit,offset}=data;
+    try {
+   
+    const response = await apiClient(getBaseUrl(`rest/v1/rpc/get_projects?limit=${limit}&offset=${offset}`), {
       method: 'POST',
+      headers:{
+       Prefer:'count=exact'
+      }
     });
 
     return response;
@@ -40,5 +45,8 @@ export const GetProjects = async () => {
     }
 
     throw new Error('Unknown error');
+
   }
+  
+  
 };

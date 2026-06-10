@@ -8,7 +8,6 @@ export const apiClient = async (url: string, options: RequestInit = {}) => {
   }
 
   let accessToken = Cookies.get('access_token');
-
   let response = await fetch(url, {
     ...options,
     headers: {
@@ -32,6 +31,7 @@ export const apiClient = async (url: string, options: RequestInit = {}) => {
       },
     });
   }
+
 
   return response;
 };
