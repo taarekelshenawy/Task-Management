@@ -9,8 +9,8 @@ import Resetpassword from '../pages/Resetpassword';
 import Guard from '../Componenets/Guard/Guard';
 import AddProject from '../Componenets/AddProject/AddProject';
 import Projects from '../Componenets/Projects/Projects';
-import Epics from '../Componenets/Epics/Epics';
-import ProjectLayout from '../pages/ProjectLayout';
+import Epics from '../Componenets/Epics/CreateEpics';
+// import ProjectLayout from '../pages/ProjectLayout';
 import EditProject from '../Componenets/EditProject/EditProject';
 import ProjectMembers from '../Componenets/ProjectMemebers/ProjectMembers';
 
@@ -59,34 +59,17 @@ const router = createBrowserRouter([
             path: 'epics',
             element: <Epics />,
           },
-        ],
-      },
-      {
-        path: 'project/:projectId',
-        element: (
-          <Guard>
-            <ProjectLayout />
-          </Guard>
-        ),
-        children: [
-          {
-            path: 'tasks',
-            element: <div>Tasks Page</div>,
+           {
+            path: ':projectId/edit',
+            element: <EditProject/>,
           },
           {
-            path: 'epics',
-            element: <Epics />,
-          },
-          {
-            path: 'members',
+            path: ':projectId/members',
             element: <ProjectMembers/>,
           },
-          {
-            path: 'edit',
-            element:<EditProject/>,
-          },
         ],
       },
+    
     ],
   },
 ]);

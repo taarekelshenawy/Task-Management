@@ -3,11 +3,13 @@ import Sidebar from '../Componenets/Sidebar/leftSidebar';
 import { useAppDispatch } from '../Store/hooks';
 import { getUser } from '../Store/UserSlice';
 import { useAppSelector } from '../Store/hooks';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useParams } from 'react-router-dom';
 
 export default function Dashboard() {
   const dispatch = useAppDispatch();
   const { user, loading } = useAppSelector((state) => state.User);
+  const {projectId}=useParams();
+ 
 
   useEffect(() => {
     dispatch(getUser());
@@ -22,7 +24,7 @@ export default function Dashboard() {
 
   return (
     <div className="flex">
-      <Sidebar />
+      <Sidebar projectId={projectId} />
       <div className="flex flex-col w-full">
         {loading ? (
           <div className="p-4">...loading </div>

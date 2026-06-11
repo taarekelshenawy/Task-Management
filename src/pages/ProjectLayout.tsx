@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 export default function ProjectLayout() {
   return (
     <div className="flex w-full">
-      <ProjectSidebar />
+      {/* <ProjectSidebar /> */}
       <div className='w-full'>
       <Outlet/>
       </div>
