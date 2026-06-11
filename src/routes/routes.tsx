@@ -12,6 +12,7 @@ import Projects from '../Componenets/Projects/Projects';
 import Epics from '../Componenets/Epics/Epics';
 import ProjectLayout from '../pages/ProjectLayout';
 import EditProject from '../Componenets/EditProject/EditProject';
+import ProjectMembers from '../Componenets/ProjectMemebers/ProjectMembers';
 
 const router = createBrowserRouter([
   {
@@ -74,7 +75,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'members',
-            element: <div>Members Page</div>,
+            element: <ProjectMembers/>,
           },
           {
             path: 'edit',
