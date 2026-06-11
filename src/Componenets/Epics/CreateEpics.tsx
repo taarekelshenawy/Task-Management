@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 
-
 type Inputs = {
   name: string;
   description: string;
@@ -50,13 +49,14 @@ export default function Epics() {
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <div>
-<h1 className="text-4xl font-semibold text-slate-dark">
-          Create New Epic
-        </h1>
-        <p>Define a major project phase or high-level milestone to group
-related tasks and track architectural progress.</p>
+          <h1 className="text-4xl font-semibold text-slate-dark">
+            Create New Epic
+          </h1>
+          <p>
+            Define a major project phase or high-level milestone to group
+            related tasks and track architectural progress.
+          </p>
         </div>
-        
 
         <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
           <img src={inviteIcon} />
@@ -91,7 +91,7 @@ related tasks and track architectural progress.</p>
                 className="text-slate-md font-bold basis-[30%] "
                 htmlFor="project-title"
               >
-               TITLE
+                TITLE
               </label>
 
               <input
@@ -112,7 +112,10 @@ related tasks and track architectural progress.</p>
 
             {/* Description */}
             <div className="flex items-center gap-6">
-              <label className=" basis-[30%] text-slate-md font-bold" htmlFor="description">
+              <label
+                className=" basis-[30%] text-slate-md font-bold"
+                htmlFor="description"
+              >
                 Description
               </label>
 

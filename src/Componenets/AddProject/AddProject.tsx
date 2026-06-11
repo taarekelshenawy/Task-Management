@@ -9,7 +9,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 
-
 type Inputs = {
   name: string;
   description: string;
@@ -28,15 +27,11 @@ export default function AddProject() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await CreateProject(data);
-
-      toast.success('Project created successfully 🚀');
-
-      reset(); // يمسح الفورم بعد النجاح
+      toast.success('Project created successfully ');
+      reset();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Failed to create project: ${error.message}`);
-      } else {
-        toast.error('Something went wrong');
       }
     }
   };

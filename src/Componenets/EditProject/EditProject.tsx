@@ -12,41 +12,35 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getProjectDetails } from '../../services/projectService';
 
-
 type Inputs = {
   name: string;
   description: string;
 };
 
 export default function EditProject() {
-    const [currentData,setCurrentData]=useState([{name:'',description:''}])
+  const [currentData, setCurrentData] = useState([
+    { name: '', description: '' },
+  ]);
 
-    const {projectId}=useParams();
-        if (!projectId) {
-  throw new Error('Project ID is missing');
-}
+  const { projectId } = useParams();
+  if (!projectId) {
+    throw new Error('Project ID is missing');
+  }
 
-useEffect(()=>{
-     const fetchProjectDetails = async () => {
-      
-   
-         try {
-           const response = await getProjectDetails({projectId});
-   
-           const data = await response.json();
-           setCurrentData(data)
-   
-         } catch (err) {
-           console.error(err);
-        
-       };
-   
-     
-    }
-    fetchProjectDetails ();
+  useEffect(() => {
+    const fetchProjectDetails = async () => {
+      try {
+        const response = await getProjectDetails({ projectId });
 
-},[projectId])
-console.log(currentData[0].name)
+        const data = await response.json();
+        setCurrentData(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProjectDetails();
+  }, [projectId]);
+  console.log(currentData[0].name);
 
   const {
     register,
@@ -58,9 +52,9 @@ console.log(currentData[0].name)
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-const payload ={...data,projectId}
-      try {
-      await handleEditProject(payload)
+    const payload = { ...data, projectId };
+    try {
+      await handleEditProject(payload);
 
       toast.success('Project created successfully 🚀');
 
@@ -82,9 +76,7 @@ const payload ={...data,projectId}
       </header>
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
-        <h1 className="text-4xl font-semibold text-slate-dark">
-         Edit Project
-        </h1>
+        <h1 className="text-4xl font-semibold text-slate-dark">Edit Project</h1>
 
         <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
           <img src={inviteIcon} />
@@ -127,7 +119,6 @@ const payload ={...data,projectId}
                 id="project-title"
                 type="text"
                 value={currentData[0].name}
-  
                 className="bg-surface-high h-13 rounded px-3"
                 placeholder="Pr"
               />
@@ -172,7 +163,7 @@ const payload ={...data,projectId}
               type="submit"
               className="cursor-pointer bg-primary text-white p-3 rounded-sm font-bold w-40"
             >
-             Save
+              Save
             </button>
           </footer>
 

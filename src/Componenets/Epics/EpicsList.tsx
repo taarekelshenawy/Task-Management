@@ -12,7 +12,7 @@ type Project = {
   created_at: string;
 };
 
-export default function Projects() {
+export default function EpicsList() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
@@ -139,7 +139,9 @@ export default function Projects() {
       {/* Header */}
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <div>
-          <h1 className="text-4xl font-semibold text-slate-dark">Projects</h1>
+          <h1 className="text-4xl font-semibold text-slate-dark">
+            Project Epics
+          </h1>
           <p className="font-medium text-secondary">
             Manage and curate your projects
           </p>
@@ -167,7 +169,7 @@ export default function Projects() {
           <Link to={`/project/${project.id}/epics`}>
             <div
               key={project.id || `${project.name}-${project.created_at}`}
-              className="bg-white max-w-76 max-h-55 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
+              className="bg-white max-w-117 max-h-55 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
             >
               <div>
                 <h3 className="text-lg font-semibold text-slate-800 mb-2">

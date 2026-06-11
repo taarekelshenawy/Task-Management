@@ -13,6 +13,7 @@ import Epics from '../Componenets/Epics/CreateEpics';
 // import ProjectLayout from '../pages/ProjectLayout';
 import EditProject from '../Componenets/EditProject/EditProject';
 import ProjectMembers from '../Componenets/ProjectMemebers/ProjectMembers';
+import EpicsList from '../Componenets/Epics/EpicsList';
 
 const router = createBrowserRouter([
   {
@@ -59,17 +60,20 @@ const router = createBrowserRouter([
             path: 'epics',
             element: <Epics />,
           },
-           {
+          {
             path: ':projectId/edit',
-            element: <EditProject/>,
+            element: <EditProject />,
           },
           {
             path: ':projectId/members',
-            element: <ProjectMembers/>,
+            element: <ProjectMembers />,
+          },
+          {
+            path: ':projectId/epics',
+            element: <EpicsList />,
           },
         ],
       },
-    
     ],
   },
 ]);

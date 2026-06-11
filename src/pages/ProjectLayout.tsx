@@ -6,10 +6,9 @@ export default function ProjectLayout() {
   return (
     <div className="flex w-full">
       {/* <ProjectSidebar /> */}
-      <div className='w-full'>
-      <Outlet/>
+      <div className="w-full">
+        <Outlet />
       </div>
-    
     </div>
   );
 }

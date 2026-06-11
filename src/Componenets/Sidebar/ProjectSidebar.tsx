@@ -1,4 +1,4 @@
-import { Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import SignUpIcon from '../../assets/Icon.svg';
 import { logoutFunction } from '../../services/authService';
@@ -17,7 +17,6 @@ import {
 export default function ProjectSidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
 
   function handleLogout() {
     logoutFunction();

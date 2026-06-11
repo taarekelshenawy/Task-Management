@@ -83,9 +83,7 @@ export const AddProjectSchema = z.object({
 
   description: z
     .string()
-    .max(500, 'Description must not exceed 500 characters')
-    
+    .max(500, 'Description must not exceed 500 characters'),
 });
-
 
 export default signUpSchema;
