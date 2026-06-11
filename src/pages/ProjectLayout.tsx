@@ -1,11 +1,15 @@
 import React from 'react';
 import ProjectSidebar from '../Componenets/Sidebar/ProjectSidebar';
+import { Outlet } from 'react-router-dom';
 
 export default function ProjectLayout() {
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <ProjectSidebar />
-      <h1>welcome</h1>
+      <div className='w-full'>
+      <Outlet/>
+      </div>
+    
     </div>
   );
 }

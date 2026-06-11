@@ -49,3 +49,34 @@ export const GetProjects = async (data) => {
     throw new Error('Unknown error');
   }
 };
+
+export const handleEditProject = async (data: {
+  name: string;
+  description: string;
+  projectId:string,
+}) => {
+  console.log(data)
+  try {
+    const response = await apiClient(getBaseUrl(`rest/v1/projects?id=eq.${data.projectId}`), {
+      method: 'PATCH',
+      headers:{
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: data.name,
+        description: data.description,
+      }),
+    });
+
+    return response;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error('Unknown error');
+  }
+};

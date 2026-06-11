@@ -171,11 +171,13 @@ export default function Projects() {
                 <h3 className="text-lg font-semibold text-slate-800 mb-2">
                   {project.name}
                 </h3>
+     
 
                 <p className="text-sm text-slate-600 font-bold">
                   {project.description || 'No description provided'}
                 </p>
               </div>
+         
 
               <div className="pt-4 flex justify-between">
                 <p className="text-xs text-slate-500">Created at</p>
@@ -184,6 +186,18 @@ export default function Projects() {
                   {formatDate(project.created_at)}
                 </time>
               </div>
+
+              <div className='flex justify-end mt-4'>
+            <Link
+    to={`/project/${project.id}/edit`}
+    onClick={(e) => e.stopPropagation()}
+    className="max-w-20 px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 transition-all duration-200 shadow-sm"
+  >
+    Edit
+  </Link>
+              </div>
+
+    
             </div>
           </Link>
         ))}

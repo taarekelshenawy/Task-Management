@@ -11,6 +11,7 @@ import AddProject from '../Componenets/AddProject/AddProject';
 import Projects from '../Componenets/Projects/Projects';
 import Epics from '../Componenets/Epics/Epics';
 import ProjectLayout from '../pages/ProjectLayout';
+import EditProject from '../Componenets/EditProject/EditProject';
 
 const router = createBrowserRouter([
   {
@@ -77,7 +78,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'edit',
-            element: <div>Edit Project</div>,
+            element:<EditProject/>,
           },
         ],
       },
