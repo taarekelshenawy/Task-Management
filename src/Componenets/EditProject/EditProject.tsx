@@ -9,6 +9,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { handleEditProject } from '../../services/projectService';
 import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getProjectDetails } from '../../services/projectService';
 
 
 type Inputs = {
@@ -17,12 +19,35 @@ type Inputs = {
 };
 
 export default function EditProject() {
+    const [currentData,setCurrentData]=useState([{name:'',description:''}])
 
     const {projectId}=useParams();
         if (!projectId) {
   throw new Error('Project ID is missing');
 }
-console.log(projectId)
+
+useEffect(()=>{
+     const fetchProjectDetails = async () => {
+      
+   
+         try {
+           const response = await getProjectDetails({projectId});
+   
+           const data = await response.json();
+           setCurrentData(data)
+   
+         } catch (err) {
+           console.error(err);
+        
+       };
+   
+     
+    }
+    fetchProjectDetails ();
+
+},[projectId])
+console.log(currentData[0].name)
+
   const {
     register,
     handleSubmit,
@@ -101,6 +126,8 @@ const payload ={...data,projectId}
                 {...register('name')}
                 id="project-title"
                 type="text"
+                value={currentData[0].name}
+  
                 className="bg-surface-high h-13 rounded px-3"
                 placeholder="Pr"
               />
@@ -121,6 +148,7 @@ const payload ={...data,projectId}
 
               <textarea
                 {...register('description')}
+                value={currentData[0].description}
                 id="description"
                 className="bg-surface-high w-full h-37 rounded px-3 p-2"
                 placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
