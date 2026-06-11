@@ -8,6 +8,7 @@ import { AddProjectSchema } from '../../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 type Inputs = {
   name: string;
@@ -38,7 +39,12 @@ export default function AddProject() {
   return (
     <main className="p-7">
       <header className="flex items-center gap-2 max-sm:hidden">
-        <p className="font-bold text-secondary">PROJECTS</p>
+        <Link
+          to="/project"
+          className="font-bold text-secondary hover:underline"
+        >
+          PROJECTS
+        </Link>
         <img src={arrowIcon} className="w-2" />
         <p className="font-bold text-primary">ADD NEW PROJECT</p>
       </header>
@@ -123,9 +129,12 @@ export default function AddProject() {
 
           {/* FORM FOOTER */}
           <footer className="flex justify-between items-center max-sm:flex-col-reverse max-sm:gap-4 mt-6">
-            <button type="button" className="font-bold">
+            <Link to="/project">
+                <button type="button" className="font-bold">
               Back
             </button>
+            </Link>
+        
 
             <button
               type="submit"
