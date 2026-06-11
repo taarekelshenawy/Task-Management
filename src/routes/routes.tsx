@@ -55,6 +55,10 @@ const router = createBrowserRouter([
             path: 'add',
             element: <AddProject />,
           },
+          {
+            path: 'epics',
+            element: <Epics />,
+          },
         ],
       },
       {

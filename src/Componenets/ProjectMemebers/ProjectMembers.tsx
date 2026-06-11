@@ -1,18 +1,39 @@
 import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
-import { useAppSelector } from '../../Store/hooks';
-import { useAppDispatch } from '../../Store/hooks';
-import { useEffect } from 'react';
-import { getUser } from '../../Store/UserSlice';
+import { useEffect, useState } from 'react';
+import { getProjectMembers } from '../../services/projectService';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 export default function ProjectMembers() {
-     const dispatch = useAppDispatch();
-     const { user, loading } = useAppSelector((state) => state.User);
+    const [members,setMemebers]=useState([{metadata:{name:''},email:'',role:''}])
+    const {projectId}=useParams()
+    if(!projectId){
+        throw new Error('there no project Id')
+    }
+     console.log(members)
    
      useEffect(() => {
-       dispatch(getUser());
-     }, [dispatch]);
-       const name = user?.user_metadata?.name ?? '';
+     const fetchProjectMembers =async()=>{
+        try{
+            const response = await getProjectMembers({projectId});
+            const data = await response.json();
+            setMemebers(data)
+
+        }catch(error){
+            if(error instanceof Error){
+   toast.error(error.message)
+            }
+         
+
+        }
+
+     }
+     fetchProjectMembers()
+     }, [projectId]
+    );
+       const name = members[0]?.metadata.name ?? '';
 
   const userName = name
     ? `${name.split(' ')[0]?.slice(0, 1)?.toUpperCase() ?? ''}
@@ -20,7 +41,7 @@ export default function ProjectMembers() {
     : '';
   return (
     <div className='w-full p-7'>
-
+{/* 
          <div className="flex flex-col w-full">
         {loading ? (
           <div className="p-4">...loading </div>
@@ -39,7 +60,7 @@ export default function ProjectMembers() {
             </div>
           </div>
         )}
-        </div>
+        </div> */}
 
           <header className="flex items-center gap-2 max-sm:hidden">
         <p className="font-bold text-secondary">PROJECTS</p>
@@ -86,16 +107,16 @@ export default function ProjectMembers() {
 
           {/* avatar */}
           <div className="w-12 h-12 rounded-xl bg-[#0052CC] flex items-center justify-center text-white font-bold">
-            {user ? userName : ""}
+            {members ? userName : ""}
           </div>
 
           {/* info */}
           <div className="flex flex-col">
             <h2 className="font-semibold text-gray-900">
-              {user?.user_metadata.name}
+              {userName}
             </h2>
             <p className="text-sm text-gray-500">
-              {user?.user_metadata.email}
+              {members[0].email}
             </p>
 
           
@@ -107,7 +128,7 @@ export default function ProjectMembers() {
       {/* ROLE column (لو عايز تفصله بدل ما يكون تحت الاسم) */}
     <td className="p-4 align-middle">
   <span className="bg-primary w-17 h-5 p-1 rounded-2xl px-7 text-white">
-    Owner
+    {members[0]?.role}
   </span>
 </td>
 
@@ -126,26 +147,4 @@ export default function ProjectMembers() {
     </div>
   )
 }
-    {/* <tbody>
-                 <tr>
-                <td>
-            
-            <div className="flex items-center gap-2 ">
-                 <div className="w-10 h-10 rounded-xl bg-[#0052CC] flex justify-center items-center text-white">
-                <p>{user ? userName : ''}</p>
-              </div>
-              <div>
-                <h2 className="font-bold">{user?.user_metadata.name}</h2>
-                <p className="font-bold text-[#003D9B]">
-                  {user?.user_metadata.department}
-                </p>
-              </div>
-             
-            </div>
-       
-                </td>
-                <td>Owner</td>
-                <td></td>
-            </tr>
-
-            </tbody> */}
+  

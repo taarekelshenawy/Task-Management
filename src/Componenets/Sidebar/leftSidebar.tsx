@@ -73,7 +73,16 @@ export default function Sidebar() {
                 {!collapsed && <span>Projects</span>}
               </Link>
             </li>
-
+  <li>
+            <Link
+              to="epics"
+              onClick={() => setIsMobileOpen(false)}
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
+            >
+         
+              {!collapsed && <span>Project Tasks</span>}
+            </Link>
+          </li>
             {/* <li>
               <Link
                 to="/project/epics"

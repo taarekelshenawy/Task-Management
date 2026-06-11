@@ -95,3 +95,24 @@ export const getProjectDetails = async (data: {
     throw new Error('Unknown error');
   }
 };
+
+export const getProjectMembers = async (data: {
+  projectId:string,
+}) => {
+  try {
+    const response = await apiClient(getBaseUrl(`rest/v1/get_project_members?project_id=eq.${data.projectId}`), {
+    
+    });
+
+    return response;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+   
+
+    throw new Error('Unknown error');
+  }
+};
+
+
