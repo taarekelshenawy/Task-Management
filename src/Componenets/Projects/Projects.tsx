@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+
+
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { GetProjects } from '../../services/projectService';
 import EmptyIcon from '../../assets/EmptyIcon.png';
 import arrowRight from '../../assets/arrowRight.png';
@@ -18,7 +20,12 @@ export default function Projects() {
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia('(max-width: 639px)').matches,
+  );
+  const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const windowSize = 5;
 
@@ -51,10 +58,31 @@ export default function Projects() {
 
   const { total, displayedCount, totalPages } = parsed;
 
+  // ===== Mobile detection (matches Tailwind max-sm: 639px) =====
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 639px)');
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
+      setCurrentPage(1);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
   // ===== Fetch Projects =====
   useEffect(() => {
     const fetchProjects = async () => {
-      setLoading(true);
+      const isLoadMore = isMobile && currentPage > 1;
+
+      if (isLoadMore) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+
       setError('');
       try {
         const response = await GetProjects({ limit, offset });
@@ -62,24 +90,46 @@ export default function Projects() {
         const contentRangeHeader = response.headers.get('Content-Range') || '';
 
         setContentRange(contentRangeHeader);
-        setProjects(data || []);
+
+        if (isLoadMore) {
+          setProjects((prev) => [...prev, ...(data || [])]);
+        } else {
+          setProjects(data || []);
+        }
       } catch (err) {
         console.error(err);
         setError('Failed to load projects');
       } finally {
         setLoading(false);
+        setLoadingMore(false);
       }
     };
 
     fetchProjects();
-  }, [offset]);
+  }, [offset, isMobile, currentPage]);
 
-  // ===== Prevent invalid page =====
+  // ===== Infinite scroll (mobile only) =====
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setCurrentPage(totalPages);
-    }
-  }, [totalPages, currentPage]);
+    if (!isMobile || !loadMoreRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          !loading &&
+          !loadingMore &&
+          currentPage < totalPages
+        ) {
+          setCurrentPage((page) => page + 1);
+        }
+      },
+      { rootMargin: '120px' },
+    );
+
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [isMobile, loading, loadingMore, currentPage, totalPages]);
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-GB', {
@@ -148,7 +198,7 @@ export default function Projects() {
       </section>
 
       {/* Loading */}
-      {loading && <ProjectSkeleton count={limit}/>}
+      {loading && projects.length === 0 && <ProjectSkeleton count={limit} />}
 
       {/* Error */}
       {error && <p className="text-center text-red-500">{error}</p>}
@@ -159,7 +209,7 @@ export default function Projects() {
           <Link to={`/project/${project.id}/epics`}>
             <div
               key={project.id || `${project.name}-${project.created_at}`}
-              className="bg-white max-w-76 max-h-55 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
+              className="bg-white max-w-76 max-h-80 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
             >
               <div>
                 <h3 className="text-lg font-semibold text-slate-800 mb-2">
@@ -193,13 +243,24 @@ export default function Projects() {
         ))}
       </div>
 
+      {/* Infinite scroll sentinel (mobile only) */}
+      {isMobile && currentPage < totalPages && (
+        <div ref={loadMoreRef} className="h-1 sm:hidden" aria-hidden="true" />
+      )}
+
+      {loadingMore && (
+        <div className="sm:hidden">
+          <ProjectSkeleton count={1} />
+        </div>
+      )}
+
       {/* Pagination */}
       <div className="flex justify-between bg-white p-4 items-center">
         <p className="font-bold text-secondary">
           Showing {displayedCount} of {total} active projects
         </p>
 
-        <div className="flex items-center gap-2">
+        <div className="max-sm:hidden flex items-center gap-2">
           {/* Prev */}
           <button
             onClick={() => setCurrentPage((p) => p - 1)}
