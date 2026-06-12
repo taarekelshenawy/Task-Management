@@ -30,8 +30,8 @@ export default function Epics() {
     futureDate.setDate(futureDate.getDate() + 7);
     const data = {
       ...payload,
-      assignee_id: members.user_id,
-      project_id: members.project_id,
+      assignee_id:members?.[0]?.user_id,
+      project_id:members?.[0]?.project_id,
       deadline: futureDate.toISOString().split('T')[0],
     };
 

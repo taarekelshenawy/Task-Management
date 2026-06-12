@@ -18,7 +18,7 @@ import {
 export default function Sidebar({ projectId }:{projectId:string}) {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  console.log(projectId);
+if (!projectId) return null;
 
   function handleLogout() {
     logoutFunction();
