@@ -69,7 +69,7 @@ const router = createBrowserRouter([
             element: <ProjectMembers />,
           },
           {
-            path: ':projectId/epics',
+            path: ':projectId/epics/new',
             element: <EpicsList />,
           },
         ],
