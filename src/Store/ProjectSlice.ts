@@ -7,6 +7,10 @@ type Member = {
   project_id: string;
   user_id: string;
   role?: string;
+  email:string,
+  member_id:string,
+  metadata:{name:string}
+  
 };
 
 type StateProps = {
@@ -18,7 +22,7 @@ type StateProps = {
 const initialState: StateProps = {
   loading: false,
   error: null,
-  members: [],
+  members:[],
 };
 
 export const getProjectMembers = createAsyncThunk(

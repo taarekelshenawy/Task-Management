@@ -31,7 +31,6 @@ export default function EpicsList() {
     throw new Error('there is no project id');
   }
 
-
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-GB', {
       day: 'numeric',
@@ -49,7 +48,6 @@ export default function EpicsList() {
       try {
         const data = await getProjectEpics(projectId);
 
-
         setEpics(data || []);
       } catch (err) {
         console.error(err);
@@ -61,7 +59,7 @@ export default function EpicsList() {
 
     fetchEpics();
   }, [projectId]);
-console.log(epics)
+  console.log(epics);
   // ===== Empty State =====
   if (!loading && epics.length === 0) {
     return (
@@ -69,7 +67,9 @@ console.log(epics)
         <div className="max-w-75 text-center flex flex-col gap-5">
           <img src={EmptyIcon} className="max-w-[288px]" />
           <h1 className="font-bold text-2xl">No Epics</h1>
-          <p>You don’t have any epics yet. Start by creating your first epic.</p>
+          <p>
+            You don’t have any epics yet. Start by creating your first epic.
+          </p>
 
           <div className="flex justify-center">
             <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
@@ -100,9 +100,7 @@ console.log(epics)
       </section>
 
       {/* Loading */}
-      {loading && (
-        <p className="text-center text-gray-500">Loading epics...</p>
-      )}
+      {loading && <p className="text-center text-gray-500">Loading epics...</p>}
 
       {/* Error */}
       {error && <p className="text-center text-red-500">{error}</p>}
@@ -116,9 +114,7 @@ console.log(epics)
           >
             {/* Top */}
             <div>
-              <p className="text-xs text-gray-500 font-bold">
-                {epic.epic_id}
-              </p>
+              <p className="text-xs text-gray-500 font-bold">{epic.epic_id}</p>
 
               <h3 className="text-lg font-semibold text-slate-800 mb-2">
                 {epic.title}
@@ -181,8 +177,6 @@ console.log(epics)
     </div>
   );
 }
-
-
 
 // import { useEffect, useMemo, useState } from 'react';
 // import { GetProjects } from '../../services/projectService';

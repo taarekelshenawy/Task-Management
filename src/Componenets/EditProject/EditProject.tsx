@@ -31,16 +31,17 @@ export default function EditProject() {
     const fetchProjectDetails = async () => {
       try {
         const response = await getProjectDetails({ projectId });
-
         const data = await response.json();
         setCurrentData(data);
       } catch (err) {
-        console.error(err);
+        if(err instanceof Error){
+       toast.error(err.message)
+        }
+
       }
     };
     fetchProjectDetails();
   }, [projectId]);
-  console.log(currentData[0].name);
 
   const {
     register,
@@ -56,9 +57,9 @@ export default function EditProject() {
     try {
       await handleEditProject(payload);
 
-      toast.success('Project created successfully 🚀');
+      toast.success('Project Edit created successfully ');
 
-      reset(); // يمسح الفورم بعد النجاح
+      reset(); 
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Failed to Edit project: ${error.message}`);

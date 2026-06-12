@@ -38,7 +38,7 @@ export default function SignUp() {
       await registerFunction(data);
       toast('Account created successfully ');
       setLoading(false);
-      navigate('/');
+      navigate('/project');
     } catch (error) {
       if (error instanceof Error) {
         toast(error.message);

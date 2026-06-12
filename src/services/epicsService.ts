@@ -1,6 +1,5 @@
-import { apiClient } from "../utils/apiClient";
-import getBaseUrl from "../utils/api";
-
+import { apiClient } from '../utils/apiClient';
+import getBaseUrl from '../utils/api';
 
 export const createNewEpic = async (data: {
   title: string;
@@ -31,13 +30,10 @@ export const createNewEpic = async (data: {
 export const getProjectEpics = async (projectId: string) => {
   try {
     const response = await apiClient(
-      getBaseUrl(
-        `rest/v1/project_epics?project_id=eq.${projectId}`
-      )
+      getBaseUrl(`rest/v1/project_epics?project_id=eq.${projectId}`),
     );
 
     const data = await response.json();
-
 
     return data;
   } catch (error) {

@@ -17,7 +17,7 @@ type Inputs = {
 };
 
 export default function Epics() {
-  const {members}=useAppSelector((state)=>state.Project)
+  const { members } = useAppSelector((state) => state.Project);
   const {
     register,
     handleSubmit,
@@ -29,14 +29,13 @@ export default function Epics() {
 
   const onSubmit: SubmitHandler<Inputs> = async (payload) => {
     const futureDate = new Date();
-futureDate.setDate(futureDate.getDate() + 7);
-    const data ={
+    futureDate.setDate(futureDate.getDate() + 7);
+    const data = {
       ...payload,
-      assignee_id:members.user_id,
-      project_id:members.project_id,
-     deadline: futureDate.toISOString().split('T')[0],
-
-    }
+      assignee_id: members.user_id,
+      project_id: members.project_id,
+      deadline: futureDate.toISOString().split('T')[0],
+    };
 
     try {
       await createNewEpic(data);

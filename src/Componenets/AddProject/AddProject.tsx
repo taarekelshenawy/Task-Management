@@ -53,8 +53,7 @@ export default function AddProject() {
         <h1 className="text-4xl font-semibold text-slate-dark">
           Add New Project
         </h1>
-
-        <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
+        <button className="flex items-center rounded-xs cursor-pointer gap-2 bg-primary w-45 h-11 justify-center text-white">
           <img src={inviteIcon} />
           <span className="font-bold">Invite Member</span>
         </button>
