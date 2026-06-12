@@ -1,10 +1,10 @@
-const MemberSkeleton = () => {
+export const MemberSkeleton = () => {
   return (
     <tr className="animate-pulse">
       {/* MEMBER */}
       <td className="p-4">
         <div className="flex items-center gap-3">
-          {/* avatar skeleton */}
+          {/* avatar */}
           <div className="w-12 h-12 rounded-xl bg-gray-300" />
 
           {/* name + email */}
@@ -27,5 +27,3 @@ const MemberSkeleton = () => {
     </tr>
   );
 };
-
-export default MemberSkeleton;

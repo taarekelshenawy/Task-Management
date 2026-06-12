@@ -22,12 +22,13 @@ export const CreateProject = async (data: {
     if (error instanceof Error) {
       throw error;
     }
+     throw new Error('No response returned from server');
 
-    throw new Error('Unknown error');
+  
   }
 };
 
-export const GetProjects = async (data) => {
+export const GetProjects = async (data:{limit:number,offset:number}) => {
   const { limit, offset } = data;
   try {
     const response = await apiClient(
@@ -45,8 +46,9 @@ export const GetProjects = async (data) => {
     if (error instanceof Error) {
       throw error;
     }
+     throw new Error('No response returned from server');
 
-    throw new Error('Unknown error');
+
   }
 };
 
@@ -76,7 +78,9 @@ export const handleEditProject = async (data: {
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Unknown error');
+     throw new Error('No response returned from server');
+    
+   
   }
 };
 
@@ -92,8 +96,8 @@ export const getProjectDetails = async (data: { projectId: string }) => {
     if (error instanceof Error) {
       throw error;
     }
+  throw new Error('No response returned from server');
 
-    throw new Error('Unknown error');
   }
 };
 
@@ -109,7 +113,8 @@ export const getProjectMembers = async (data: { projectId: string }) => {
     if (error instanceof Error) {
       throw error;
     }
+     throw new Error('No response returned from server');
 
-    throw new Error('Unknown error');
+
   }
 };

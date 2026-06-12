@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../Store/hooks';
 import { getProjectMembers } from '../../Store/ProjectSlice';
 import { Link } from 'react-router-dom';
-import MemberSkeleton from './MemberSkelton';
+import { MemberSkeleton } from './MemberSkelton';
 
 export default function ProjectMembers() {
   const { members,loading } = useAppSelector((state) => state.Project);

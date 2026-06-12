@@ -2,13 +2,17 @@ import { apiClient } from '../utils/apiClient';
 import getBaseUrl from '../utils/api';
 
 export const createNewEpic = async (data: {
-  title: string;
-  description: string;
-  project_id: string;
-  assignee_id?: string;
-  deadline?: string;
+
+    assignee_id: string;
+    project_id: string;
+    deadline: string;
+    title: string;
+    description: string;
+
+
 }) => {
   try {
+    console.log(data)
     const response = await apiClient(getBaseUrl('rest/v1/epics'), {
       method: 'POST',
       body: JSON.stringify({
@@ -23,7 +27,7 @@ export const createNewEpic = async (data: {
     return response;
   } catch (error) {
     if (error instanceof Error) throw error;
-    throw new Error('Unknown error');
+   
   }
 };
 
@@ -38,6 +42,6 @@ export const getProjectEpics = async (projectId: string) => {
     return data;
   } catch (error) {
     if (error instanceof Error) throw error;
-    throw new Error('Unknown error');
+
   }
 };

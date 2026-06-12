@@ -10,6 +10,7 @@ import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
+
 type Inputs = {
   name: string;
   description: string;
@@ -60,6 +61,7 @@ export default function AddProject() {
       </section>
 
       <section>
+        
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="shadow-form flex flex-col max-w-2xl mx-auto p-8 bg-white mt-9"

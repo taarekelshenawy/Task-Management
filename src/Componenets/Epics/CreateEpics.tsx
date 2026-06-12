@@ -2,17 +2,15 @@ import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
-import BentoIcon from '../../assets/BentoIcon.png';
 import TipIcon from '../../assets/TipIcon.png';
-import { AddProjectSchema } from '../../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 import { createNewEpic } from '../../services/epicsService';
 import { useAppSelector } from '../../Store/hooks';
+import { AddProjectEpicsSchema } from '../../utils/validationSchema';
 
 type Inputs = {
-  name: string;
+  title: string;
   description: string;
 };
 
@@ -24,7 +22,7 @@ export default function Epics() {
     reset,
     formState: { errors },
   } = useForm<Inputs>({
-    resolver: zodResolver(AddProjectSchema),
+    resolver: zodResolver(AddProjectEpicsSchema),
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (payload) => {
@@ -42,7 +40,7 @@ export default function Epics() {
 
       toast.success('projectEpic created successfully 🚀');
 
-      reset(); // يمسح الفورم بعد النجاح
+      reset(); 
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Failed to create project: ${error.message}`);
@@ -81,19 +79,7 @@ export default function Epics() {
           onSubmit={handleSubmit(onSubmit)}
           className="shadow-form flex flex-col max-w-2xl mx-auto p-8 bg-white mt-9"
         >
-          {/* FORM HEADER */}
-          {/* <header className="flex items-center gap-2 mb-9">
-            <div className="max-sm:hidden w-11 h-11 bg-primary-container/10 flex justify-center items-center">
-              <img src={BentoIcon} />
-            </div>
-
-            <div>
-              <h2 className="text-3xl font-semibold">Initialize New Project</h2>
-              <p className="text-slate-md font-medium">
-                Define the scope and foundational details of your project.
-              </p>
-            </div>
-          </header> */}
+          
 
           {/* FORM CONTENT */}
           <section className="flex flex-col gap-6">
@@ -107,17 +93,17 @@ export default function Epics() {
               </label>
 
               <input
-                {...register('name')}
+                {...register('title')}
                 id="project-title"
                 type="text"
                 className="bg-surface-high h-13 rounded px-3 w-full"
                 placeholder="Pr"
               />
 
-              {errors.name && (
+              {errors.title && (
                 <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
                   <span className="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-                  {errors.name.message}
+                  {errors.title.message}
                 </p>
               )}
             </div>

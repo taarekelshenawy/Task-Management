@@ -119,7 +119,7 @@ export default function EditProject() {
                 {...register('name')}
                 id="project-title"
                 type="text"
-                value={currentData[0].name}
+                defaultValue={currentData[0]?.name}
                 className="bg-surface-high h-13 rounded px-3"
                 placeholder="Pr"
               />
@@ -140,7 +140,7 @@ export default function EditProject() {
 
               <textarea
                 {...register('description')}
-                value={currentData[0].description}
+                defaultValue={currentData[0]?.description}
                 id="description"
                 className="bg-surface-high w-full h-37 rounded px-3 p-2"
                 placeholder="Provide a high-level overview of the project's architectural objectives and key milestones..."
