@@ -8,6 +8,8 @@ import { AddProjectSchema } from '../../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
+import { createNewEpic } from '../../services/epicsService';
+import { useAppSelector } from '../../Store/hooks';
 
 type Inputs = {
   name: string;
@@ -15,6 +17,7 @@ type Inputs = {
 };
 
 export default function Epics() {
+  const {members}=useAppSelector((state)=>state.Project)
   const {
     register,
     handleSubmit,
@@ -24,11 +27,21 @@ export default function Epics() {
     resolver: zodResolver(AddProjectSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    try {
-      await CreateProject(data);
+  const onSubmit: SubmitHandler<Inputs> = async (payload) => {
+    const futureDate = new Date();
+futureDate.setDate(futureDate.getDate() + 7);
+    const data ={
+      ...payload,
+      assignee_id:members.user_id,
+      project_id:members.project_id,
+     deadline: futureDate.toISOString().split('T')[0],
 
-      toast.success('Project created successfully 🚀');
+    }
+
+    try {
+      await createNewEpic(data);
+
+      toast.success('projectEpic created successfully 🚀');
 
       reset(); // يمسح الفورم بعد النجاح
     } catch (error) {
