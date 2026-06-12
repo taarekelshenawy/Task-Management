@@ -8,23 +8,30 @@ export const CreateProject = async (data: {
   try {
     const response = await apiClient(getBaseUrl('rest/v1/projects'), {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation',
+      },
       body: JSON.stringify({
         name: data.name,
         description: data.description,
       }),
     });
 
-    return response;
+    const result = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      throw new Error(
+        result?.message || result?.error || result?.hint || 'Failed to create project',
+      );
+    }
+
+    return result;
   } catch (error) {
     if (error instanceof Error) {
       throw error;
     }
-    if (error instanceof Error) {
-      throw error;
-    }
-     throw new Error('No response returned from server');
-
-  
+    throw new Error('No response returned from server');
   }
 };
 

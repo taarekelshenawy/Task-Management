@@ -8,7 +8,7 @@ import { AddProjectSchema } from '../../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 type Inputs = {
@@ -17,6 +17,7 @@ type Inputs = {
 };
 
 export default function AddProject() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -31,6 +32,7 @@ export default function AddProject() {
       await CreateProject(data);
       toast.success('Project created successfully ');
       reset();
+      navigate('/project', { replace: true });
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Failed to create project: ${error.message}`);

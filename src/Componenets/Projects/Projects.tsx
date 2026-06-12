@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { GetProjects } from '../../services/projectService';
 import arrowRight from '../../assets/arrowRight.png';
 import arrowLeft from '../../assets/arrowleft.png';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Skeleton from '../ui/Skelton';
 import Emptystate from '../ui/Emptystate';
 
@@ -14,6 +14,7 @@ type Project = {
 };
 
 export default function Projects() {
+  const location = useLocation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
@@ -102,7 +103,7 @@ export default function Projects() {
     };
 
     fetchProjects();
-  }, [offset, isMobile, currentPage]);
+  }, [offset, isMobile, currentPage, location.key]);
 
   // ===== Infinite scroll (mobile only) =====
   useEffect(() => {
