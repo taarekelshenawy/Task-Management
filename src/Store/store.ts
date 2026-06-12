@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userslice from './UserSlice';
+import projectslice from './ProjectSlice';
 // ...
 
 export const store = configureStore({
   reducer: {
     User: userslice,
+    Project: projectslice,
   },
 });
 

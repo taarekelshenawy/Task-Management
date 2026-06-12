@@ -130,11 +130,10 @@ export default function AddProject() {
           {/* FORM FOOTER */}
           <footer className="flex justify-between items-center max-sm:flex-col-reverse max-sm:gap-4 mt-6">
             <Link to="/project">
-                <button type="button" className="font-bold">
-              Back
-            </button>
+              <button type="button" className="font-bold">
+                Back
+              </button>
             </Link>
-        
 
             <button
               type="submit"

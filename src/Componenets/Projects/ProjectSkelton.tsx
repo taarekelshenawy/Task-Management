@@ -1,7 +1,4 @@
-
-
-
-function ProjectSkeleton({count}:{count:number}) {
+function ProjectSkeleton({ count }: { count: number }) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
       {Array.from({ length: count }).map((_, i) => (

@@ -1,5 +1,3 @@
-
-
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { GetProjects } from '../../services/projectService';
 import EmptyIcon from '../../assets/EmptyIcon.png';
@@ -297,5 +295,3 @@ export default function Projects() {
     </div>
   );
 }
-
-
