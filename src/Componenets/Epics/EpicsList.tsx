@@ -78,7 +78,7 @@ export default function EpicsList() {
         title="No Epics"
         description="You don’t have any epics yet. Start by creating your first epic."
         buttonText="+ Create New Epic"
-        link={`/project/${projectId}/epics/new`}
+        link={`/project/${projectId}/epics/create`}
       />
     );
   }
@@ -109,7 +109,7 @@ export default function EpicsList() {
           </p>
         </div>
 
-        <Link to="/project/epics">
+        <Link to={`/project/${projectId}/epics/create`}>
          <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
           + Create New Epic
         </button>

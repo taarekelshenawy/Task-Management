@@ -1,12 +1,15 @@
 import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
 import TipIcon from '../../assets/TipIcon.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { createNewEpic } from '../../services/epicsService';
-import { useAppSelector } from '../../Store/hooks';
+import { useAppDispatch, useAppSelector } from '../../Store/hooks';
+import { getProjectMembers } from '../../Store/ProjectSlice';
 import { AddProjectEpicsSchema } from '../../utils/validationSchema';
 
 type Inputs = {
@@ -16,6 +19,18 @@ type Inputs = {
 
 export default function Epics() {
   const { members } = useAppSelector((state) => state.Project);
+  const { user } = useAppSelector((state) => state.User);
+  const dispatch = useAppDispatch();
+  const { projectId } = useParams();
+
+  if (!projectId) {
+    throw new Error('there is no project id');
+  }
+
+  useEffect(() => {
+    dispatch(getProjectMembers({ projectId }));
+  }, [projectId, dispatch]);
+
   const {
     register,
     handleSubmit,
@@ -24,14 +39,25 @@ export default function Epics() {
   } = useForm<Inputs>({
     resolver: zodResolver(AddProjectEpicsSchema),
   });
-
+ 
   const onSubmit: SubmitHandler<Inputs> = async (payload) => {
+    const assigneeId =
+      members.find((member) => member.user_id === user?.id)?.user_id ??
+      members[0]?.user_id ??
+      user?.id;
+
+    if (!assigneeId) {
+      toast.error('Unable to determine assignee. Please try again.');
+      return;
+    }
+
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + 7);
+
     const data = {
       ...payload,
-      assignee_id:members?.[0]?.user_id,
-      project_id:members?.[0]?.project_id,
+      assignee_id: assigneeId,
+      project_id: projectId,
       deadline: futureDate.toISOString().split('T')[0],
     };
 

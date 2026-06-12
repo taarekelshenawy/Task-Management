@@ -12,9 +12,11 @@ export const createNewEpic = async (data: {
 
 }) => {
   try {
-    console.log(data)
     const response = await apiClient(getBaseUrl('rest/v1/epics'), {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         title: data.title,
         description: data.description,
@@ -24,10 +26,18 @@ export const createNewEpic = async (data: {
       }),
     });
 
-    return response;
+    const result = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      throw new Error(
+        result?.message || result?.error || 'Failed to create epic',
+      );
+    }
+
+    return result;
   } catch (error) {
     if (error instanceof Error) throw error;
-   
+    throw new Error('Failed to create epic');
   }
 };
 
