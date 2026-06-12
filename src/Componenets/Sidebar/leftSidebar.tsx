@@ -15,10 +15,10 @@ import {
   Info,
 } from 'lucide-react';
 
-export default function Sidebar({ projectId }:{projectId:string}) {
+export default function Sidebar({ projectId }:{projectId?:string}) {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-if (!projectId) return null;
+
 
   function handleLogout() {
     logoutFunction();
