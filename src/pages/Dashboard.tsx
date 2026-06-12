@@ -4,6 +4,7 @@ import ProjectHeader from '../Componenets/ProjectHeader/ProjectHeader';
 
 export default function Dashboard() {
   const { projectId } = useParams();
+  if (!projectId) return null;
 
   return (
     <div className="flex">
