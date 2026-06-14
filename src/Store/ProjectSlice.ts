@@ -16,6 +16,7 @@ type Member = {
 type StateProps = {
   loading: boolean;
   error: string | null;
+ isFetched:boolean,
   members: Member[];
 };
 
@@ -23,6 +24,7 @@ const initialState: StateProps = {
   loading: false,
   error: null,
   members:[],
+  isFetched:false,
 };
 
 export const getProjectMembers = createAsyncThunk(
@@ -64,13 +66,16 @@ const projectMembersSlice = createSlice({
       .addCase(getProjectMembers.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.isFetched=false;
       })
       .addCase(getProjectMembers.fulfilled, (state, action) => {
         state.loading = false;
         state.members = action.payload;
+        state.isFetched=true;
       })
       .addCase(getProjectMembers.rejected, (state, action) => {
         state.loading = false;
+        state.isFetched=false;
         state.error =
           (action.payload as string) || 'Failed to get project members';
       });

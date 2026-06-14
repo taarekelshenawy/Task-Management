@@ -108,20 +108,20 @@ export const getProjectDetails = async (data: { projectId: string }) => {
   }
 };
 
-export const getProjectMembers = async (data: { projectId: string }) => {
-  try {
-    const response = await apiClient(
-      getBaseUrl(`rest/v1/get_project_members?project_id=eq.${data.projectId}`),
-      {},
-    );
+// export const getProjectMembers = async (data: { projectId: string }) => {
+//   try {
+//     const response = await apiClient(
+//       getBaseUrl(`rest/v1/get_project_members?project_id=eq.${data.projectId}`),
+//       {},
+//     );
 
-    return response;
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-     throw new Error('No response returned from server');
+//     return response;
+//   } catch (error) {
+//     if (error instanceof Error) {
+//       throw error;
+//     }
+//      throw new Error('No response returned from server');
 
 
-  }
-};
+//   }
+// };

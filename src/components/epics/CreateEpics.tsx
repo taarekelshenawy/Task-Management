@@ -1,16 +1,16 @@
 import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
 import TipIcon from '../../assets/TipIcon.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { createNewEpic } from '../../services/epicsService';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { getProjectMembers } from '../../store/projectSlice';
+import {  useAppSelector } from '../../store/hooks';
 import { AddProjectEpicsSchema } from '../../utils/validationSchema';
+import { useParams } from 'react-router-dom';
+import FetchGuard from '../shared/FetchGuard';
+
 
 type Inputs = {
   title: string;
@@ -18,18 +18,11 @@ type Inputs = {
 };
 
 export default function Epics() {
+  const {projectId}=useParams()
   const { members } = useAppSelector((state) => state.Project);
-  const { user } = useAppSelector((state) => state.User);
-  const dispatch = useAppDispatch();
-  const { projectId } = useParams();
 
-  if (!projectId) {
-    throw new Error('there is no project id');
-  }
 
-  useEffect(() => {
-    dispatch(getProjectMembers({ projectId }));
-  }, [projectId, dispatch]);
+
 
   const {
     register,
@@ -41,23 +34,16 @@ export default function Epics() {
   });
  
   const onSubmit: SubmitHandler<Inputs> = async (payload) => {
-    const assigneeId =
-      members.find((member) => member.user_id === user?.id)?.user_id ??
-      members[0]?.user_id ??
-      user?.id;
 
-    if (!assigneeId) {
-      toast.error('Unable to determine assignee. Please try again.');
-      return;
-    }
 
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + 7);
+   
 
     const data = {
       ...payload,
-      assignee_id: assigneeId,
-      project_id: projectId,
+      assignee_id:members[0]?.user_id,
+      project_id: members[0]?.project_id,
       deadline: futureDate.toISOString().split('T')[0],
     };
 
@@ -77,11 +63,16 @@ export default function Epics() {
   };
   return (
     <main className="p-7">
+
+       <FetchGuard
+       projectId={projectId!}
+       />
+
       <header className="flex items-center gap-2 max-sm:hidden">
         <p className="font-bold text-secondary">PROJECTS</p>
         <img src={arrowIcon} className="w-2" />
         <p className="font-bold text-primary">Create New Epic</p>
-      </header>
+      </header> 
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <div>
