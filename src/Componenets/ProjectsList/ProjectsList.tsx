@@ -13,7 +13,7 @@ type Project = {
   created_at: string;
 };
 
-export default function Projects() {
+export default function ProjectsList() {
   const location = useLocation();
   const [projects, setProjects] = useState<Project[]>([]);
   const [currentPage, setCurrentPage] = useState(1);

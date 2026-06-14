@@ -2,7 +2,7 @@ import Sidebar from '../Componenets/Sidebar/leftSidebar';
 import { Outlet, useParams } from 'react-router-dom';
 import ProjectHeader from '../Componenets/ProjectHeader/ProjectHeader';
 
-export default function Dashboard() {
+export default function ProjectLayout() {
   const { projectId } = useParams();
 
 

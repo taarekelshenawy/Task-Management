@@ -16,7 +16,7 @@ type Inputs = {
   description: string;
 };
 
-export default function AddProject() {
+export default function ProjectForm() {
   const navigate = useNavigate();
   const {
     register,

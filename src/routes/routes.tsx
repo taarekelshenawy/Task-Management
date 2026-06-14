@@ -4,15 +4,15 @@ import Login from '../pages/Login';
 import Layout from '../Layout';
 import Forgetpassword from '../pages/Forgetpassword';
 import { ToastContainer } from 'react-toastify';
-import Dashboard from '../pages/Dashboard';
 import Resetpassword from '../pages/Resetpassword';
 import Guard from '../Componenets/Guard/Guard';
-import AddProject from '../Componenets/AddProject/AddProject';
-import Projects from '../Componenets/Projects/Projects';
-import Epics from '../Componenets/Epics/CreateEpics';
-import EditProject from '../Componenets/EditProject/EditProject';
-import ProjectMembers from '../Componenets/ProjectMemebers/ProjectMembers';
-import EpicsList from '../Componenets/Epics/EpicsList';
+import ProjectLayout from '../pages/ProjectLayout';
+import ProjectsPage from '../pages/ProjectsPage';
+import AddProject from '../pages/AddProject';
+import AddNewEpic from '../pages/AddNewEpic';
+import EditPage from '../pages/EditPage';
+import Members from '../pages/Members';
+import EpicsPage from '../pages/EpicsPage';
 
 const router = createBrowserRouter([
   {
@@ -43,13 +43,13 @@ const router = createBrowserRouter([
         path: 'project',
         element: (
           <Guard>
-            <Dashboard />
+            <ProjectLayout/>
           </Guard>
         ),
         children: [
           {
             index: true,
-            element: <Projects />,
+            element: <ProjectsPage />,
           },
           {
             path: 'add',
@@ -57,19 +57,19 @@ const router = createBrowserRouter([
           },
           {
             path: ':projectId/epics/create',
-            element: <Epics />,
+            element: <AddNewEpic />,
           },
           {
             path: ':projectId/edit',
-            element: <EditProject />,
+            element: <EditPage />,
           },
           {
             path: ':projectId/members',
-            element: <ProjectMembers />,
+            element: <Members />,
           },
           {
             path: ':projectId/epics/new',
-            element: <EpicsList />,
+            element: <EpicsPage />,
           },
         ],
       },
