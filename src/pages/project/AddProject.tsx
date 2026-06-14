@@ -1,4 +1,4 @@
-import ProjectForm from "../Componenets/ProjectForm/ProjectForm"
+import ProjectForm from "../../components/project/ProjectForm"
 
 export default function AddProject() {
   return (

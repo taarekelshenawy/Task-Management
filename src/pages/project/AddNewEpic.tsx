@@ -1,4 +1,4 @@
-import Epics from "../Componenets/Epics/CreateEpics"
+import Epics from "../../components/epics/CreateEpics"
 
 export default function AddNewEpic() {
   return (

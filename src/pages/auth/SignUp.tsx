@@ -1,10 +1,9 @@
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
-import signUpSchema from '../utils/validationSchema';
+import signUpSchema from '../../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
-import Header from '../Componenets/Header/Header';
-import { registerFunction } from '../services/authService';
+import { registerFunction } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -53,8 +52,7 @@ export default function SignUp() {
   };
 
   return (
-    <div className=" pb-14">
-      <Header />
+    <>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -239,6 +237,6 @@ export default function SignUp() {
           </a>
         </p>
       </form>
-    </div>
+    </>
   );
 }

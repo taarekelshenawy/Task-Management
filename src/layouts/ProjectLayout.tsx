@@ -1,6 +1,6 @@
-import Sidebar from '../Componenets/Sidebar/leftSidebar';
+import Sidebar from '../components/sidebar/leftSidebar';
 import { Outlet, useParams } from 'react-router-dom';
-import ProjectHeader from '../Componenets/ProjectHeader/ProjectHeader';
+import ProjectHeader from '../components/project/ProjectHeader';
 
 export default function ProjectLayout() {
   const { projectId } = useParams();

@@ -1,7 +1,7 @@
 import SignUpIcon from '../../assets/Icon.svg';
 import { Link } from 'react-router-dom';
 
-export default function Header() {
+export default function AuthHeader() {
   return (
     <div className="flex items-center  gap-2 font-bold px-10 py-8  ">
       <img src={SignUpIcon} />

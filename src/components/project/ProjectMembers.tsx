@@ -3,8 +3,8 @@ import inviteIcon from '../../assets/InviteIcon.png';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAppDispatch, useAppSelector } from '../../Store/hooks';
-import { getProjectMembers } from '../../Store/ProjectSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { getProjectMembers } from '../../store/projectSlice';
 import { Link } from 'react-router-dom';
 import { MemberSkeleton } from './MemberSkelton';
 

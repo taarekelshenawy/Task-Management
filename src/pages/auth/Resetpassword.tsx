@@ -1,10 +1,10 @@
-import SignUpIcon from '../assets/Icon.svg';
+import SignUpIcon from '../../assets/Icon.svg';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
-import { reset } from '../utils/validationSchema';
-import { resetPassword } from '../services/authService';
+import { reset } from '../../utils/validationSchema';
+import { resetPassword } from '../../services/authService';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 
@@ -40,7 +40,7 @@ export default function Resetpassword() {
   };
 
   return (
-    <div className="bg-[#F9F9FF] pb-14 min-h-screen">
+    <div className="bg-[#F9F9FF]">
       <div className="flex items-center bg-[#F9F9FF] gap-2 font-bold px-10 py-8 fixed top-0 left-0 right-0">
         <img src={SignUpIcon} alt="logo" />
         <h1 className="text-[#041B3C] text-xl">TASKLY</h1>

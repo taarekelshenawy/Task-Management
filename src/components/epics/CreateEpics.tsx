@@ -8,8 +8,8 @@ import TipIcon from '../../assets/TipIcon.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { createNewEpic } from '../../services/epicsService';
-import { useAppDispatch, useAppSelector } from '../../Store/hooks';
-import { getProjectMembers } from '../../Store/ProjectSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { getProjectMembers } from '../../store/projectSlice';
 import { AddProjectEpicsSchema } from '../../utils/validationSchema';
 
 type Inputs = {

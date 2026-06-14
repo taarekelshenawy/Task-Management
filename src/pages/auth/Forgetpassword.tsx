@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import SignUpIcon from '../assets/Icon.svg';
+import SignUpIcon from '../../assets/Icon.svg';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Link } from 'react-router-dom';
-import { EmailSchema } from '../utils/validationSchema';
+import { EmailSchema } from '../../utils/validationSchema';
 import { toast } from 'react-toastify';
-import { forgotPassword } from '../services/authService';
+import { forgotPassword } from '../../services/authService';
 
 type Inputs = {
   email: string;
@@ -81,7 +81,7 @@ export default function Forgetpassword() {
   const seconds = String(timeLeft % 60).padStart(2, '0');
 
   return (
-    <div className="bg-[#F9F9FF] pb-14 min-h-screen">
+    <div className="bg-[#F9F9FF] ">
       <div className="flex items-center bg-[#F9F9FF] gap-2 font-bold px-10 py-8 fixed top-0 left-0 right-0">
         <img src={SignUpIcon} alt="logo" />
         <h1 className="text-[#041B3C] text-xl">TASKLY</h1>

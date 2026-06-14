@@ -1,11 +1,10 @@
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
-import { LoginSchema } from '../utils/validationSchema';
+import { LoginSchema } from '../../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from '../Componenets/Header/Header';
-import { loginFunction } from '../services/authService';
+import { loginFunction } from '../../services/authService';
 import { useState } from 'react';
 
 type Inputs = {
@@ -46,8 +45,8 @@ export default function Login() {
   };
 
   return (
-    <div className=" min-h-screen pb-14">
-      <Header />
+    <>
+
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="shadow-form flex flex-col max-w-141.75 mx-auto p-12 bg-white mt-2"
@@ -136,6 +135,6 @@ export default function Login() {
           </Link>
         </p>
       </form>
-    </div>
+    </>
   );
 }

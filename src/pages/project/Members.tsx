@@ -1,4 +1,4 @@
-import ProjectMembers from "../Componenets/ProjectMemebers/ProjectMembers"
+import ProjectMembers from "../../components/project/ProjectMembers"
 
 export default function Members() {
   return (
