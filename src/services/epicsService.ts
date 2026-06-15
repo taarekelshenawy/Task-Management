@@ -1,6 +1,7 @@
 import { apiClient } from '../utils/apiClient';
 import getBaseUrl from '../utils/api';
 
+
 export const createNewEpic = async (data: {
 
     assignee_id: string;
@@ -41,15 +42,27 @@ export const createNewEpic = async (data: {
   }
 };
 
-export const getProjectEpics = async (projectId: string) => {
+type epicsProps ={
+  projectId:string,
+  limit:number,
+  offset:number,
+
+}
+export const getProjectEpics = async ({projectId,limit,offset}:epicsProps) => {
   try {
+
     const response = await apiClient(
-      getBaseUrl(`rest/v1/project_epics?project_id=eq.${projectId}`),
+      getBaseUrl(`rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`),
+      {
+        headers:{
+          Prefer:"count=exact"
+        }
+      }
     );
 
-    const data = await response.json();
+   
 
-    return data;
+    return response;
   } catch (error) {
     if (error instanceof Error) throw error;
 
