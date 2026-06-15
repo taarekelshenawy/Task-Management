@@ -31,7 +31,7 @@ export default function EpicsList() {
   const [error, setError] = useState('');
   const [currentPage,setCurrentPage]=useState(1);
   const [contentRange,setContentRange]=useState('');
-  const limit =2;
+  const limit =1;
   const offset =(currentPage - 1) * limit;
 
   const { projectId } = useParams();
@@ -43,8 +43,53 @@ export default function EpicsList() {
   const range =contentRange.split('/')[0];
   const [start, end] = range.split('-').map(Number);
   const pageItemsCount = end - start +1;
-  const totalItems =contentRange.split('/')[1];
-const totalPages = Number(totalItems)  / pageItemsCount;
+  // const totalItems =contentRange.split('/')[1];
+  // const totalPages = Number(totalItems)  / pageItemsCount;
+  const totalItems = Number(contentRange.split('/')[1] || 0);
+const totalPages = Math.ceil(totalItems / limit);
+
+  const getPagination = (current: number, total: number) => {
+  const pages: (number | string)[] = [];
+
+  if (total <= 5) {
+    for (let i = 1; i <= total; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  if (current <= 3) {
+    pages.push(1, 2, 3, '...', total);
+    return pages;
+  }
+  
+  if (current === 4) {
+    pages.push(1, 2, 3, current,'...', total);
+    return pages;
+  }
+
+
+
+  if (current >= total - 2) {
+    pages.push(1, '...', total - 2, total - 1, total);
+    return pages;
+  }
+
+  pages.push(
+    1,
+    '...',
+    current - 1,
+    current,
+    current + 1,
+    '...',
+    total
+  );
+
+  return pages;
+};
+
+
+  
 
 
 
@@ -192,7 +237,7 @@ const totalPages = Number(totalItems)  / pageItemsCount;
       )}
 
       {/* Pagination UI only */}
-      <div className="flex justify-between bg-white p-4 items-center opacity-60">
+      <div className="flex justify-between bg-white p-4 items-center ">
         <p className="font-bold text-secondary">
     Showing {pageItemsCount} of {totalItems} active projects
         </p>
@@ -203,15 +248,33 @@ const totalPages = Number(totalItems)  / pageItemsCount;
           className="w-8 h-8 border flex items-center justify-center">
             <img src={arrowLeft} className="w-1 h-2" />
           </button>
-
-          {[1, 2, 3].map((page) => (
+{/* 
+          {getPagination(currentPage, totalPages).map((page) => (
             <button
+            onClick={setCurrentPage((prev)=>)}
               key={page}
-              className="w-8 h-8 border flex items-center justify-center"
+              className={`w-8 h-8 border flex items-center justify-center ${currentPage===page ? 'bg-blue-800 text-white' :''}`}
             >
               {page}
             </button>
-          ))}
+          ))} */}
+
+          {getPagination(currentPage, totalPages).map((page, index) => (
+  <button
+    key={index}
+    disabled={page === '...'}
+    onClick={() => {
+      if (typeof page === 'number') {
+        setCurrentPage(page);
+      }
+    }}
+    className={`w-8 h-8 border flex items-center justify-center ${
+      currentPage === page ? 'bg-blue-800 text-white' : ''
+    }`}
+  >
+    {page}
+  </button>
+))}
 
           <button 
           disabled={Number(currentPage) === Number(totalPages)}
