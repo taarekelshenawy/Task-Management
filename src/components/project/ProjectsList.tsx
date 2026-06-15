@@ -169,9 +169,7 @@ export default function ProjectsList() {
           </section>
 
           {/* Loading */}
-          {loading && projects.length === 0 && (
-            <Skeleton count={limit} />
-          )}
+          {loading && projects.length === 0 && <Skeleton count={limit} />}
 
           {/* Error */}
           {error && <p className="text-center text-red-500">{error}</p>}
@@ -231,52 +229,51 @@ export default function ProjectsList() {
             </div>
           )}
 
-       
           {/* Pagination */}
-<div className="flex justify-between bg-white p-4 items-center">
-  <p className="font-bold text-secondary">
-    Showing {displayedCount} of {total} active projects
-  </p>
+          <div className="flex justify-between bg-white p-4 items-center">
+            <p className="font-bold text-secondary">
+              Showing {displayedCount} of {total} active projects
+            </p>
 
-  <div className="max-sm:hidden flex items-center gap-2">
-    {/* Prev */}
-    <button
-      onClick={() => setCurrentPage((p) => p - 1)}
-      disabled={currentPage === 1}
-      className="w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer disabled:opacity-40"
-    >
-      <img src={arrowLeft} className="w-1 h-2" />
-    </button>
+            <div className="max-sm:hidden flex items-center gap-2">
+              {/* Prev */}
+              <button
+                onClick={() => setCurrentPage((p) => p - 1)}
+                disabled={currentPage === 1}
+                className="w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer disabled:opacity-40"
+              >
+                <img src={arrowLeft} className="w-1 h-2" />
+              </button>
 
-    {/* Page Numbers */}
-    {Array.from({ length: totalPages }, (_, index) => {
-      const page = index + 1;
+              {/* Page Numbers */}
+              {Array.from({ length: totalPages }, (_, index) => {
+                const page = index + 1;
 
-      return (
-        <button
-          key={page}
-          onClick={() => setCurrentPage(page)}
-          className={`w-8 h-8 border flex justify-center items-center cursor-pointer transition ${
-            currentPage === page
-              ? 'bg-primary text-white'
-              : 'hover:bg-gray-100'
-          }`}
-        >
-          {page}
-        </button>
-      );
-    })}
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-8 h-8 border flex justify-center items-center cursor-pointer transition ${
+                      currentPage === page
+                        ? 'bg-primary text-white'
+                        : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              })}
 
-    {/* Next */}
-    <button
-      onClick={() => setCurrentPage((p) => p + 1)}
-      disabled={currentPage === totalPages}
-      className="w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer disabled:opacity-40"
-    >
-      <img src={arrowRight} className="w-1 h-2" />
-    </button>
-  </div>
-</div>
+              {/* Next */}
+              <button
+                onClick={() => setCurrentPage((p) => p + 1)}
+                disabled={currentPage === totalPages}
+                className="w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer disabled:opacity-40"
+              >
+                <img src={arrowRight} className="w-1 h-2" />
+              </button>
+            </div>
+          </div>
         </>
       )}
     </div>

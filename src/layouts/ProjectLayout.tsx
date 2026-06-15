@@ -5,7 +5,6 @@ import ProjectHeader from '../components/project/ProjectHeader';
 export default function ProjectLayout() {
   const { projectId } = useParams();
 
-
   return (
     <div className="flex">
       <Sidebar projectId={projectId} />

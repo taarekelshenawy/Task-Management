@@ -1,9 +1,9 @@
-import EpicsList from "../../components/epics/EpicsList"
+import EpicsList from '../../components/epics/EpicsList';
 
 export default function EpicsPage() {
   return (
     <>
-    <EpicsList/>
+      <EpicsList />
     </>
-  )
+  );
 }

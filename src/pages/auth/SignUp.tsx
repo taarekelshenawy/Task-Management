@@ -53,7 +53,6 @@ export default function SignUp() {
 
   return (
     <>
-
       <form
         onSubmit={handleSubmit(onSubmit)}
         className=" shadow-form flex flex-col max-w-141.75 mx-auto p-12 bg-white mt-4"

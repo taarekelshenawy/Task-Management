@@ -22,7 +22,10 @@ export const CreateProject = async (data: {
 
     if (!response.ok) {
       throw new Error(
-        result?.message || result?.error || result?.hint || 'Failed to create project',
+        result?.message ||
+          result?.error ||
+          result?.hint ||
+          'Failed to create project',
       );
     }
 
@@ -35,7 +38,7 @@ export const CreateProject = async (data: {
   }
 };
 
-export const GetProjects = async (data:{limit:number,offset:number}) => {
+export const GetProjects = async (data: { limit: number; offset: number }) => {
   const { limit, offset } = data;
   try {
     const response = await apiClient(
@@ -53,9 +56,7 @@ export const GetProjects = async (data:{limit:number,offset:number}) => {
     if (error instanceof Error) {
       throw error;
     }
-     throw new Error('No response returned from server');
-
-
+    throw new Error('No response returned from server');
   }
 };
 
@@ -85,9 +86,7 @@ export const handleEditProject = async (data: {
     if (error instanceof Error) {
       throw error;
     }
-     throw new Error('No response returned from server');
-    
-   
+    throw new Error('No response returned from server');
   }
 };
 
@@ -103,8 +102,7 @@ export const getProjectDetails = async (data: { projectId: string }) => {
     if (error instanceof Error) {
       throw error;
     }
-  throw new Error('No response returned from server');
-
+    throw new Error('No response returned from server');
   }
 };
 
@@ -121,7 +119,6 @@ export const getProjectDetails = async (data: { projectId: string }) => {
 //       throw error;
 //     }
 //      throw new Error('No response returned from server');
-
 
 //   }
 // };

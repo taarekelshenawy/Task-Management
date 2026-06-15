@@ -34,10 +34,9 @@ export default function EditProject() {
         const data = await response.json();
         setCurrentData(data);
       } catch (err) {
-        if(err instanceof Error){
-       toast.error(err.message)
+        if (err instanceof Error) {
+          toast.error(err.message);
         }
-
       }
     };
     fetchProjectDetails();
@@ -59,7 +58,7 @@ export default function EditProject() {
 
       toast.success('Project Edit created successfully ');
 
-      reset(); 
+      reset();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Failed to Edit project: ${error.message}`);

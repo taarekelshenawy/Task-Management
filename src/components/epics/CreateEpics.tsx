@@ -6,11 +6,10 @@ import TipIcon from '../../assets/TipIcon.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { createNewEpic } from '../../services/epicsService';
-import {  useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { AddProjectEpicsSchema } from '../../utils/validationSchema';
 import { useParams } from 'react-router-dom';
 import FetchGuard from '../shared/FetchGuard';
-
 
 type Inputs = {
   title: string;
@@ -18,11 +17,8 @@ type Inputs = {
 };
 
 export default function Epics() {
-  const {projectId}=useParams()
+  const { projectId } = useParams();
   const { members } = useAppSelector((state) => state.Project);
-
-
-
 
   const {
     register,
@@ -32,17 +28,14 @@ export default function Epics() {
   } = useForm<Inputs>({
     resolver: zodResolver(AddProjectEpicsSchema),
   });
- 
+
   const onSubmit: SubmitHandler<Inputs> = async (payload) => {
-
-
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + 7);
-   
 
     const data = {
       ...payload,
-      assignee_id:members[0]?.user_id,
+      assignee_id: members[0]?.user_id,
       project_id: members[0]?.project_id,
       deadline: futureDate.toISOString().split('T')[0],
     };
@@ -52,7 +45,7 @@ export default function Epics() {
 
       toast.success('projectEpic created successfully 🚀');
 
-      reset(); 
+      reset();
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`Failed to create project: ${error.message}`);
@@ -63,16 +56,13 @@ export default function Epics() {
   };
   return (
     <main className="p-7">
-
-       <FetchGuard
-       projectId={projectId!}
-       />
+      <FetchGuard projectId={projectId!} />
 
       <header className="flex items-center gap-2 max-sm:hidden">
         <p className="font-bold text-secondary">PROJECTS</p>
         <img src={arrowIcon} className="w-2" />
         <p className="font-bold text-primary">Create New Epic</p>
-      </header> 
+      </header>
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <div>
@@ -96,8 +86,6 @@ export default function Epics() {
           onSubmit={handleSubmit(onSubmit)}
           className="shadow-form flex flex-col max-w-2xl mx-auto p-8 bg-white mt-9"
         >
-          
-
           {/* FORM CONTENT */}
           <section className="flex flex-col gap-6">
             {/* Project Title */}

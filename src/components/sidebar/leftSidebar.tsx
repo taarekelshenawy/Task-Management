@@ -15,10 +15,9 @@ import {
   Info,
 } from 'lucide-react';
 
-export default function Sidebar({ projectId }:{projectId?:string}) {
+export default function Sidebar({ projectId }: { projectId?: string }) {
   const [collapsed, setCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-
 
   function handleLogout() {
     logoutFunction();
@@ -26,7 +25,6 @@ export default function Sidebar({ projectId }:{projectId?:string}) {
 
   return (
     <>
-   
       <button
         className="lg:hidden absolute top-4 left-4 z-50 p-2 bg-white shadow rounded"
         onClick={() => setIsMobileOpen(true)}
@@ -222,5 +220,3 @@ export default function Sidebar({ projectId }:{projectId?:string}) {
     </>
   );
 }
-
-

@@ -1,9 +1,9 @@
-import ProjectMembers from "../../components/project/ProjectMembers"
+import ProjectMembers from '../../components/project/ProjectMembers';
 
 export default function Members() {
   return (
     <>
-    <ProjectMembers/>
+      <ProjectMembers />
     </>
-  )
+  );
 }

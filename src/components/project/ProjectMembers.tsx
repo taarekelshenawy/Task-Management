@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { MemberSkeleton } from './MemberSkelton';
 
 export default function ProjectMembers() {
-  const { members,loading } = useAppSelector((state) => state.Project);
+  const { members, loading } = useAppSelector((state) => state.Project);
   const dispatch = useAppDispatch();
   const { projectId } = useParams();
 
@@ -50,7 +50,7 @@ export default function ProjectMembers() {
         <Link to="/project">
           <p className="font-bold text-secondary">PROJECTS</p>
         </Link>
-      
+
         <img src={arrowIcon} className="w-2" />
         <p className="font-bold text-primary">Members</p>
       </header>
@@ -76,62 +76,59 @@ export default function ProjectMembers() {
         </thead>
 
         <tbody className="bg-white">
-          {loading ?   Array.from({ length: members.length }).map((_, i) => (
-        <MemberSkeleton key={i} />
-      )):
-      <>
-      {members?.map((el) => {
-            const name = el?.metadata?.name ?? '';
-            const initials = getInitials(name);
+          {loading ? (
+            Array.from({ length: members.length }).map((_, i) => (
+              <MemberSkeleton key={i} />
+            ))
+          ) : (
+            <>
+              {members?.map((el) => {
+                const name = el?.metadata?.name ?? '';
+                const initials = getInitials(name);
 
-            return (
-              <tr
-                key={el?.member_id || el?.user_id}
-                className="hover:bg-gray-50 transition"
-              >
-                {/* MEMBER */}
-                <td className="p-4">
-                  <div className="flex items-center gap-3">
-                    {/* avatar */}
-                    <div className="w-12 h-12 rounded-xl bg-[#0052CC] flex items-center justify-center text-white font-bold">
-                      {initials}
-                    </div>
+                return (
+                  <tr
+                    key={el?.member_id || el?.user_id}
+                    className="hover:bg-gray-50 transition"
+                  >
+                    {/* MEMBER */}
+                    <td className="p-4">
+                      <div className="flex items-center gap-3">
+                        {/* avatar */}
+                        <div className="w-12 h-12 rounded-xl bg-[#0052CC] flex items-center justify-center text-white font-bold">
+                          {initials}
+                        </div>
 
-                    {/* info */}
-                    <div className="flex flex-col">
-                      <h2 className="font-semibold text-gray-900">
-                        {name}
-                      </h2>
-                      <p className="text-sm text-gray-500">{el.email}</p>
-                    </div>
-                  </div>
-                </td>
+                        {/* info */}
+                        <div className="flex flex-col">
+                          <h2 className="font-semibold text-gray-900">
+                            {name}
+                          </h2>
+                          <p className="text-sm text-gray-500">{el.email}</p>
+                        </div>
+                      </div>
+                    </td>
 
-                {/* ROLE */}
-                <td className="p-4 align-middle">
-                  <span className="bg-primary w-17 h-5 p-1 rounded-2xl px-7 text-white">
-                    {el.role}
-                  </span>
-                </td>
+                    {/* ROLE */}
+                    <td className="p-4 align-middle">
+                      <span className="bg-primary w-17 h-5 p-1 rounded-2xl px-7 text-white">
+                        {el.role}
+                      </span>
+                    </td>
 
-                {/* ACTIONS */}
-                <td className="p-4 align-middle">
-                  <button className="px-3 py-1 text-sm bg-red-100 text-red-600 rounded-md hover:bg-red-200">
-                    Remove
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-      </>
-    
-    }
-          
+                    {/* ACTIONS */}
+                    <td className="p-4 align-middle">
+                      <button className="px-3 py-1 text-sm bg-red-100 text-red-600 rounded-md hover:bg-red-200">
+                        Remove
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </>
+          )}
         </tbody>
       </table>
     </div>
   );
 }
-
-
-

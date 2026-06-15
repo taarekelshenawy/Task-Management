@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import arrowRight from '../../assets/arrowRight.png';
 import arrowLeft from '../../assets/arrowleft.png';
-import { useParams} from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { getProjectEpics } from '../../services/epicsService';
 import Skeleton from '../ui/Skelton';
 import Emptystate from '../ui/Emptystate';
 import arrowIcon from '../../assets/arrowIcon.png';
 import { Link } from 'react-router-dom';
-
+import DetailsModal from './DetailsModal';
 
 type Epic = {
   id: string;
@@ -29,69 +29,54 @@ export default function EpicsList() {
   const [epics, setEpics] = useState<Epic[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [currentPage,setCurrentPage]=useState(1);
-  const [contentRange,setContentRange]=useState('');
-  const limit =1;
-  const offset =(currentPage - 1) * limit;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [contentRange, setContentRange] = useState('');
+  const [openModal, setOpenModal] = useState(false);
+  const limit = 1;
+  const offset = (currentPage - 1) * limit;
 
   const { projectId } = useParams();
-
 
   if (!projectId) {
     throw new Error('there is no project id');
   }
-  const range =contentRange.split('/')[0];
+  const range = contentRange.split('/')[0];
   const [start, end] = range.split('-').map(Number);
-  const pageItemsCount = end - start +1;
+  const pageItemsCount = end - start + 1;
   // const totalItems =contentRange.split('/')[1];
   // const totalPages = Number(totalItems)  / pageItemsCount;
   const totalItems = Number(contentRange.split('/')[1] || 0);
-const totalPages = Math.ceil(totalItems / limit);
+  const totalPages = Math.ceil(totalItems / limit);
 
   const getPagination = (current: number, total: number) => {
-  const pages: (number | string)[] = [];
+    const pages: (number | string)[] = [];
 
-  if (total <= 5) {
-    for (let i = 1; i <= total; i++) {
-      pages.push(i);
+    if (total <= 5) {
+      for (let i = 1; i <= total; i++) {
+        pages.push(i);
+      }
+      return pages;
     }
+
+    if (current <= 3) {
+      pages.push(1, 2, 3, '...', total);
+      return pages;
+    }
+
+    if (current === 4) {
+      pages.push(1, 2, 3, current, '...', total);
+      return pages;
+    }
+
+    if (current >= total - 2) {
+      pages.push(1, '...', total - 2, total - 1, total);
+      return pages;
+    }
+
+    pages.push(1, '...', current - 1, current, current + 1, '...', total);
+
     return pages;
-  }
-
-  if (current <= 3) {
-    pages.push(1, 2, 3, '...', total);
-    return pages;
-  }
-  
-  if (current === 4) {
-    pages.push(1, 2, 3, current,'...', total);
-    return pages;
-  }
-
-
-
-  if (current >= total - 2) {
-    pages.push(1, '...', total - 2, total - 1, total);
-    return pages;
-  }
-
-  pages.push(
-    1,
-    '...',
-    current - 1,
-    current,
-    current + 1,
-    '...',
-    total
-  );
-
-  return pages;
-};
-
-
-  
-
-
+  };
 
   // ===== helpers =====
   const formatDate = (date: string) =>
@@ -111,17 +96,15 @@ const totalPages = Math.ceil(totalItems / limit);
 
   // ===== Fetch Epics =====
   useEffect(() => {
-   
     const fetchEpics = async () => {
       setLoading(true);
       setError('');
-   
-     
+
       try {
-        const response = await getProjectEpics({projectId,limit,offset});
+        const response = await getProjectEpics({ projectId, limit, offset });
         const data = await response?.json();
-        const headers = response?.headers.get("Content-Range");
-       setContentRange(headers || '')
+        const headers = response?.headers.get('Content-Range');
+        setContentRange(headers || '');
         setEpics(data || []);
       } catch (err) {
         console.error(err);
@@ -132,7 +115,7 @@ const totalPages = Math.ceil(totalItems / limit);
     };
 
     fetchEpics();
-  }, [projectId,offset]);
+  }, [projectId, offset]);
 
   // ===== Empty State =====
   if (!loading && epics.length === 0) {
@@ -148,8 +131,7 @@ const totalPages = Math.ceil(totalItems / limit);
 
   return (
     <div className="p-7 flex flex-col gap-12">
-
-       <header className="flex items-center gap-2 max-sm:hidden">
+      <header className="flex items-center gap-2 max-sm:hidden">
         <Link
           to="/project"
           className="font-bold text-secondary hover:underline"
@@ -159,8 +141,6 @@ const totalPages = Math.ceil(totalItems / limit);
         <img src={arrowIcon} className="w-2" />
         <p className="font-bold text-primary">Epics</p>
       </header>
-
-
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <div>
@@ -173,12 +153,10 @@ const totalPages = Math.ceil(totalItems / limit);
         </div>
 
         <Link to={`/project/${projectId}/epics/create`}>
-         <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
-          + Create New Epic
-        </button>
+          <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
+            + Create New Epic
+          </button>
         </Link>
-
-       
       </section>
 
       {/* Error */}
@@ -195,6 +173,7 @@ const totalPages = Math.ceil(totalItems / limit);
 
             return (
               <div
+                onClick={() => setOpenModal(true)}
                 key={epic.id}
                 className="bg-white rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
               >
@@ -210,8 +189,6 @@ const totalPages = Math.ceil(totalItems / limit);
 
                   {/* Assignee */}
                   <div className="flex items-center gap-2 text-sm">
-             
-
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-[#65DCA4] text-white text-xs flex items-center justify-center rounded-md font-bold">
                         {initials}
@@ -239,16 +216,18 @@ const totalPages = Math.ceil(totalItems / limit);
       {/* Pagination UI only */}
       <div className="flex justify-between bg-white p-4 items-center ">
         <p className="font-bold text-secondary">
-    Showing {pageItemsCount} of {totalItems} active projects
+          Showing {pageItemsCount} of {totalItems} active projects
         </p>
 
         <div className="flex items-center gap-2">
-          <button onClick={()=>setCurrentPage(currentPage-1)} 
-          disabled={currentPage === 1}
-          className="w-8 h-8 border flex items-center justify-center">
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="w-8 h-8 border flex items-center justify-center"
+          >
             <img src={arrowLeft} className="w-1 h-2" />
           </button>
-{/* 
+          {/* 
           {getPagination(currentPage, totalPages).map((page) => (
             <button
             onClick={setCurrentPage((prev)=>)}
@@ -260,34 +239,33 @@ const totalPages = Math.ceil(totalItems / limit);
           ))} */}
 
           {getPagination(currentPage, totalPages).map((page, index) => (
-  <button
-    key={index}
-    disabled={page === '...'}
-    onClick={() => {
-      if (typeof page === 'number') {
-        setCurrentPage(page);
-      }
-    }}
-    className={`w-8 h-8 border flex items-center justify-center ${
-      currentPage === page ? 'bg-blue-800 text-white' : ''
-    }`}
-  >
-    {page}
-  </button>
-))}
+            <button
+              key={index}
+              disabled={page === '...'}
+              onClick={() => {
+                if (typeof page === 'number') {
+                  setCurrentPage(page);
+                }
+              }}
+              className={`w-8 h-8 border flex items-center justify-center ${
+                currentPage === page ? 'bg-blue-800 text-white' : ''
+              }`}
+            >
+              {page}
+            </button>
+          ))}
 
-          <button 
-          disabled={Number(currentPage) === Number(totalPages)}
-           onClick={()=>setCurrentPage(currentPage+1)} className="w-8 h-8 border flex items-center justify-center">
+          <button
+            disabled={Number(currentPage) === Number(totalPages)}
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="w-8 h-8 border flex items-center justify-center"
+          >
             <img src={arrowRight} className="w-1 h-2" />
           </button>
         </div>
       </div>
+
+      {openModal && <DetailsModal />}
     </div>
   );
 }
-
-
-
-
-
