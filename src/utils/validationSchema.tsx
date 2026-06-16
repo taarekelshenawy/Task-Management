@@ -95,6 +95,10 @@ export const AddProjectEpicsSchema = z.object({
   description: z
     .string()
     .max(500, 'Description must not exceed 500 characters'),
+
+  deadline: z.string().refine((date) => new Date(date) > new Date(), {
+    message: 'Deadline must be in the future',
+  }),
 });
 
 export default signUpSchema;

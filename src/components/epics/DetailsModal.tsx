@@ -24,8 +24,7 @@ export default function DetailsModal() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="flex flex-col gap-3">
-            
-            <UserInfo title="Created at"/>
+            <UserInfo title="Created at" />
             <div>
               <div className="flex items-center gap-1">
                 {/* avatar */}
@@ -42,8 +41,7 @@ export default function DetailsModal() {
           </div>
 
           <div className="flex flex-col gap-3">
-         
-                <UserInfo title="Assignee"/>
+            <UserInfo title="Assignee" />
             <div>
               <div className="flex items-center gap-1">
                 {/* avatar */}
@@ -60,8 +58,8 @@ export default function DetailsModal() {
           </div>
 
           <div className="flex flex-col gap-3">
-            <UserInfo title="Deadline"/>
-           
+            <UserInfo title="Deadline" />
+
             <div>
               <div className="flex items-center gap-3">
                 <img src={dateIcon} alt="date-icon"></img>
@@ -75,8 +73,8 @@ export default function DetailsModal() {
           </div>
 
           <div className="flex flex-col gap-3">
-        <UserInfo title="Created At" />
-          
+            <UserInfo title="Created At" />
+
             <div>
               <div className="flex items-center gap-3">
                 <img src={dateIcon} alt="date-icon"></img>

@@ -14,6 +14,7 @@ import FetchGuard from '../shared/FetchGuard';
 type Inputs = {
   title: string;
   description: string;
+  deadline: string;
 };
 
 export default function Epics() {
@@ -30,14 +31,10 @@ export default function Epics() {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (payload) => {
-    const futureDate = new Date();
-    futureDate.setDate(futureDate.getDate() + 7);
-
     const data = {
       ...payload,
       assignee_id: members[0]?.user_id,
       project_id: members[0]?.project_id,
-      deadline: futureDate.toISOString().split('T')[0],
     };
 
     try {
@@ -134,6 +131,42 @@ export default function Epics() {
                   {errors.description.message}
                 </p>
               )}
+            </div>
+
+            <div className="flex justify-between items-center gap-4 max-sm:flex-wrap">
+              <div className="flex flex-col gap-3 basis-93.5 ">
+                <label htmlFor="member-select ">Assignee</label>
+
+                {/* React controls the value here */}
+                <select
+                  id="member-select"
+                  className="w-full h-11 p-2 bg-surface-high"
+                  defaultValue=""
+                >
+                  <option
+                    value=""
+                    disabled
+                    className="font-medium text-slate-dark"
+                  >
+                    Select a member...
+                  </option>
+
+                  {members.map((el) => (
+                    <option value={el.id} key={el.id}>
+                      {el.metadata.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col gap-3 flex-1">
+                <label htmlFor="Deadline">Deadline</label>
+                <input
+                  {...register('deadline')}
+                  id="Deadline"
+                  type="date"
+                  className="bg-surface-high h-12 p-2 rounded"
+                ></input>
+              </div>
             </div>
           </section>
 
