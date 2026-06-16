@@ -44,22 +44,19 @@ export default function DetailsModal({
   const { projectId } = useParams();
   const { members } = useAppSelector((state) => state.Project);
 
-  const [updateData, setUpdateData] = useState<Payload>({
-    title: '',
-    description: '',
-    assignee_id: '',
-    deadline: '',
-  });
+  
 
   // ✅ loading state للـ update
   const [isUpdating, setIsUpdating] = useState(false);
 
   // ✅ useRef لتجنب stale closure
-  const updateDataRef = useRef(updateData);
-  useEffect(() => {
-    updateDataRef.current = updateData;
-  }, [updateData]);
-
+  const updateDataRef = useRef({
+    title: '',
+    description: '',
+    assignee_id: '',
+    deadline: '',
+  });
+   
   if (!projectId) {
     throw new Error('there is no id');
   }
@@ -79,16 +76,18 @@ export default function DetailsModal({
         const data = response || [];
         setEpicDetails(data);
 
-        // ✅ تهيئة updateData من البيانات المجلوبة
-        if (data.length > 0) {
-          const item = data[0];
-          setUpdateData({
-            title: item.title || '',
-            description: item.description || '',
-            assignee_id: item.assignee?.sub || '',
-            deadline: item.deadline || '',
-          });
-        }
+         if (data.length > 0) {
+      const item = data[0];
+
+      updateDataRef.current = {
+        title: item.title || '',
+        description: item.description || '',
+        assignee_id: item.assignee?.sub || '',
+        deadline: item.deadline || '',
+      };
+    }
+
+        
       } catch (error) {
         if (error instanceof Error) {
           console.log(error);
@@ -109,7 +108,8 @@ export default function DetailsModal({
         setIsUpdating(true);
         try {
           const response = await updateEpicDetails({ epicId, payload });
-          setEpicDetails(response || []);
+          const safeData = Array.isArray(response) ? response : [];
+          setEpicDetails(safeData || []);
         } catch (error) {
           if (error instanceof Error) {
             console.log(error);
@@ -117,11 +117,11 @@ export default function DetailsModal({
         } finally {
           setIsUpdating(false);
         }
-      }, 500);
+      }, 2000);
     },
     [epicId],
   );
-
+console.log(epicDetails)
   return (
     <section
       className="fixed w-full p-5   z-50 bg-black/45  inset-0 min-h-screen flex flex-col
@@ -174,14 +174,15 @@ export default function DetailsModal({
                   <input
                     type="text"
                     className="w-full h-9 p-2 px-3 bg-surface-high"
-                    value={updateData.description}
+               
+                    defaultValue={item.description}
                     onChange={(e) => {
                       const value = e.target.value;
                       const newData = {
                         ...updateDataRef.current,
                         description: value,
                       };
-                      setUpdateData(newData);
+                   updateDataRef.current = newData;
                       updateEpic(newData);
                     }}
                   />
@@ -227,14 +228,15 @@ export default function DetailsModal({
                       </div>
                       {/* ✅ controlled select */}
                       <select
-                        value={updateData.assignee_id}
+                 
+                        defaultValue={item.assignee.sub}
                         onChange={(e) => {
                           const value = e.target.value;
                           const newData = {
                             ...updateDataRef.current,
                             assignee_id: value,
                           };
-                          setUpdateData(newData);
+                        updateDataRef.current = newData;
                           updateEpic(newData);
                         }}
                       >
@@ -260,14 +262,15 @@ export default function DetailsModal({
                         {/* ✅ controlled date input */}
                         <input
                           type="date"
-                          value={updateData.deadline}
+                          defaultValue={item.deadline}
+                 
                           onChange={(e) => {
                             const value = e.target.value;
                             const newData = {
                               ...updateDataRef.current,
                               deadline: value,
                             };
-                            setUpdateData(newData);
+                        updateDataRef.current = newData;
                             updateEpic(newData);
                           }}
                         />
@@ -316,3 +319,8 @@ export default function DetailsModal({
     </section>
   );
 }
+
+
+
+
+

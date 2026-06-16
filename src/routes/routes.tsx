@@ -47,7 +47,7 @@ const router = createBrowserRouter([
       { path: 'add', element: <AddProject /> },
       { path: ':projectId/edit', element: <EditPage /> },
       { path: ':projectId/members', element: <Members /> },
-      { path: ':projectId/epics/new', element: <EpicsPage /> },
+      { path: ':projectId/epics', element: <EpicsPage /> },
       { path: ':projectId/epics/create', element: <AddNewEpic /> },
     ],
   },

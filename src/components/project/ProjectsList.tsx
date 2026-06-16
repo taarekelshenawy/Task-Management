@@ -177,7 +177,7 @@ export default function ProjectsList() {
           {/* Projects Grid */}
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
             {projects.map((project) => (
-              <Link to={`/project/${project.id}/epics/new`}>
+              <Link to={`/project/${project.id}/epics`}>
                 <div
                   key={project.id || `${project.name}-${project.created_at}`}
                   className="bg-white max-w-76 max-h-80 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"

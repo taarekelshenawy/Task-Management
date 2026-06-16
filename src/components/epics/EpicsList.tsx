@@ -33,7 +33,7 @@ export default function EpicsList() {
   const [contentRange, setContentRange] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [epicId, setEpicId] = useState('');
-  const limit = 1;
+  const limit = 3;
   const offset = (currentPage - 1) * limit;
 
   const { projectId } = useParams();
