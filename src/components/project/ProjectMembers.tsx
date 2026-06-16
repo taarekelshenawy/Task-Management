@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getProjectMembers } from '../../store/projectSlice';
 import { Link } from 'react-router-dom';
 import { MemberSkeleton } from './MemberSkelton';
+import Helper from '../../utils/helper';
 
 export default function ProjectMembers() {
   const { members, loading } = useAppSelector((state) => state.Project);
@@ -35,14 +36,7 @@ export default function ProjectMembers() {
     fetchProjectMembers();
   }, [projectId, dispatch]);
 
-  // ✅ helper function
-  const getInitials = (name: string = '') =>
-    name
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((p) => p[0]?.toUpperCase())
-      .join('');
+ 
 
   return (
     <div className="w-full p-7">
@@ -83,8 +77,7 @@ export default function ProjectMembers() {
           ) : (
             <>
               {members?.map((el) => {
-                const name = el?.metadata?.name ?? '';
-                const initials = getInitials(name);
+              
 
                 return (
                   <tr
@@ -94,19 +87,10 @@ export default function ProjectMembers() {
                     {/* MEMBER */}
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                        {/* avatar */}
-                        <div className="w-12 h-12 rounded-xl bg-[#0052CC] flex items-center justify-center text-white font-bold">
-                          {initials}
-                        </div>
-
-                        {/* info */}
-                        <div className="flex flex-col">
-                          <h2 className="font-semibold text-gray-900">
-                            {name}
-                          </h2>
-                          <p className="text-sm text-gray-500">{el.email}</p>
-                        </div>
+                       
+                          <Helper el={el}/>
                       </div>
+                    
                     </td>
 
                     {/* ROLE */}

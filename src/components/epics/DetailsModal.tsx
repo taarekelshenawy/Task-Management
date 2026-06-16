@@ -1,21 +1,88 @@
+
+
+import { useParams } from 'react-router-dom';
 import EpicsIcon from '../../assets/EpicsModal.png';
 import dateIcon from '../../assets/dateIcon.png';
 import UserInfo from './UserInfo';
+import { getEpicDetails } from '../../services/epicsService';
+import { useEffect, useState } from 'react';
+import Helper from '../../utils/helper';
 
-export default function DetailsModal() {
+
+ type User = {
+  sub: string;
+  name: string;
+  email: string;
+  department: string;
+};
+ type EpicDetails = {
+  id: string;
+  epic_id: string;
+  title: string;
+  description: string;
+  deadline: string;
+  project_id: string;
+  created_at: string;
+  created_by: User;
+  assignee: User;
+};
+
+export default function DetailsModal({epicId,modalStatus}:{epicId:string}) {
+  const [epicDetails,setEpicDetails]=useState<EpicDetails[]>([]);
+  const {projectId}=useParams();
+  if(!projectId){
+ throw new Error('there is no id')
+  }
+
+  useEffect(()=>{
+    const getEpic =async()=>{
+      try{
+        const response = await getEpicDetails({epicId,projectId})
+
+       setEpicDetails(response || [])
+
+      }catch(error){
+        if(error instanceof Error){
+          console.log(error)
+        }
+
+      }
+    }
+    getEpic()
+    
+  },[epicId,projectId])
+  console.log(epicDetails)
+ 
   return (
+    
     <section
       className="fixed w-full p-5   z-50 bg-black/45  inset-0 min-h-screen flex flex-col
      justify-center items-center "
     >
+     
       <div className="bg-white max-h-[90vh]  overflow-y-scroll md:mt-10  max-sm:mt-16  w-full max-w-2xl p-8 flex flex-col gap-5">
-        <div className="flex flex-col gap-3">
+        {epicDetails.map((item)=>{
+          return(
+            <>
+            <div className='flex justify-between'>
+               <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2">
             <img src={EpicsIcon} alt="EpicsIcon"></img>
-            <p className="text-slate-dark font-bold text-[12px]">Epic-101</p>
+            <p className="text-slate-dark font-bold text-[12px]">{item.epic_id}</p>
           </div>
-          <h1 className="text-2xl font-bold">Modern Architecture Overhaul</h1>
+          <h1 className="text-2xl font-bold">{item.description}</h1>
         </div>
+
+
+  <button
+    onClick={()=>modalStatus(false)}
+    className="text-xl font-bold text-gray-600 hover:text-black"
+  >
+    ✕
+  </button>
+
+            </div>
+        
         <div>
           <p className="font-medium ">
             A comprehensive review and upgrade of the core architectural
@@ -24,7 +91,7 @@ export default function DetailsModal() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="flex flex-col gap-3">
-            <UserInfo title="Created at" />
+            <UserInfo title="Created by" />
             <div>
               <div className="flex items-center gap-1">
                 {/* avatar */}
@@ -34,8 +101,9 @@ export default function DetailsModal() {
 
                 {/* info */}
                 <div className="flex flex-col">
-                  <h2 className="font-medium text-gray-900 text-sm">Tarek</h2>
+                  <h2 className="font-medium text-gray-900 text-sm">{item.created_by.name}</h2>
                 </div>
+         
               </div>
             </div>
           </div>
@@ -51,7 +119,7 @@ export default function DetailsModal() {
 
                 {/* info */}
                 <div className="flex flex-col">
-                  <h2 className="font-medium text-gray-900 text-sm">Tarek</h2>
+                  <h2 className="font-medium text-gray-900 text-sm">{item.assignee.name}</h2>
                 </div>
               </div>
             </div>
@@ -66,7 +134,7 @@ export default function DetailsModal() {
 
                 {/* info */}
                 <div className="flex flex-col">
-                  <h2 className="font-medium text-gray-900">Oct 15, 2025</h2>
+                  <h2 className="font-medium text-gray-900">{item.deadline}</h2>
                 </div>
               </div>
             </div>
@@ -81,7 +149,9 @@ export default function DetailsModal() {
 
                 {/* info */}
                 <div className="flex flex-col">
-                  <h2 className="font-medium text-gray-900 ">Oct 15, 2025</h2>
+                 <h2 className="font-medium text-gray-900">
+  {new Date(item.created_at).toDateString()}
+</h2>
                 </div>
               </div>
             </div>
@@ -103,6 +173,11 @@ export default function DetailsModal() {
             </div>
           </div>
         </div>
+            </>
+            
+          )
+        })}
+       
       </div>
     </section>
   );

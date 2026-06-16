@@ -65,3 +65,25 @@ export const getProjectEpics = async ({
     if (error instanceof Error) throw error;
   }
 };
+
+export const getEpicDetails = async ({
+  epicId,
+  projectId
+}: {
+  epicId: string;
+  projectId:string
+}) => {
+  try {
+    const response = await apiClient(
+      getBaseUrl(
+        `rest/v1/project_epics?project_id:eq.${projectId}&id=eq.${epicId}`
+      )
+    );
+
+    const data = await response.json();
+   return data;
+  } catch (error) {
+    if (error instanceof Error) throw error;
+      throw new Error('Failed to get Epic');
+  }
+};

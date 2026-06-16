@@ -32,6 +32,7 @@ export default function EpicsList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
   const [openModal, setOpenModal] = useState(false);
+  const [epicId,setEpicId]=useState('')
   const limit = 1;
   const offset = (currentPage - 1) * limit;
 
@@ -173,7 +174,7 @@ export default function EpicsList() {
 
             return (
               <div
-                onClick={() => setOpenModal(true)}
+                onClick={() =>{return (setOpenModal(true),setEpicId(epic.id))}}
                 key={epic.id}
                 className="bg-white rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
               >
@@ -265,7 +266,7 @@ export default function EpicsList() {
         </div>
       </div>
 
-      {openModal && <DetailsModal />}
+      {openModal && <DetailsModal epicId={epicId} modalStatus={setOpenModal}/>}
     </div>
   );
 }
