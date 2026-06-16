@@ -68,22 +68,54 @@ export const getProjectEpics = async ({
 
 export const getEpicDetails = async ({
   epicId,
-  projectId
+  projectId,
 }: {
   epicId: string;
-  projectId:string
+  projectId: string;
 }) => {
   try {
     const response = await apiClient(
       getBaseUrl(
-        `rest/v1/project_epics?project_id:eq.${projectId}&id=eq.${epicId}`
-      )
+        `rest/v1/project_epics?project_id:eq.${projectId}&id=eq.${epicId}`,
+      ),
     );
 
     const data = await response.json();
-   return data;
+    return data;
   } catch (error) {
     if (error instanceof Error) throw error;
-      throw new Error('Failed to get Epic');
+    throw new Error('Failed to get Epic');
+  }
+};
+
+export const updateEpicDetails = async ({
+  epicId,
+  payload,
+}: {
+  epicId: string;
+  payload: {
+    title: string;
+    description: string;
+    assignee_id: string;
+    deadline: string;
+  };
+}) => {
+  try {
+    const response = await apiClient(
+      getBaseUrl(`rest/v1/epics?id=eq.${epicId}`),
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    if (error instanceof Error) throw error;
+    throw new Error('Failed to get Epic');
   }
 };

@@ -36,8 +36,6 @@ export default function ProjectMembers() {
     fetchProjectMembers();
   }, [projectId, dispatch]);
 
- 
-
   return (
     <div className="w-full p-7">
       <header className="flex items-center gap-2 max-sm:hidden">
@@ -77,8 +75,6 @@ export default function ProjectMembers() {
           ) : (
             <>
               {members?.map((el) => {
-              
-
                 return (
                   <tr
                     key={el?.member_id || el?.user_id}
@@ -87,10 +83,8 @@ export default function ProjectMembers() {
                     {/* MEMBER */}
                     <td className="p-4">
                       <div className="flex items-center gap-3">
-                       
-                          <Helper el={el}/>
+                        <Helper el={el} />
                       </div>
-                    
                     </td>
 
                     {/* ROLE */}
