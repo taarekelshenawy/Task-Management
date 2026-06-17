@@ -8,6 +8,8 @@ import { useAppSelector } from '../../store/hooks';
 import FetchGuard from '../shared/FetchGuard';
 import { updateEpicDetails } from '../../services/epicsService';
 import getEpicTasks from '../../services/taskService';
+import containerIcon from '../../assets/Container.png';
+
 
 type User = {
   sub: string;
@@ -34,6 +36,8 @@ type Payload = {
   deadline: string;
 };
 
+
+
 export default function DetailsModal({
   epicId,
   modalStatus,
@@ -44,8 +48,16 @@ export default function DetailsModal({
   const [epicDetails, setEpicDetails] = useState<EpicDetails[]>([]);
   const { projectId } = useParams();
   const { members } = useAppSelector((state) => state.Project);
+  const [epicsTasks,setEpicsTasks]=useState([])
 
   console.log(epicId)
+  const getInitials = (name: string = '') =>
+    name
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase())
+      .join('');
 
   // ✅ loading state للـ update
   const [isUpdating, setIsUpdating] = useState(false);
@@ -62,13 +74,7 @@ export default function DetailsModal({
     throw new Error('there is no id');
   }
 
-  const getInitials = (name: string = '') =>
-    name
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((p) => p[0]?.toUpperCase())
-      .join('');
+  
 
   useEffect(() => {
     const getEpic = async () => {
@@ -97,12 +103,16 @@ export default function DetailsModal({
     };
     getEpic();
   }, [epicId, projectId]);
+  console.log(epicsTasks)
 
   useEffect(()=>{
     const handleEpicTasks =async()=>{
       try{
         const data = await getEpicTasks(epicId);
-        console.log(data)
+     if(data.length!=0){
+      
+      setEpicsTasks(data);
+     }
 
       }catch(error){
         alert(error)
@@ -137,7 +147,7 @@ export default function DetailsModal({
     },
     [epicId],
   );
-console.log(epicDetails)
+
   return (
     <section
       className="fixed w-full p-5   z-50 bg-black/45  inset-0 min-h-screen flex flex-col
@@ -314,17 +324,44 @@ console.log(epicDetails)
                 <div className="flex justify-between">
                   <p className="font-semibold text-lg">Tasks</p>
                   <button className="text-primary font-semibold">
-                    + Add Button
+                    + Add Task
                   </button>
                 </div>
-                <div className="min-h-64 bg-[#F1F3FF] p-2 flex flex-col  justify-center items-center">
-                  <div className="flex flex-col gap-3 items-center">
+                <div className="min-h-64 bg-[#F1F3FF] p-5 flex flex-col   w-full">
+                  <div className="flex flex-col gap-3 items-center w-full">
+{epicsTasks.length === 0 ? 
+ 
                     <p className="font-medium">
                       No tasks have been added to this epic yet
-                    </p>
-                    <button className="w-36 bg-blue-800 h-11 text-white">
-                      + Add Task
-                    </button>
+                    </p> :
+epicsTasks?.map((el)=>{
+    const name = el.created_by.name;
+  const initials = getInitials(name);
+  return(
+ <div className='flex justify-between w-full max-sm:flex-wrap gap-4'>
+                      <div className='flex gap-2 items-center'>
+                        <img src={containerIcon} alt=''></img>
+                        <div>
+                          <h1 className='font-medium text-lg'>{el.title}</h1>
+                          <div className='flex gap-1'>
+                          <div className="w-5 h-5 rounded-xl bg-[#0052CC] flex items-center justify-center text-white font-bold">
+          {initials}
+        </div>
+                            <p>{el.created_by.name}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className='text-center'>
+                        <p className='font-bold text-slate-dark/40 text-[10px]'>Due Date</p>
+                        <p  className='font-medium text-slate-dark/70 text-[12px]'>{new Date(el.due_date).toDateString()}</p>
+
+                      </div>
+                    </div>
+  )
+})}
+                   
+                 
+                  
                   </div>
                 </div>
               </div>
