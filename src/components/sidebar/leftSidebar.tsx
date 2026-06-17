@@ -47,7 +47,7 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
           fixed lg:static top-0 left-0 bottom-0 z-50  bg-[#F1F3FF]
           flex flex-col transition-transform duration-300
           min-h-screen
-          ${collapsed ? 'w-20' : 'w-64'}
+          ${collapsed ? 'w-20' : 'min-w-64'}
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
         >
@@ -94,7 +94,7 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
 
               <li>
                 <Link
-                  to="tasks"
+                  to={`/project/${projectId}/tasks?view=board`}
                   onClick={() => setIsMobileOpen(false)}
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
                 >

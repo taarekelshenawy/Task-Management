@@ -6,10 +6,10 @@ export default function ProjectLayout() {
   const { projectId } = useParams();
 
   return (
-    <div className="flex">
+    <div className="flex overflow-hidden">
       <Sidebar projectId={projectId} />
 
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full overflow-hidden">
         <ProjectHeader />
 
         <Outlet />

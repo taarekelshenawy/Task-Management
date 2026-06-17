@@ -14,6 +14,7 @@ import ProjectLayout from '../layouts/ProjectLayout';
 import ProtectedRoute from './ProtectedRoute';
 import { Navigate } from 'react-router-dom';
 import AuthLayout from '../layouts/AuthLayout';
+import TasksPage from '../pages/project/TasksPage';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
       { path: ':projectId/members', element: <Members /> },
       { path: ':projectId/epics', element: <EpicsPage /> },
       { path: ':projectId/epics/create', element: <AddNewEpic /> },
+      { path: ':projectId/tasks', element: <TasksPage /> },
     ],
   },
   {
