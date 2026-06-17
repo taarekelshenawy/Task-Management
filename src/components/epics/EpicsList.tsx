@@ -8,25 +8,12 @@ import Emptystate from '../ui/Emptystate';
 import { Link } from 'react-router-dom';
 import DetailsModal from './DetailsModal';
 import BreadCrumb from '../shared/BreadCrumb';
+import type { EpicProps } from '../../types/epics';
 
-type Epic = {
-  id: string;
-  epic_id: string;
-  title: string;
-  description?: string;
-  deadline?: string;
-  created_at: string;
-  created_by: {
-    name: string;
-  };
-  assignee: {
-    name: string;
-    email?: string;
-  };
-};
+
 
 export default function EpicsList() {
-  const [epics, setEpics] = useState<Epic[]>([]);
+  const [epics, setEpics] = useState<EpicProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);

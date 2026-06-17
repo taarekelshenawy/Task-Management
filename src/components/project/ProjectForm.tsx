@@ -9,11 +9,9 @@ import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import BreadCrumb from '../shared/BreadCrumb';
+import type { projectProps } from '../../types/project';
 
-type Inputs = {
-  name: string;
-  description: string;
-};
+
 
 export default function ProjectForm() {
   const navigate = useNavigate();
@@ -22,11 +20,11 @@ export default function ProjectForm() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<projectProps>({
     resolver: zodResolver(AddProjectSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<projectProps> = async (data) => {
     try {
       await CreateProject(data);
       toast.success('Project created successfully ');

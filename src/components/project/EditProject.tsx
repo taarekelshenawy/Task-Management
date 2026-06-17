@@ -11,11 +11,8 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getProjectDetails } from '../../services/projectService';
 import BreadCrumb from '../shared/BreadCrumb';
+import type { projectProps } from '../../types/project';
 
-type Inputs = {
-  name: string;
-  description: string;
-};
 
 export default function EditProject() {
   const [currentData, setCurrentData] = useState([
@@ -47,11 +44,11 @@ export default function EditProject() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<projectProps>({
     resolver: zodResolver(AddProjectSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<projectProps> = async (data) => {
     const payload = { ...data, projectId };
     try {
       await handleEditProject(payload);

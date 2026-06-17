@@ -1,17 +1,14 @@
-// StatusColumn.tsx
+
 import { useEffect, useState } from 'react';
 import { fetchTasks } from '../../services/taskService';
 import TaskCard from './TaskCard';
 import { useNavigate, useParams } from 'react-router-dom';
+import type { TaskProps } from '../../types/tasks';
 
-export type Task = {
-  id: string;
-  title: string;
-  status: string;
-};
+
 
 export default function StatusColumn({ status }: { status: string }) {
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<TaskProps[]>([]);
   const { projectId } = useParams();
   const navigate = useNavigate();
   console.log(projectId);

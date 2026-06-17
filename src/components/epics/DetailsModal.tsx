@@ -9,31 +9,10 @@ import FetchGuard from '../shared/FetchGuard';
 import { updateEpicDetails } from '../../services/epicsService';
 import getEpicTasks from '../../services/taskService';
 import containerIcon from '../../assets/Container.png';
+import type  { EpicDetailsProps,PayloadEpics } from '../../types/epics';
+import type { epicsTasksProps } from '../../types/epics';
 
-type User = {
-  sub: string;
-  name: string;
-  email: string;
-  department: string;
-};
-type EpicDetails = {
-  id: string;
-  epic_id: string;
-  title: string;
-  description: string;
-  deadline: string;
-  project_id: string;
-  created_at: string;
-  created_by: User;
-  assignee: User;
-};
 
-type Payload = {
-  title: string;
-  description: string;
-  assignee_id: string;
-  deadline: string;
-};
 
 export default function DetailsModal({
   epicId,
@@ -42,7 +21,7 @@ export default function DetailsModal({
   epicId: string;
   modalStatus: (status: boolean) => void;
 }) {
-  const [epicDetails, setEpicDetails] = useState<EpicDetails[]>([]);
+  const [epicDetails, setEpicDetails] = useState<EpicDetailsProps[]>([]);
   const { projectId } = useParams();
   const { members } = useAppSelector((state) => state.Project);
   const [epicsTasks, setEpicsTasks] = useState([]);
@@ -116,7 +95,7 @@ export default function DetailsModal({
 
   // ✅ updateEpic مع loading state و debounce
   const updateEpic = useCallback(
-    (payload: Payload) => {
+    (payload: PayloadEpics) => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
 
       debounceTimer.current = setTimeout(async () => {
@@ -320,7 +299,7 @@ export default function DetailsModal({
                         No tasks have been added to this epic yet
                       </p>
                     ) : (
-                      epicsTasks?.map((el) => {
+                      epicsTasks?.map((el:epicsTasksProps) => {
                         const name = el.created_by.name;
                         const initials = getInitials(name);
                         return (

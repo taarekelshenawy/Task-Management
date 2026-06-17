@@ -10,12 +10,9 @@ import { AddProjectEpicsSchema } from '../../utils/validationSchema';
 import { useParams } from 'react-router-dom';
 import FetchGuard from '../shared/FetchGuard';
 import BreadCrumb from '../shared/BreadCrumb';
+import type { InputProps } from '../../types/epics';
 
-type Inputs = {
-  title: string;
-  description: string;
-  deadline: string;
-};
+
 
 export default function Epics() {
   const { projectId } = useParams();
@@ -26,11 +23,11 @@ export default function Epics() {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<InputProps>({
     resolver: zodResolver(AddProjectEpicsSchema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = async (payload) => {
+  const onSubmit: SubmitHandler<InputProps> = async (payload) => {
     const data = {
       ...payload,
       assignee_id: members[0]?.user_id,

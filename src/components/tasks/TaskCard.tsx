@@ -1,11 +1,12 @@
-export type Task = {
-  id: string;
-  title: string;
-  status: string;
-};
+// export type Task = {
+//   id: string;
+//   title: string;
+//   status: string;
+// };
+import type { TaskProps } from "../../types/tasks";
 
-export default function TaskCard({ task }: { task: any }) {
-  console.log(task);
+export default function TaskCard({ task }:{task:TaskProps}) {
+
   const initials = task.assignee.name
     ? task.assignee.name
         .split(' ')

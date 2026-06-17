@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getProjectMembers } from '../../store/projectSlice';
 import BreadCrumb from '../shared/BreadCrumb';
 import { MemberSkeleton } from './MemberSkelton';
-import Helper from '../../utils/helper';
+import Helper from '../../utils/Helper';
 
 export default function ProjectMembers() {
   const { members, loading } = useAppSelector((state) => state.Project);

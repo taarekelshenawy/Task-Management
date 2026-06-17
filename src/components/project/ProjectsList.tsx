@@ -5,17 +5,11 @@ import arrowLeft from '../../assets/arrowleft.png';
 import { Link, useLocation } from 'react-router-dom';
 import Skeleton from '../ui/Skelton';
 import Emptystate from '../ui/Emptystate';
-
-type Project = {
-  id?: string;
-  name: string;
-  description: string;
-  created_at: string;
-};
+import type { projectListProps } from '../../types/project';
 
 export default function ProjectsList() {
   const location = useLocation();
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<projectListProps[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
   const [loading, setLoading] = useState(false);
