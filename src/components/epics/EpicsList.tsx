@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import { getProjectEpics } from '../../services/epicsService';
 import Skeleton from '../ui/Skelton';
 import Emptystate from '../ui/Emptystate';
-import arrowIcon from '../../assets/arrowIcon.png';
 import { Link } from 'react-router-dom';
 import DetailsModal from './DetailsModal';
+import BreadCrumb from '../shared/BreadCrumb';
 
 type Epic = {
   id: string;
@@ -132,16 +132,13 @@ export default function EpicsList() {
 
   return (
     <div className="p-7 flex flex-col gap-12">
-      <header className="flex items-center gap-2 max-sm:hidden">
-        <Link
-          to="/project"
-          className="font-bold text-secondary hover:underline"
-        >
-          PROJECTS
-        </Link>
-        <img src={arrowIcon} className="w-2" />
-        <p className="font-bold text-primary">Epics</p>
-      </header>
+      <BreadCrumb
+        items={[
+          { label: 'PROJECTS', href: '/project' },
+          { label: 'PROJECT Name', href: '/project' },
+          { label: 'Epics' },
+        ]}
+      />
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <div>

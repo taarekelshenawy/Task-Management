@@ -1,4 +1,3 @@
-
 export type Task = {
   id: string;
   title: string;
@@ -6,19 +5,18 @@ export type Task = {
 };
 
 export const STATUSES = [
-  "TO_DO",
-  "IN_PROGRESS",
-  "BLOCKED",
-  "IN_REVIEW",
-  "READY_FOR_QA",
-  "REOPENED",
-  "READY_FOR_PRODUCTION",
-  "DONE",
+  'TO_DO',
+  'IN_PROGRESS',
+  'BLOCKED',
+  'IN_REVIEW',
+  'READY_FOR_QA',
+  'REOPENED',
+  'READY_FOR_PRODUCTION',
+  'DONE',
 ];
 
 // TasksBoardPage.tsx
-import StatusColumn from "./StatusColumn";
-
+import StatusColumn from './StatusColumn';
 
 export default function Boardview() {
   return (
@@ -26,8 +24,10 @@ export default function Boardview() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6 max-sm:flex-wrap gap-5">
         <div>
-            <h1 className="font-bold text-3xl">Active Workboard</h1>
-            <p className="text-[#64748B]">Curating Project Alpha's production pipeline and milestones.</p>
+          <h1 className="font-bold text-3xl">Active Workboard</h1>
+          <p className="text-[#64748B]">
+            Curating Project Alpha's production pipeline and milestones.
+          </p>
         </div>
         <input
           placeholder="Search tasks..."

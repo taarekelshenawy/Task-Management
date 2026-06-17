@@ -1,4 +1,3 @@
-
 export type Task = {
   id: string;
   title: string;
@@ -6,37 +5,34 @@ export type Task = {
 };
 
 export default function TaskCard({ task }: { task: any }) {
-    console.log(task)
+  console.log(task);
   const initials = task.assignee.name
     ? task.assignee.name
-        .split(" ")
+        .split(' ')
         .map((n: string) => n[0])
-        .join("")
+        .join('')
         .slice(0, 2)
         .toUpperCase()
-    : "UN";
+    : 'UN';
 
   return (
     <div className="bg-white p-3 rounded-lg shadow-sm border hover:shadow-md transition">
-      
       {/* Title */}
       <p className="text-sm font-medium">{task.title}</p>
 
       {/* Footer */}
       <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
-        
         {/* Date */}
         <span>
           {task.due_date
             ? new Date(task.due_date).toLocaleDateString()
-            : "No date"}
+            : 'No date'}
         </span>
 
         {/* Avatar initials */}
         <div className="w-6 h-6 flex items-center justify-center rounded-full bg-primary text-white font-semibold">
           {initials}
         </div>
-
       </div>
     </div>
   );

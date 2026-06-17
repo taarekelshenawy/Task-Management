@@ -1,4 +1,3 @@
-import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
@@ -11,6 +10,7 @@ import { handleEditProject } from '../../services/projectService';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getProjectDetails } from '../../services/projectService';
+import BreadCrumb from '../shared/BreadCrumb';
 
 type Inputs = {
   name: string;
@@ -69,11 +69,13 @@ export default function EditProject() {
   };
   return (
     <main className="p-7">
-      <header className="flex items-center gap-2 max-sm:hidden">
-        <p className="font-bold text-secondary">PROJECTS</p>
-        <img src={arrowIcon} className="w-2" />
-        <p className="font-bold text-primary">Edit Project</p>
-      </header>
+      <BreadCrumb
+        items={[
+          { label: 'Projects', href: '/project' },
+          { label: 'PROJECT TITLE', href: '/project' },
+          { label: 'Edit' },
+        ]}
+      />
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <h1 className="text-4xl font-semibold text-slate-dark">Edit Project</h1>

@@ -1,9 +1,9 @@
-import Boardview from "../../components/tasks/Boardview"
+import Boardview from '../../components/tasks/Boardview';
 
 export default function TasksPage() {
   return (
     <div>
-        <Boardview/>
+      <Boardview />
     </div>
-  )
+  );
 }

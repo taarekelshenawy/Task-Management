@@ -1,4 +1,3 @@
-import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
@@ -9,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
+import BreadCrumb from '../shared/BreadCrumb';
 
 type Inputs = {
   name: string;
@@ -40,16 +40,12 @@ export default function ProjectForm() {
   };
   return (
     <main className="p-7">
-      <header className="flex items-center gap-2 max-sm:hidden">
-        <Link
-          to="/project"
-          className="font-bold text-secondary hover:underline"
-        >
-          PROJECTS
-        </Link>
-        <img src={arrowIcon} className="w-2" />
-        <p className="font-bold text-primary">ADD NEW PROJECT</p>
-      </header>
+      <BreadCrumb
+        items={[
+          { label: 'Projects', href: '/project' },
+          { label: 'ADD NEW PROJECT' },
+        ]}
+      />
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <h1 className="text-4xl font-semibold text-slate-dark">

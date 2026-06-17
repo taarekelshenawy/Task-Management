@@ -1,11 +1,10 @@
-import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getProjectMembers } from '../../store/projectSlice';
-import { Link } from 'react-router-dom';
+import BreadCrumb from '../shared/BreadCrumb';
 import { MemberSkeleton } from './MemberSkelton';
 import Helper from '../../utils/helper';
 
@@ -38,14 +37,13 @@ export default function ProjectMembers() {
 
   return (
     <div className="w-full p-7">
-      <header className="flex items-center gap-2 max-sm:hidden">
-        <Link to="/project">
-          <p className="font-bold text-secondary">PROJECTS</p>
-        </Link>
-
-        <img src={arrowIcon} className="w-2" />
-        <p className="font-bold text-primary">Members</p>
-      </header>
+      <BreadCrumb
+        items={[
+          { label: 'PROJECTS', href: '/project' },
+          { label: 'PROJECT Name', href: '/project' },
+          { label: 'Members' },
+        ]}
+      />
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <h1 className="text-4xl font-semibold text-slate-dark">

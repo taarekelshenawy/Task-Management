@@ -1,4 +1,3 @@
-import arrowIcon from '../../assets/arrowIcon.png';
 import inviteIcon from '../../assets/InviteIcon.png';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
@@ -10,6 +9,7 @@ import { useAppSelector } from '../../store/hooks';
 import { AddProjectEpicsSchema } from '../../utils/validationSchema';
 import { useParams } from 'react-router-dom';
 import FetchGuard from '../shared/FetchGuard';
+import BreadCrumb from '../shared/BreadCrumb';
 
 type Inputs = {
   title: string;
@@ -55,11 +55,14 @@ export default function Epics() {
     <main className="p-7">
       <FetchGuard projectId={projectId!} />
 
-      <header className="flex items-center gap-2 max-sm:hidden">
-        <p className="font-bold text-secondary">PROJECTS</p>
-        <img src={arrowIcon} className="w-2" />
-        <p className="font-bold text-primary">Create New Epic</p>
-      </header>
+      <BreadCrumb
+        items={[
+          { label: 'PROJECTS', href: '/project' },
+          { label: 'Project Alpha', href: '/project' },
+          { label: 'Epics' },
+          { label: 'New Epic' },
+        ]}
+      />
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
         <div>
