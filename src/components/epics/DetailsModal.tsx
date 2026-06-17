@@ -7,6 +7,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { useAppSelector } from '../../store/hooks';
 import FetchGuard from '../shared/FetchGuard';
 import { updateEpicDetails } from '../../services/epicsService';
+import getEpicTasks from '../../services/taskService';
 
 type User = {
   sub: string;
@@ -44,7 +45,7 @@ export default function DetailsModal({
   const { projectId } = useParams();
   const { members } = useAppSelector((state) => state.Project);
 
-  
+  console.log(epicId)
 
   // ✅ loading state للـ update
   const [isUpdating, setIsUpdating] = useState(false);
@@ -96,6 +97,21 @@ export default function DetailsModal({
     };
     getEpic();
   }, [epicId, projectId]);
+
+  useEffect(()=>{
+    const handleEpicTasks =async()=>{
+      try{
+        const data = await getEpicTasks(epicId);
+        console.log(data)
+
+      }catch(error){
+        alert(error)
+
+      }
+    }
+    handleEpicTasks()
+
+  },[epicId])
 
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 

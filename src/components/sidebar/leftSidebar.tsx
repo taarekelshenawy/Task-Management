@@ -83,7 +83,7 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
 
               <li>
                 <Link
-                  to={`/project/${projectId}/epics/new`}
+                  to={`/project/${projectId}/epics/`}
                   onClick={() => setIsMobileOpen(false)}
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
                 >
