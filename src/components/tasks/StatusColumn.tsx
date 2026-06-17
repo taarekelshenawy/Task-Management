@@ -1,6 +1,6 @@
 // StatusColumn.tsx
 import { useEffect, useState } from "react";
-// import { fetchTasks } from "../../services/taskService";
+import { fetchTasks } from "../../services/taskService";
 import TaskCard from "./TaskCard";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -16,11 +16,11 @@ export default function StatusColumn({ status }: { status: string }) {
   const navigate = useNavigate();
   console.log(projectId)
 
-//   useEffect(() => {
-//     if (!projectId) return;
+  useEffect(() => {
+    if (!projectId) return;
 
-//     fetchTasks(projectId, status).then(setTasks);
-//   }, [projectId, status]);
+    fetchTasks(projectId, status).then(setTasks);
+  }, [projectId, status]);
 
   return (
     <div className="bg-gray-100 rounded-xl p-3 w-72 flex-shrink-0 flex flex-col gap-4">
@@ -44,11 +44,11 @@ export default function StatusColumn({ status }: { status: string }) {
     </div>
 
       {/* Tasks */}
-      {/* <div className="space-y-2">
+      <div className="space-y-2">
         {tasks?.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
-      </div> */}
+      </div>
     </div>
   );
 }
