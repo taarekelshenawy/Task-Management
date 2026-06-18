@@ -3,8 +3,7 @@ import EpicsIcon from '../../assets/EpicsModal.png';
 import dateIcon from '../../assets/dateIcon.png';
 import UserInfo from './UserInfo';
 import { useEffect, useState, useCallback, useRef } from 'react';
-// import { useAppSelector } from '../../store/hooks';
-import FetchGuard from '../shared/ProjectMembersLoader';
+import FetchGuard from '../../shared/ProjectMembersLoader';
 import { updateEpicDetails } from '../../services/epicsService';
 import getEpicTasks from '../../services/taskService';
 import containerIcon from '../../assets/Container.png';
@@ -13,6 +12,8 @@ import type { epicsTasksProps } from '../../types/epics';
 import { fetchEpicDetails } from '../../store/epicsSlice';
 import { useAppDispatch } from '../../store/hooks';
 import { useAppSelector } from '../../store/hooks';
+import { getInitials } from '../../utils/Helper';
+import { useNavigate } from 'react-router-dom';
 
 export default function DetailsModal({
   epicId,
@@ -21,22 +22,14 @@ export default function DetailsModal({
   epicId: string;
   modalStatus: (status: boolean) => void;
 }) {
-
   const { projectId } = useParams();
   const { members } = useAppSelector((state) => state.Project);
   const [epicsTasks, setEpicsTasks] = useState([]);
   const dispatch = useAppDispatch();
   const { data: epicDetails } = useAppSelector((state) => state.epics);
-
-  const getInitials = (name: string = '') =>
-    name
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((p) => p[0]?.toUpperCase())
-      .join('');
-
+  const [editing, setIsEditing] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const navigate = useNavigate();
 
   const updateDataRef = useRef({
     title: '',
@@ -49,16 +42,10 @@ export default function DetailsModal({
     throw new Error('there is no id');
   }
 
-  // ==============================
-  // Redux fetch epic details
-  // ==============================
   useEffect(() => {
     dispatch(fetchEpicDetails({ epicId, projectId }));
   }, [dispatch, epicId, projectId]);
 
-  // ==============================
-  // sync ref after redux data
-  // ==============================
   useEffect(() => {
     if (epicDetails?.length > 0) {
       const item = epicDetails[0];
@@ -88,7 +75,6 @@ export default function DetailsModal({
 
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // updateEpic مع loading state و debounce
   const updateEpic = useCallback(
     (payload: PayloadEpics) => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -97,6 +83,7 @@ export default function DetailsModal({
         setIsUpdating(true);
         try {
           await updateEpicDetails({ epicId, payload });
+          navigate(`/project/${projectId}/epics`);
 
           dispatch(fetchEpicDetails({ epicId, projectId }));
         } catch (error) {
@@ -106,9 +93,9 @@ export default function DetailsModal({
         } finally {
           setIsUpdating(false);
         }
-      }, 2000);
+      }, 1000);
     },
-    [epicId, dispatch, projectId],
+    [epicId, dispatch, projectId, navigate],
   );
 
   return (
@@ -118,7 +105,6 @@ export default function DetailsModal({
     >
       <FetchGuard projectId={projectId!} />
       <div className="bg-white max-h-[90vh]  overflow-y-scroll md:mt-10  max-sm:mt-16  w-full max-w-2xl p-8 flex flex-col gap-10">
-        {/*  Loading indicator للـ update */}
         {isUpdating && (
           <div className="flex items-center gap-2 text-sm text-blue-600 bg-blue-50 px-3 py-2 rounded">
             <svg
@@ -146,12 +132,9 @@ export default function DetailsModal({
         )}
 
         {epicDetails?.map((item) => {
-          const name = item.created_by.name ?? '';
-          const initials = getInitials(name);
           return (
-            //  key للـ map
             <div key={item.id} className="flex flex-col gap-5">
-              <div className="flex justify-between items-start">
+              <div className="flex justify-between items-start ">
                 <div className="flex flex-col gap-4 w-full">
                   <div className="flex items-center gap-2">
                     <img src={EpicsIcon} alt="EpicsIcon"></img>
@@ -159,22 +142,32 @@ export default function DetailsModal({
                       {item.epic_id}
                     </p>
                   </div>
-                  {/* ✅ controlled input بـ updateData.description */}
-                  <input
-                    type="text"
-                    className="w-full h-9 p-2 px-3 bg-surface-high"
-                    defaultValue={item.description}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      const newData = {
-                        ...updateDataRef.current,
-                        description: value,
-                      };
-                      updateDataRef.current = newData;
-                      updateEpic(newData);
-                    }}
-                  />
+                  <p
+                    className=" font-bold hover:cursor-text"
+                    onClick={() => setIsEditing(true)}
+                  >
+                    {item.description}
+                  </p>
+                  {editing && (
+                    <input
+                      autoFocus
+                      type="text"
+                      className="w-full h-9 p-2 px-3 bg-surface-high"
+                      defaultValue={item.description}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        const newData = {
+                          ...updateDataRef.current,
+                          description: value,
+                        };
+                        updateDataRef.current = newData;
+                        updateEpic(newData);
+                        setIsEditing(false);
+                      }}
+                    />
+                  )}
                 </div>
+
                 <button
                   onClick={() => modalStatus(false)}
                   className="text-xl font-bold text-gray-600 hover:text-black"
@@ -196,7 +189,7 @@ export default function DetailsModal({
                   <div>
                     <div className="flex items-center gap-1">
                       <div className="w-7 h-7 rounded-full bg-[#0052CC] flex items-center justify-center text-white text-[10px] font-bold">
-                        {initials}
+                        {getInitials(item.created_by.name)}
                       </div>
                       <div className="flex flex-col">
                         <h2 className="font-medium text-gray-900 text-sm">
@@ -212,7 +205,7 @@ export default function DetailsModal({
                   <div>
                     <div className="flex items-center gap-1">
                       <div className="w-7 h-7 rounded-full bg-[#0052CC] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
-                        {initials}
+                        {getInitials(item.created_by.name)}
                       </div>
                       {/*  controlled select */}
                       <select
@@ -289,16 +282,14 @@ export default function DetailsModal({
                     </button>
                   </Link>
                 </div>
-                <div className="min-h-64 bg-[#F1F3FF] p-5 flex flex-col   w-full">
-                  <div className="flex flex-col gap-3 items-center w-full">
+                <div className="min-h-64 bg-[#F1F3FF] p-5 flex flex-col justify-center   w-full">
+                  <div className="flex flex-col  gap-3 items-center w-full">
                     {epicsTasks.length === 0 ? (
                       <p className="font-medium">
                         No tasks have been added to this epic yet
                       </p>
                     ) : (
                       epicsTasks?.map((el: epicsTasksProps) => {
-                        const name = el.created_by.name;
-                        const initials = getInitials(name);
                         return (
                           <div className="flex justify-between w-full max-sm:flex-wrap gap-4">
                             <div className="flex gap-2 items-center">
@@ -307,9 +298,9 @@ export default function DetailsModal({
                                 <h1 className="font-medium text-lg">
                                   {el.title}
                                 </h1>
-                                <div className="flex gap-1">
-                                  <div className="w-5 h-5 rounded-xl bg-[#0052CC] flex items-center justify-center text-white font-bold">
-                                    {initials}
+                                <div className="flex gap-1 items-center">
+                                  <div className="w-7 h-7 rounded-full bg-[#0052CC] flex items-center justify-center text-white font-bold">
+                                    {getInitials(el.created_by.name)}
                                   </div>
                                   <p>{el.created_by.name}</p>
                                 </div>

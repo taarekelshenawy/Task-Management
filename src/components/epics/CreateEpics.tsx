@@ -8,8 +8,8 @@ import { createNewEpic } from '../../services/epicsService';
 import { useAppSelector } from '../../store/hooks';
 import { AddProjectEpicsSchema } from '../../utils/validationSchema';
 import { useParams } from 'react-router-dom';
-import FetchGuard from '../shared/ProjectMembersLoader';
-import BreadCrumb from '../shared/BreadCrumb';
+import FetchGuard from '../../shared/ProjectMembersLoader';
+import BreadCrumb from '../../shared/BreadCrumb';
 import type { InputProps } from '../../types/epics';
 
 export default function Epics() {

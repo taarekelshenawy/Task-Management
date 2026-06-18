@@ -7,7 +7,7 @@ import Skeleton from '../ui/Skelton';
 import Emptystate from '../ui/Emptystate';
 import { Link } from 'react-router-dom';
 import DetailsModal from './DetailsModal';
-import BreadCrumb from '../shared/BreadCrumb';
+import BreadCrumb from '../../shared/BreadCrumb';
 import type { EpicProps } from '../../types/epics';
 import { getInitials } from '../../utils/Helper';
 import { useRef } from 'react';
@@ -178,7 +178,7 @@ export default function EpicsList() {
         </div>
 
         <Link to={`/project/${projectId}/epics/create`}>
-          <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
+          <button className="flex items-center gap-2 cursor-pointer bg-primary w-45 h-11 justify-center text-white">
             + Create New Epic
           </button>
         </Link>
@@ -199,7 +199,7 @@ export default function EpicsList() {
                   return (setOpenModal(true), setEpicId(epic.id));
                 }}
                 key={epic.id}
-                className="bg-white rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
+                className="bg-white cursor-pointer rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
               >
                 {/* TOP */}
                 <div className="flex flex-col gap-4">

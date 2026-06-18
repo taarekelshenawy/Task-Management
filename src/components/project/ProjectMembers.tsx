@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getProjectMembers } from '../../store/projectSlice';
-import BreadCrumb from '../shared/BreadCrumb';
+import BreadCrumb from '../../shared/BreadCrumb';
 import { MemberSkeleton } from './MemberSkelton';
 import { getInitials } from '../../utils/Helper';
 

@@ -16,7 +16,7 @@ export default function StatusColumn({ status }: { status: string }) {
   }, [projectId, status]);
 
   return (
-    <div className="bg-gray-100 rounded-xl p-3 w-72 shrink-0 flex flex-col gap-4">
+    <div className="rounded-xl p-3 w-72 shrink-0 flex flex-col gap-4">
       {/* Header */}
       <div className="flex items-center justify-between mb-3">
         <h2 className="text-sm font-semibold">{status}</h2>

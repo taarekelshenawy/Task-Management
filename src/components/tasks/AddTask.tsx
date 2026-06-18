@@ -4,8 +4,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
 
-import BreadCrumb from '../shared/BreadCrumb';
-import FetchGuard from '../shared/ProjectMembersLoader';
+import BreadCrumb from '../../shared/BreadCrumb';
+import FetchGuard from '../../shared/ProjectMembersLoader';
 
 import { useAppSelector } from '../../store/hooks';
 import { createNewTask } from '../../services/taskService';
@@ -20,10 +20,8 @@ export default function AddTask() {
     throw new Error('Project ID is missing');
   }
 
-
   const { data: epicDetails } = useAppSelector((state) => state.epics);
   const { members } = useAppSelector((state) => state.Project);
-
 
   const {
     register,
@@ -38,7 +36,6 @@ export default function AddTask() {
   // CREATE TASK
   // =========================
   const onSubmit = async (data: CreateTaskPayload) => {
-
     try {
       const payload: CreateTaskPayload = {
         epic_id: data.epic_id,
@@ -227,5 +224,3 @@ export default function AddTask() {
     </main>
   );
 }
-
-

@@ -13,7 +13,6 @@ const getEpicTasks = async (epicId: string) => {
   }
 };
 
-
 export async function fetchTasks(projectId: string, status: string) {
   const res = await apiClient(
     getBaseUrl(
@@ -49,7 +48,6 @@ export const createNewTask = async (payload: {
     const data = text ? JSON.parse(text) : null;
 
     if (!response.ok) {
-
       throw new Error(
         data?.message ||
           data?.error ||

@@ -8,7 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateProject } from '../../services/projectService';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
-import BreadCrumb from '../shared/BreadCrumb';
+import BreadCrumb from '../../shared/BreadCrumb';
 import type { projectProps } from '../../types/project';
 
 export default function ProjectForm() {

@@ -10,7 +10,7 @@ import { handleEditProject } from '../../services/projectService';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getProjectDetails } from '../../services/projectService';
-import BreadCrumb from '../shared/BreadCrumb';
+import BreadCrumb from '../../shared/BreadCrumb';
 import type { projectProps } from '../../types/project';
 
 export default function EditProject() {

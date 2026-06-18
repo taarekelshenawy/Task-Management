@@ -43,7 +43,6 @@ export default function SignUp() {
         toast(error.message);
       }
     }
-   
   };
 
   return (

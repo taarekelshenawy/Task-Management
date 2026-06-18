@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import arrowIcon from '../../assets/arrowIcon.png';
+import arrowIcon from '../assets/arrowIcon.png';
 
 type ItemsProps = {
   items: {
