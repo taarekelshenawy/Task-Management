@@ -65,7 +65,6 @@ export const handleEditProject = async (data: {
   description: string;
   projectId: string;
 }) => {
-  console.log(data);
   try {
     const response = await apiClient(
       getBaseUrl(`rest/v1/projects?id=eq.${data.projectId}`),

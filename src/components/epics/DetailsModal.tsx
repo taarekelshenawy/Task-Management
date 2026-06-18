@@ -2,15 +2,17 @@ import { Link, useParams } from 'react-router-dom';
 import EpicsIcon from '../../assets/EpicsModal.png';
 import dateIcon from '../../assets/dateIcon.png';
 import UserInfo from './UserInfo';
-import { getEpicDetails } from '../../services/epicsService';
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { useAppSelector } from '../../store/hooks';
-import FetchGuard from '../shared/FetchGuard';
+// import { useAppSelector } from '../../store/hooks';
+import FetchGuard from '../shared/ProjectMembersLoader';
 import { updateEpicDetails } from '../../services/epicsService';
 import getEpicTasks from '../../services/taskService';
 import containerIcon from '../../assets/Container.png';
-import type { EpicDetailsProps, PayloadEpics } from '../../types/epics';
+import type { PayloadEpics } from '../../types/epics';
 import type { epicsTasksProps } from '../../types/epics';
+import { fetchEpicDetails } from '../../store/epicsSlice';
+import { useAppDispatch } from '../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 
 export default function DetailsModal({
   epicId,
@@ -19,12 +21,13 @@ export default function DetailsModal({
   epicId: string;
   modalStatus: (status: boolean) => void;
 }) {
-  const [epicDetails, setEpicDetails] = useState<EpicDetailsProps[]>([]);
+
   const { projectId } = useParams();
   const { members } = useAppSelector((state) => state.Project);
   const [epicsTasks, setEpicsTasks] = useState([]);
+  const dispatch = useAppDispatch();
+  const { data: epicDetails } = useAppSelector((state) => state.epics);
 
-  console.log(epicId);
   const getInitials = (name: string = '') =>
     name
       .split(' ')
@@ -33,10 +36,8 @@ export default function DetailsModal({
       .map((p) => p[0]?.toUpperCase())
       .join('');
 
-  // ✅ loading state للـ update
   const [isUpdating, setIsUpdating] = useState(false);
 
-  // ✅ useRef لتجنب stale closure
   const updateDataRef = useRef({
     title: '',
     description: '',
@@ -48,32 +49,28 @@ export default function DetailsModal({
     throw new Error('there is no id');
   }
 
+  // ==============================
+  // Redux fetch epic details
+  // ==============================
   useEffect(() => {
-    const getEpic = async () => {
-      try {
-        const response = await getEpicDetails({ epicId, projectId });
-        const data = response || [];
-        setEpicDetails(data);
+    dispatch(fetchEpicDetails({ epicId, projectId }));
+  }, [dispatch, epicId, projectId]);
 
-        if (data.length > 0) {
-          const item = data[0];
+  // ==============================
+  // sync ref after redux data
+  // ==============================
+  useEffect(() => {
+    if (epicDetails?.length > 0) {
+      const item = epicDetails[0];
 
-          updateDataRef.current = {
-            title: item.title || '',
-            description: item.description || '',
-            assignee_id: item.assignee?.sub || '',
-            deadline: item.deadline || '',
-          };
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          console.log(error);
-        }
-      }
-    };
-    getEpic();
-  }, [epicId, projectId]);
-  console.log(epicsTasks);
+      updateDataRef.current = {
+        title: item.title || '',
+        description: item.description || '',
+        assignee_id: item.assignee?.sub || '',
+        deadline: item.deadline || '',
+      };
+    }
+  }, [epicDetails]);
 
   useEffect(() => {
     const handleEpicTasks = async () => {
@@ -91,7 +88,7 @@ export default function DetailsModal({
 
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // ✅ updateEpic مع loading state و debounce
+  // updateEpic مع loading state و debounce
   const updateEpic = useCallback(
     (payload: PayloadEpics) => {
       if (debounceTimer.current) clearTimeout(debounceTimer.current);
@@ -99,9 +96,9 @@ export default function DetailsModal({
       debounceTimer.current = setTimeout(async () => {
         setIsUpdating(true);
         try {
-          const response = await updateEpicDetails({ epicId, payload });
-          const safeData = Array.isArray(response) ? response : [];
-          setEpicDetails(safeData || []);
+          await updateEpicDetails({ epicId, payload });
+
+          dispatch(fetchEpicDetails({ epicId, projectId }));
         } catch (error) {
           if (error instanceof Error) {
             console.log(error);
@@ -111,7 +108,7 @@ export default function DetailsModal({
         }
       }, 2000);
     },
-    [epicId],
+    [epicId, dispatch, projectId],
   );
 
   return (
@@ -121,7 +118,7 @@ export default function DetailsModal({
     >
       <FetchGuard projectId={projectId!} />
       <div className="bg-white max-h-[90vh]  overflow-y-scroll md:mt-10  max-sm:mt-16  w-full max-w-2xl p-8 flex flex-col gap-10">
-        {/* ✅ Loading indicator للـ update */}
+        {/*  Loading indicator للـ update */}
         {isUpdating && (
           <div className="flex items-center gap-2 text-sm text-blue-600 bg-blue-50 px-3 py-2 rounded">
             <svg
@@ -152,7 +149,7 @@ export default function DetailsModal({
           const name = item.created_by.name ?? '';
           const initials = getInitials(name);
           return (
-            // ✅ key للـ map
+            //  key للـ map
             <div key={item.id} className="flex flex-col gap-5">
               <div className="flex justify-between items-start">
                 <div className="flex flex-col gap-4 w-full">
@@ -217,7 +214,7 @@ export default function DetailsModal({
                       <div className="w-7 h-7 rounded-full bg-[#0052CC] flex items-center justify-center text-white text-[10px] font-bold shrink-0">
                         {initials}
                       </div>
-                      {/* ✅ controlled select */}
+                      {/*  controlled select */}
                       <select
                         defaultValue={item.assignee.sub}
                         onChange={(e) => {
@@ -249,7 +246,7 @@ export default function DetailsModal({
                     <div className="flex items-center gap-3">
                       <img src={dateIcon} alt="date-icon"></img>
                       <div className="flex flex-col">
-                        {/* ✅ controlled date input */}
+                        {/*  controlled date input */}
                         <input
                           type="date"
                           defaultValue={item.deadline}

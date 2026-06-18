@@ -13,9 +13,8 @@ const getEpicTasks = async (epicId: string) => {
   }
 };
 
-// api.ts
+
 export async function fetchTasks(projectId: string, status: string) {
-  console.log(projectId, status);
   const res = await apiClient(
     getBaseUrl(
       `/rest/v1/project_tasks?project_id=eq.${projectId}&status=eq.${status}`,
@@ -25,5 +24,50 @@ export async function fetchTasks(projectId: string, status: string) {
 
   return data;
 }
+
+export const createNewTask = async (payload: {
+  project_id: string;
+  epic_id: string;
+  title: string;
+  description: string;
+  assignee_id?: string;
+  due_date: string;
+  status: string;
+}) => {
+  try {
+    const response = await apiClient(getBaseUrl('/rest/v1/tasks'), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Prefer: 'return=representation',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const text = await response.text();
+
+    const data = text ? JSON.parse(text) : null;
+
+    if (!response.ok) {
+
+      throw new Error(
+        data?.message ||
+          data?.error ||
+          data?.details ||
+          'Failed to create task',
+      );
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+
+    if (error instanceof Error) {
+      throw error;
+    }
+
+    throw new Error('Failed to create task');
+  }
+};
 
 export default getEpicTasks;

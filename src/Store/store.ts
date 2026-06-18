@@ -1,12 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userslice from './userSlice';
 import projectslice from './projectSlice';
+import epicReducer from './epicsSlice';
+
 // ...
 
 export const store = configureStore({
   reducer: {
     User: userslice,
     Project: projectslice,
+    epics: epicReducer,
   },
 });
 

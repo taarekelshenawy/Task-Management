@@ -9,15 +9,22 @@ import { Link } from 'react-router-dom';
 import DetailsModal from './DetailsModal';
 import BreadCrumb from '../shared/BreadCrumb';
 import type { EpicProps } from '../../types/epics';
+import { getInitials } from '../../utils/Helper';
+import { useRef } from 'react';
 
 export default function EpicsList() {
   const [epics, setEpics] = useState<EpicProps[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [epicId, setEpicId] = useState('');
+  const [isMobile, setIsMobile] = useState(
+    () => window.matchMedia('(max-width: 639px)').matches,
+  );
+  const loadMoreRef = useRef<HTMLDivElement>(null);
   const limit = 3;
   const offset = (currentPage - 1) * limit;
 
@@ -29,8 +36,6 @@ export default function EpicsList() {
   const range = contentRange.split('/')[0];
   const [start, end] = range.split('-').map(Number);
   const pageItemsCount = end - start + 1;
-  // const totalItems =contentRange.split('/')[1];
-  // const totalPages = Number(totalItems)  / pageItemsCount;
   const totalItems = Number(contentRange.split('/')[1] || 0);
   const totalPages = Math.ceil(totalItems / limit);
 
@@ -64,6 +69,43 @@ export default function EpicsList() {
     return pages;
   };
 
+  // ===== Mobile detection (matches Tailwind max-sm: 639px) =====
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 639px)');
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsMobile(event.matches);
+      setCurrentPage(1);
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
+  // ===== Infinite scroll (mobile only) =====
+  useEffect(() => {
+    if (!isMobile || !loadMoreRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          !loading &&
+          !loadingMore &&
+          currentPage < totalPages
+        ) {
+          setCurrentPage((page) => page + 1);
+        }
+      },
+      { rootMargin: '120px' },
+    );
+
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [isMobile, loading, loadingMore, currentPage, totalPages]);
+
   // ===== helpers =====
   const formatDate = (date: string) =>
     new Date(date).toLocaleDateString('en-GB', {
@@ -72,18 +114,17 @@ export default function EpicsList() {
       year: 'numeric',
     });
 
-  const getInitials = (name: string = '') =>
-    name
-      .split(' ')
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((p) => p[0]?.toUpperCase())
-      .join('');
-
   // ===== Fetch Epics =====
   useEffect(() => {
     const fetchEpics = async () => {
-      setLoading(true);
+      const isLoadMore = isMobile && currentPage > 1;
+
+      if (isLoadMore) {
+        setLoadingMore(true);
+      } else {
+        setLoading(true);
+      }
+
       setError('');
 
       try {
@@ -97,11 +138,12 @@ export default function EpicsList() {
         setError('Failed to load epics');
       } finally {
         setLoading(false);
+        setLoadingMore(false);
       }
     };
 
     fetchEpics();
-  }, [projectId, offset]);
+  }, [projectId, offset, isMobile, currentPage]);
 
   // ===== Empty State =====
   if (!loading && epics.length === 0) {
@@ -151,9 +193,6 @@ export default function EpicsList() {
       ) : (
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
           {epics.map((epic) => {
-            const name = epic.assignee?.name ?? '';
-            const initials = getInitials(name);
-
             return (
               <div
                 onClick={() => {
@@ -176,10 +215,10 @@ export default function EpicsList() {
                   <div className="flex items-center gap-2 text-sm">
                     <div className="flex items-center gap-2">
                       <div className="w-6 h-6 bg-[#65DCA4] text-white text-xs flex items-center justify-center rounded-md font-bold">
-                        {initials}
+                        {getInitials(epic.assignee?.name)}
                       </div>
 
-                      <span>{name}</span>
+                      <span>{epic.assignee?.name}</span>
                     </div>
                   </div>
                 </div>
@@ -198,6 +237,17 @@ export default function EpicsList() {
         </div>
       )}
 
+      {/* Infinite scroll sentinel (mobile only) */}
+      {isMobile && currentPage < totalPages && (
+        <div ref={loadMoreRef} className="h-1 sm:hidden" aria-hidden="true" />
+      )}
+
+      {loadingMore && (
+        <div className="sm:hidden">
+          <Skeleton count={1} />
+        </div>
+      )}
+
       {/* Pagination UI only */}
       <div className="flex justify-between bg-white p-4 items-center ">
         <p className="font-bold text-secondary">
@@ -212,16 +262,6 @@ export default function EpicsList() {
           >
             <img src={arrowLeft} className="w-1 h-2" />
           </button>
-          {/* 
-          {getPagination(currentPage, totalPages).map((page) => (
-            <button
-            onClick={setCurrentPage((prev)=>)}
-              key={page}
-              className={`w-8 h-8 border flex items-center justify-center ${currentPage===page ? 'bg-blue-800 text-white' :''}`}
-            >
-              {page}
-            </button>
-          ))} */}
 
           {getPagination(currentPage, totalPages).map((page, index) => (
             <button

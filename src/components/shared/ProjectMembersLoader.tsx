@@ -7,7 +7,7 @@ type Props = {
   projectId: string;
 };
 
-export default function FetchGuard({ projectId }: Props) {
+export default function ProjectMembersLoader({ projectId }: Props) {
   const { members } = useAppSelector((state) => state.Project);
   const dispatch = useAppDispatch();
   useEffect(() => {

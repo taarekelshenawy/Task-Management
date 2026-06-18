@@ -43,12 +43,7 @@ export default function SignUp() {
         toast(error.message);
       }
     }
-    // const result = dispatch(Signup(data));
-    // if (Signup.fulfilled.match(result)) {
-    //   toast.success('Account created successfully ');
-    // } else {
-    //   toast.error(error);
-    // }
+   
   };
 
   return (

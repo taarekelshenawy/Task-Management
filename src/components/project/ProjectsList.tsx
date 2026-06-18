@@ -24,7 +24,7 @@ export default function ProjectsList() {
   const offset = (currentPage - 1) * limit;
 
   // ===== Parse Content Range safely =====
-  const parsed = useMemo(() => {
+  const paginationInfo = useMemo(() => {
     if (!contentRange) {
       return {
         total: 0,
@@ -47,7 +47,7 @@ export default function ProjectsList() {
     };
   }, [contentRange, projects.length, limit]);
 
-  const { total, displayedCount, totalPages } = parsed;
+  const { total, displayedCount, totalPages } = paginationInfo;
 
   // ===== Mobile detection (matches Tailwind max-sm: 639px) =====
   useEffect(() => {
@@ -167,46 +167,50 @@ export default function ProjectsList() {
 
           {/* Error */}
           {error && <p className="text-center text-red-500">{error}</p>}
+          {loading ? (
+            <>
+              <Skeleton count={3} />
+            </>
+          ) : (
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
+              {projects.map((project) => (
+                <Link to={`/project/${project.id}/epics`}>
+                  <div
+                    key={project.id || `${project.name}-${project.created_at}`}
+                    className="bg-white max-w-76 max-h-80 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
+                  >
+                    <div>
+                      <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                        {project.name}
+                      </h3>
 
-          {/* Projects Grid */}
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
-            {projects.map((project) => (
-              <Link to={`/project/${project.id}/epics`}>
-                <div
-                  key={project.id || `${project.name}-${project.created_at}`}
-                  className="bg-white max-w-76 max-h-80 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
-                >
-                  <div>
-                    <h3 className="text-lg font-semibold text-slate-800 mb-2">
-                      {project.name}
-                    </h3>
+                      <p className="text-sm text-slate-600 font-bold">
+                        {project.description || 'No description provided'}
+                      </p>
+                    </div>
 
-                    <p className="text-sm text-slate-600 font-bold">
-                      {project.description || 'No description provided'}
-                    </p>
+                    <div className="pt-4 flex justify-between">
+                      <p className="text-xs text-slate-500">Created at</p>
+
+                      <time className="text-sm font-medium text-slate-700">
+                        {formatDate(project.created_at)}
+                      </time>
+                    </div>
+
+                    <div className="flex justify-end mt-4">
+                      <Link
+                        to={`/project/${project.id}/edit`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="max-w-20 px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 transition-all duration-200 shadow-sm"
+                      >
+                        Edit
+                      </Link>
+                    </div>
                   </div>
-
-                  <div className="pt-4 flex justify-between">
-                    <p className="text-xs text-slate-500">Created at</p>
-
-                    <time className="text-sm font-medium text-slate-700">
-                      {formatDate(project.created_at)}
-                    </time>
-                  </div>
-
-                  <div className="flex justify-end mt-4">
-                    <Link
-                      to={`/project/${project.id}/edit`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="max-w-20 px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 transition-all duration-200 shadow-sm"
-                    >
-                      Edit
-                    </Link>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          )}
 
           {/* Infinite scroll sentinel (mobile only) */}
           {isMobile && currentPage < totalPages && (

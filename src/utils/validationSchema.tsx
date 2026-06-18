@@ -101,4 +101,16 @@ export const AddProjectEpicsSchema = z.object({
   }),
 });
 
+export const createTaskSchema = z.object({
+  epic_id: z.string(),
+  title: z.string().min(3),
+  description: z.string().min(5),
+
+  assignee_id: z.string().optional().or(z.literal('')),
+
+  due_date: z.string().min(1),
+
+  status: z.enum(['TO_DO', 'IN_PROGRESS', 'DONE']),
+});
+
 export default signUpSchema;

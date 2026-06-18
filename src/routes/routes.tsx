@@ -23,8 +23,6 @@ const router = createBrowserRouter([
     element: <Navigate to="/login" replace />,
   },
 
-  // =====================
-  // AUTH ROUTES
   {
     element: <AuthLayout />,
     children: [
