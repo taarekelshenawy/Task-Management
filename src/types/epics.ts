@@ -1,12 +1,8 @@
-
-
-export type InputProps={
-      title: string;
+export type InputProps = {
+  title: string;
   description: string;
   deadline: string;
-
-}
-
+};
 
 export type UserEpics = {
   sub: string;
@@ -33,13 +29,11 @@ export type PayloadEpics = {
   deadline: string;
 };
 
-
-export type epicsTasksProps={
-    created_by:{name:string},
-    title:string,
-    due_date:string,
-}
-
+export type epicsTasksProps = {
+  created_by: { name: string };
+  title: string;
+  due_date: string;
+};
 
 export type EpicProps = {
   id: string;

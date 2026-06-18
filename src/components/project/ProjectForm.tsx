@@ -11,8 +11,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import BreadCrumb from '../shared/BreadCrumb';
 import type { projectProps } from '../../types/project';
 
-
-
 export default function ProjectForm() {
   const navigate = useNavigate();
   const {

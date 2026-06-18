@@ -12,8 +12,6 @@ import FetchGuard from '../shared/FetchGuard';
 import BreadCrumb from '../shared/BreadCrumb';
 import type { InputProps } from '../../types/epics';
 
-
-
 export default function Epics() {
   const { projectId } = useParams();
   const { members } = useAppSelector((state) => state.Project);

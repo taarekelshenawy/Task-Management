@@ -4,7 +4,7 @@ export type Task = {
   status: string;
 };
 
- const STATUSES = [
+const STATUSES = [
   'TO_DO',
   'IN_PROGRESS',
   'BLOCKED',

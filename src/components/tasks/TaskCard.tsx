@@ -3,10 +3,9 @@
 //   title: string;
 //   status: string;
 // };
-import type { TaskProps } from "../../types/tasks";
+import type { TaskProps } from '../../types/tasks';
 
-export default function TaskCard({ task }:{task:TaskProps}) {
-
+export default function TaskCard({ task }: { task: TaskProps }) {
   const initials = task.assignee.name
     ? task.assignee.name
         .split(' ')

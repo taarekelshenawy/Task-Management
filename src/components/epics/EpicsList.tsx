@@ -10,8 +10,6 @@ import DetailsModal from './DetailsModal';
 import BreadCrumb from '../shared/BreadCrumb';
 import type { EpicProps } from '../../types/epics';
 
-
-
 export default function EpicsList() {
   const [epics, setEpics] = useState<EpicProps[]>([]);
   const [loading, setLoading] = useState(false);

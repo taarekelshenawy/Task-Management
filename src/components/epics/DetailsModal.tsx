@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import EpicsIcon from '../../assets/EpicsModal.png';
 import dateIcon from '../../assets/dateIcon.png';
 import UserInfo from './UserInfo';
@@ -9,10 +9,8 @@ import FetchGuard from '../shared/FetchGuard';
 import { updateEpicDetails } from '../../services/epicsService';
 import getEpicTasks from '../../services/taskService';
 import containerIcon from '../../assets/Container.png';
-import type  { EpicDetailsProps,PayloadEpics } from '../../types/epics';
+import type { EpicDetailsProps, PayloadEpics } from '../../types/epics';
 import type { epicsTasksProps } from '../../types/epics';
-
-
 
 export default function DetailsModal({
   epicId,
@@ -288,9 +286,11 @@ export default function DetailsModal({
               <div className="flex flex-col gap-5 ">
                 <div className="flex justify-between">
                   <p className="font-semibold text-lg">Tasks</p>
-                  <button className="text-primary font-semibold">
-                    + Add Task
-                  </button>
+                  <Link to={`/project/${projectId}/tasks/new`}>
+                    <button className="text-primary font-semibold">
+                      + Add Task
+                    </button>
+                  </Link>
                 </div>
                 <div className="min-h-64 bg-[#F1F3FF] p-5 flex flex-col   w-full">
                   <div className="flex flex-col gap-3 items-center w-full">
@@ -299,7 +299,7 @@ export default function DetailsModal({
                         No tasks have been added to this epic yet
                       </p>
                     ) : (
-                      epicsTasks?.map((el:epicsTasksProps) => {
+                      epicsTasks?.map((el: epicsTasksProps) => {
                         const name = el.created_by.name;
                         const initials = getInitials(name);
                         return (

@@ -1,8 +1,7 @@
 import inviteIcon from '../../assets/InviteIcon.png';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
-import BentoIcon from '../../assets/BentoIcon.png';
-import TipIcon from '../../assets/TipIcon.png';
+
 import { AddProjectSchema } from '../../utils/validationSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
@@ -13,7 +12,7 @@ import { getProjectDetails } from '../../services/projectService';
 import BreadCrumb from '../shared/BreadCrumb';
 import type { projectProps } from '../../types/project';
 
-export default function EditProject() {
+export default function AddTask() {
   const [currentData, setCurrentData] = useState([
     { name: '', description: '' },
   ]);
@@ -68,13 +67,22 @@ export default function EditProject() {
       <BreadCrumb
         items={[
           { label: 'Projects', href: '/project' },
-          { label: 'PROJECT TITLE', href: '/project' },
-          { label: 'Edit' },
+          { label: 'Project Alpha', href: '/project' },
+          { label: 'Tasks' },
+          { label: 'New Task' },
         ]}
       />
 
       <section className="max-sm:hidden flex justify-between items-center mt-7">
-        <h1 className="text-4xl font-semibold text-slate-dark">Edit Project</h1>
+        <div>
+          <h1 className="text-4xl font-semibold text-slate-dark">
+            Create New Task
+          </h1>
+          <p className="text-secondary">
+            Initialize a new work item within the Architectural Workspace
+            ecosystem.
+          </p>
+        </div>
 
         <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
           <img src={inviteIcon} />
@@ -85,22 +93,8 @@ export default function EditProject() {
       <section>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="shadow-form flex flex-col max-w-2xl mx-auto p-8 bg-white mt-9"
+          className="shadow-form flex flex-col w-full mx-auto p-8 bg-white mt-9"
         >
-          {/* FORM HEADER */}
-          <header className="flex items-center gap-2 mb-9">
-            <div className="max-sm:hidden w-11 h-11 bg-primary-container/10 flex justify-center items-center">
-              <img src={BentoIcon} />
-            </div>
-
-            <div>
-              <h2 className="text-3xl font-semibold">Edit Project</h2>
-              <p className="text-slate-md font-medium">
-                Define the scope and foundational details of your project.
-              </p>
-            </div>
-          </header>
-
           {/* FORM CONTENT */}
           <section className="flex flex-col gap-6">
             {/* Project Title */}
@@ -109,7 +103,7 @@ export default function EditProject() {
                 className="text-slate-md font-bold"
                 htmlFor="project-title"
               >
-                Project TITLE
+                TITLE
               </label>
 
               <input
@@ -128,6 +122,44 @@ export default function EditProject() {
                 </p>
               )}
             </div>
+            <div className="flex justify-between gap-4 items-center">
+              <div className='flex-1 '>
+                <label htmlFor="status"></label>
+                <select id="status" defaultValue="To-Do"
+                 className='bg-surface-high h-13 rounded px-3 w-full '
+                >
+                  <option>To Do</option>
+                </select>
+              </div>
+              <div className='flex-1'>
+                <label htmlFor="assignee">
+                  <select id="assignee" defaultValue="Select Team Member" 
+                  className='bg-surface-high h-13 rounded px-3 w-full '>
+                    <option disabled> Select Team Member</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div>
+                  <div className='flex flex-col gap-3'>
+                <label htmlFor="Epic" className='font-bold '>Epic</label>
+                  <select id="Epic" defaultValue="Select Team Member" 
+                  className='bg-surface-high h-13 rounded px-3 w-full '>
+                    <option disabled> Select Epic Link</option>
+                  </select>
+            
+              </div>
+            </div>
+            <div>
+                 <div className='flex flex-col gap-3'>
+                <label htmlFor="Epic" className='font-bold '>Due Date</label>
+                  <input type='date'  className='bg-surface-high h-13 rounded px-3 w-full '></input>
+            
+              </div>
+            </div>
+
+         
 
             {/* Description */}
             <div className="flex flex-col gap-2 w-full">
@@ -152,8 +184,9 @@ export default function EditProject() {
           </section>
 
           {/* FORM FOOTER */}
-          <footer className="flex justify-between items-center max-sm:flex-col-reverse max-sm:gap-4 mt-6">
-            <button type="button" className="font-bold">
+          <footer className="flex flex-col items-end max-sm:flex-col-reverse max-sm:gap-4 mt-6">
+            <div className='flex gap-52'>
+                       <button type="button" className="font-bold">
               Back
             </button>
 
@@ -161,18 +194,14 @@ export default function EditProject() {
               type="submit"
               className="cursor-pointer bg-primary text-white p-3 rounded-sm font-bold w-40"
             >
-              Save
+          Create Task
             </button>
+
+            </div>
+     
           </footer>
 
-          {/* TIP */}
-          <aside className="w-full bg-surface-low p-2 flex gap-1 mt-3">
-            <img src={TipIcon} className="w-3 h-4" />
-            <p className="font-bold text-slate-md text-[11px]">
-              Pro Tip: You can invite project members and assign epics
-              immediately after the initial creation process.
-            </p>
-          </aside>
+         
         </form>
       </section>
     </main>

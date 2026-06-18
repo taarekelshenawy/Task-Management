@@ -1,9 +1,7 @@
 export type TaskProps = {
- 
- id: string;
+  id: string;
   title: string;
   status: string;
-  assignee:{name:string}
-  due_date:string
-   
+  assignee: { name: string };
+  due_date: string;
 };
