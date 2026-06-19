@@ -8,9 +8,13 @@ const getEpicTasks = async (epicId: string) => {
     );
     const data = await response.json();
     return data;
-  } catch (error) {
+  }catch (error) {
+  if (error instanceof Error) {
     throw new Error(error.message);
+  } else {
+    throw new Error("Unknown error occurred");
   }
+}
 };
 
 export async function fetchTasks(projectId: string, status: string) {
@@ -58,14 +62,12 @@ export const createNewTask = async (payload: {
 
     return data;
   } catch (error) {
-    console.error(error);
-
-    if (error instanceof Error) {
-      throw error;
-    }
-
-    throw new Error('Failed to create task');
+  if (error instanceof Error) {
+    throw new Error(error.message);
+  } else {
+    throw new Error("Unknown error occurred");
   }
+}
 };
 
 export default getEpicTasks;
