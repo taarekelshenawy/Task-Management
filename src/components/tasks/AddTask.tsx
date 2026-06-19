@@ -174,7 +174,7 @@ export default function AddTask() {
             </select>
 
             {errors.epic_id && (
-              <p className="text-red-500 text-sm">{errors.epic_id.message}</p>
+              <p className="text-red-600 text-sm">{errors.epic_id.message}</p>
             )}
           </div>
 
