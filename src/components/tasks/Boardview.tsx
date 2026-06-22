@@ -15,37 +15,39 @@ const STATUSES = [
   'DONE',
 ];
 
+
+import TasksHeader from './TasksHeader';
 // TasksBoardPage.tsx
 import StatusColumn from './StatusColumn';
+import { useLocation } from 'react-router-dom';
+import ListView from './ListView';
+
+
+
+
 
 export default function Boardview() {
+  const location = useLocation();
+  const searchParams= new URLSearchParams(location.search);
+  const view = searchParams.get('view');
+  
+
+
   return (
     <div className="p-6">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6 max-sm:flex-wrap gap-5">
-        <div>
-          <h1 className="font-bold text-3xl">Active Workboard</h1>
-          <p className="text-[#64748B]">
-            Curating Project Alpha's production pipeline and milestones.
-          </p>
-        </div>
-        <input
-          placeholder="Search tasks..."
-          className="border rounded px-3 py-2 w-64 bg-surface-high"
-        />
-
-        <select className="border border-slate-light/20 rounded px-3 py-2">
-          <option>Board View</option>
-          <option>List View</option>
-        </select>
-      </div>
+      <TasksHeader/>
 
       {/* Board */}
-      <div className="flex gap-4 overflow-x-auto">
+      {view === 'Board' ?
+       <div className="flex gap-4 overflow-x-auto">
         {STATUSES.map((status) => (
           <StatusColumn key={status} status={status} />
         ))}
-      </div>
+      </div>:
+      <ListView/>
+      }
+     
     </div>
   );
 }
