@@ -26,10 +26,10 @@ export default function ListView() {
 
   return (
     <div className="overflow-x-auto">
-      <table className="min-w-225 w-full text-center  border-separate border-spacing-0">
-        <thead className="font-extrabold text-secondary bg-background uppercase">
+      <table className="min-w-225 w-full text-center  border-separate border-spacing-0 bg-white">
+        <thead className=" font-extrabold text-secondary bg-background uppercase">
           <tr>
-            <th className="py-4 font-extrabold">Task ID</th>
+            <th className="py-4 font-extrabold ">Task ID</th>
             <th className="py-4 font-extrabold">Title</th>
             <th className="py-4 font-extrabold">Status</th>
             <th className="py-4 font-extrabold">Due Date</th>
@@ -41,10 +41,14 @@ export default function ListView() {
         <tbody className="font-medium">
           {allTasks.map((el: AllTaskProps) => {
             return (
-              <tr className="bg-white">
-                <td className="py-4">{el.task_id}</td>
-                <td className="py-4">{el.title}</td>
-                <td className="py-4">{el.status}</td>
+              <tr className="bg-white ">
+                <td className="py-4 text-primary font-medium ">{el.task_id}</td>
+                <td className="py-4 font-bold">{el.title}</td>
+                <td className=" py-4 ">
+                  <span className="bg-surface-high  px-3 py-1 rounded-full text-sm">
+                    {el.status}
+                  </span>
+                </td>
                 <td className="py-4">{el.due_date}</td>
                 <td className="py-4">{el.assignee.name}</td>
                 <td className="py-4">
