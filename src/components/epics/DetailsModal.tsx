@@ -9,9 +9,9 @@ import getEpicTasks from '../../services/taskService';
 import containerIcon from '../../assets/Container.png';
 import type { PayloadEpics } from '../../types/epics';
 import type { epicsTasksProps } from '../../types/epics';
-import { fetchEpicDetails } from '../../Store/epicsSlice';
-import { useAppDispatch } from '../../Store/hooks';
-import { useAppSelector } from '../../Store/hooks';
+import { fetchEpicDetails } from '../../store/epicsSlice';
+import { useAppDispatch } from '../../store/hooks';
+import { useAppSelector } from '../../store/hooks';
 import { getInitials } from '../../utils/Helper';
 import { useNavigate } from 'react-router-dom';
 
