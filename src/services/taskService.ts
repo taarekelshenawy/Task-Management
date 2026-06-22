@@ -8,13 +8,13 @@ const getEpicTasks = async (epicId: string) => {
     );
     const data = await response.json();
     return data;
-  }catch (error) {
-  if (error instanceof Error) {
-    throw new Error(error.message);
-  } else {
-    throw new Error("Unknown error occurred");
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('Unknown error occurred');
+    }
   }
-}
 };
 
 export async function fetchTasks(projectId: string, status: string) {
@@ -62,12 +62,26 @@ export const createNewTask = async (payload: {
 
     return data;
   } catch (error) {
-  if (error instanceof Error) {
-    throw new Error(error.message);
-  } else {
-    throw new Error("Unknown error occurred");
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('Unknown error occurred');
+    }
   }
-}
 };
+
+export async function fetchAllTasks(projectId: string) {
+  const res = await apiClient(
+    getBaseUrl(`/rest/v1/project_tasks?project_id=eq.${projectId}`),
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
+  );
+  const data = await res.json();
+
+  return data;
+}
 
 export default getEpicTasks;

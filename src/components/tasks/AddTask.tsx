@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 import BreadCrumb from '../../shared/BreadCrumb';
 import FetchGuard from '../../shared/ProjectMembersLoader';
 
-import { useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../Store/hooks';
 import { createNewTask } from '../../services/taskService';
 
 import type { CreateTaskPayload } from '../../types/tasks';

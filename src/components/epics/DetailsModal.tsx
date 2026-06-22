@@ -9,12 +9,11 @@ import getEpicTasks from '../../services/taskService';
 import containerIcon from '../../assets/Container.png';
 import type { PayloadEpics } from '../../types/epics';
 import type { epicsTasksProps } from '../../types/epics';
-import { fetchEpicDetails } from '../../store/epicsSlice';
-import { useAppDispatch } from '../../store/hooks';
-import { useAppSelector } from '../../store/hooks';
+import { fetchEpicDetails } from '../../Store/epicsSlice';
+import { useAppDispatch } from '../../Store/hooks';
+import { useAppSelector } from '../../Store/hooks';
 import { getInitials } from '../../utils/Helper';
 import { useNavigate } from 'react-router-dom';
-
 
 // SKELETON COMPONENT
 function DetailsModalSkeleton() {
@@ -55,7 +54,10 @@ function DetailsModalSkeleton() {
         </div>
         <div className="min-h-64 bg-[#F1F3FF] p-5 flex flex-col justify-center w-full gap-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="flex justify-between w-full max-sm:flex-wrap gap-4">
+            <div
+              key={i}
+              className="flex justify-between w-full max-sm:flex-wrap gap-4"
+            >
               <div className="flex gap-2 items-center w-full">
                 <div className="w-8 h-8 bg-gray-200 rounded shrink-0" />
                 <div className="flex flex-col gap-2 w-full">
@@ -279,7 +281,7 @@ export default function DetailsModal({
                         </div>
                         {/*  controlled select */}
                         <select
-                        className='cursor-pointer'
+                          className="cursor-pointer"
                           defaultValue={item.assignee.sub}
                           onChange={(e) => {
                             const value = e.target.value;
@@ -295,7 +297,11 @@ export default function DetailsModal({
                             Select assignee
                           </option>
                           {members.map((el) => (
-                            <option key={el.user_id} value={el.user_id} className='cursor-pointer'>
+                            <option
+                              key={el.user_id}
+                              value={el.user_id}
+                              className="cursor-pointer"
+                            >
                               {el.metadata.name}
                             </option>
                           ))}
@@ -308,12 +314,12 @@ export default function DetailsModal({
                     <UserInfo title="Deadline" />
                     <div>
                       <div className="flex items-center gap-3">
-                        <img src={dateIcon} alt="date-icon" ></img>
+                        <img src={dateIcon} alt="date-icon"></img>
                         <div className="flex flex-col">
                           {/*  controlled date input */}
                           <input
                             type="date"
-                            className='cursor-pointer'
+                            className="cursor-pointer"
                             defaultValue={item.deadline}
                             onChange={(e) => {
                               const value = e.target.value;
@@ -334,7 +340,7 @@ export default function DetailsModal({
                     <UserInfo title="Created At" />
                     <div>
                       <div className="flex items-center gap-3">
-                        <img src={dateIcon} alt="date-icon " ></img>
+                        <img src={dateIcon} alt="date-icon "></img>
                         <div className="flex flex-col">
                           <h2 className="font-medium text-gray-900">
                             {new Date(item.created_at).toDateString()}
@@ -401,20 +407,6 @@ export default function DetailsModal({
     </section>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import { Link, useParams } from 'react-router-dom';
 // import EpicsIcon from '../../assets/EpicsModal.png';

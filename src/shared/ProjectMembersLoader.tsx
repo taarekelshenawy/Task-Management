@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useAppSelector } from '../store/hooks';
-import { useAppDispatch } from '../store/hooks';
-import { getProjectMembers } from '../store/projectSlice';
+import { useAppSelector } from '../Store/hooks';
+import { useAppDispatch } from '../Store/hooks';
+import { getProjectMembers } from '../Store/ProjectSlice';
 
 type Props = {
   projectId: string;

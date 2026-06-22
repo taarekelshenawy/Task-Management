@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../../store/hooks';
-import { getUser } from '../../store/userSlice';
-import { useAppSelector } from '../../store/hooks';
+import { useAppDispatch } from '../../Store/hooks';
+import { getUser } from '../../Store/UserSlice';
+import { useAppSelector } from '../../Store/hooks';
 
 export default function ProjectHeader() {
   const dispatch = useAppDispatch();

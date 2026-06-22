@@ -5,7 +5,7 @@ import TipIcon from '../../assets/TipIcon.png';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { createNewEpic } from '../../services/epicsService';
-import { useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../Store/hooks';
 import { AddProjectEpicsSchema } from '../../utils/validationSchema';
 import { useParams } from 'react-router-dom';
 import FetchGuard from '../../shared/ProjectMembersLoader';

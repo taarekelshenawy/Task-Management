@@ -15,39 +15,32 @@ const STATUSES = [
   'DONE',
 ];
 
-
 import TasksHeader from './TasksHeader';
 // TasksBoardPage.tsx
 import StatusColumn from './StatusColumn';
 import { useLocation } from 'react-router-dom';
 import ListView from './ListView';
 
-
-
-
-
 export default function Boardview() {
   const location = useLocation();
-  const searchParams= new URLSearchParams(location.search);
+  const searchParams = new URLSearchParams(location.search);
   const view = searchParams.get('view');
-  
-
 
   return (
     <div className="p-6">
       {/* Header */}
-      <TasksHeader/>
+      <TasksHeader />
 
       {/* Board */}
-      {view === 'Board' ?
-       <div className="flex gap-4 overflow-x-auto">
-        {STATUSES.map((status) => (
-          <StatusColumn key={status} status={status} />
-        ))}
-      </div>:
-      <ListView/>
-      }
-     
+      {view === 'Board' ? (
+        <div className="flex gap-4 overflow-x-auto">
+          {STATUSES.map((status) => (
+            <StatusColumn key={status} status={status} />
+          ))}
+        </div>
+      ) : (
+        <ListView />
+      )}
     </div>
   );
 }

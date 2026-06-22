@@ -51,7 +51,6 @@ const router = createBrowserRouter([
       { path: ':projectId/epics/create', element: <AddNewEpic /> },
       { path: ':projectId/tasks', element: <TasksPage /> },
       { path: ':projectId/tasks/new', element: <AddNewTask /> },
-     
     ],
   },
   {
