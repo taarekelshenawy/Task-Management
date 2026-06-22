@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import getBaseUrl from '../utils/api';
 import { apiClient } from '../utils/apiClient';
 import type { EpicDetailsProps } from '../types/epics';
+import type { EpicProps } from '../types/epics';
 
 export const fetchEpicDetails = createAsyncThunk(
   'epics/fetchEpicDetails',
@@ -30,20 +31,26 @@ export const fetchEpicDetails = createAsyncThunk(
 export const getProjectEpics = createAsyncThunk(
   'epics/getProjectEpics',
   async (
-    { projectId, limit, offset }: { projectId: string; limit: number; offset: number },
+    {
+      projectId,
+      limit,
+      offset,
+    }: { projectId: string; limit: number; offset: number },
     { rejectWithValue },
   ) => {
     try {
       const response = await apiClient(
         getBaseUrl(
           `rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`,
-        ),{
-        headers: {
-          Prefer: 'count=exact',
-        }
-    })
+        ),
+        {
+          headers: {
+            Prefer: 'count=exact',
+          },
+        },
+      );
 
-    const data = await response.json();
+      const data = await response.json();
       const contentRange = response.headers.get('Content-Range');
 
       return {
@@ -61,17 +68,17 @@ export const getProjectEpics = createAsyncThunk(
 
 interface EpicState {
   data: EpicDetailsProps[];
-  contentRange: string | null;  
-  projectEpics: EpicDetailsProps[];   // 👈 الجديد
+  ProjectEpics: EpicProps[];
+  contentRange: string | null; // 👈 الجديد
   loading: boolean;
-  loadingProjectEpics: boolean;       // 👈 الجديد
+  loadingProjectEpics: boolean; // 👈 الجديد
   error: string | null;
 }
 
 const initialState: EpicState = {
   data: [],
-  contentRange:'',
-  projectEpics: [],
+  ProjectEpics: [],
+  contentRange: '',
   loading: false,
   loadingProjectEpics: false,
   error: null,
@@ -106,8 +113,8 @@ const epicSlice = createSlice({
         state.loadingProjectEpics = false;
 
         // خيار 1: replace
-          state.data = action.payload.data;
-          state.contentRange = action.payload.contentRange;
+        state.ProjectEpics = action.payload.data;
+        state.contentRange = action.payload.contentRange;
 
         // خيار 2 (لو pagination infinite scroll):
         // state.projectEpics = [...state.projectEpics, ...action.payload];
@@ -120,7 +127,6 @@ const epicSlice = createSlice({
 });
 
 export default epicSlice.reducer;
-
 
 // import { createAsyncThunk } from '@reduxjs/toolkit';
 // import getBaseUrl from '../utils/api';
@@ -151,7 +157,6 @@ export default epicSlice.reducer;
 //     }
 //   },
 // );
-
 
 // export const getProjectEpics = createAsyncThunk(
 //   'epics/getProjectEpics',

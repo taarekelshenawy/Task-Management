@@ -8,7 +8,7 @@ import getEpicTasks from '../../services/taskService';
 import containerIcon from '../../assets/Container.png';
 import type { PayloadEpics } from '../../types/epics';
 import type { epicsTasksProps } from '../../types/epics';
-import { fetchEpicDetails } from '../../store/epicsSlice';
+import { fetchEpicDetails, getProjectEpics } from '../../store/epicsSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { getInitials } from '../../utils/Helper';
 import DetailsModalSkeleton from './DetailsModalSkeleton';
@@ -77,8 +77,8 @@ export default function DetailsModal({
         setIsUpdating(true);
         try {
           await updateEpicDetails({ epicId, payload });
-
-          dispatch(fetchEpicDetails({ epicId, projectId }));
+          await dispatch(fetchEpicDetails({ epicId, projectId }));
+          await dispatch(getProjectEpics({ projectId, limit: 3, offset: 0 }));
         } catch (error) {
           if (error instanceof Error) {
             console.log(error);
@@ -281,9 +281,12 @@ export default function DetailsModal({
                           No tasks have been added to this epic yet
                         </p>
                       ) : (
-                        epicsTasks?.map((el: epicsTasksProps) => {
+                        epicsTasks?.map((el: epicsTasksProps, index) => {
                           return (
-                            <div className="flex justify-between w-full max-sm:flex-wrap gap-4">
+                            <div
+                              key={index}
+                              className="flex justify-between w-full max-sm:flex-wrap gap-4"
+                            >
                               <div className="flex gap-2 items-center">
                                 <img src={containerIcon} alt=""></img>
                                 <div>

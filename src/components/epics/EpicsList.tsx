@@ -13,7 +13,6 @@ import { getProjectEpics } from '../../store/epicsSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export default function EpicsList() {
-
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
@@ -27,9 +26,11 @@ export default function EpicsList() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const limit = 3;
   const offset = (currentPage - 1) * limit;
-   const {data:epics,contentRange}=useAppSelector((state)=>state.epics);
+  const { ProjectEpics: epics, contentRange } = useAppSelector(
+    (state) => state.epics,
+  );
 
-
+  console.log(epics);
   const { projectId } = useParams();
 
   if (!projectId) {
@@ -41,7 +42,6 @@ export default function EpicsList() {
   const totalItems = Number(contentRange?.split('/')[1] || 0);
   const totalPages = Math.ceil(totalItems / limit);
   const dispatch = useAppDispatch();
- 
 
   const getPagination = (current: number, total: number) => {
     const pages: (number | string)[] = [];
@@ -133,8 +133,6 @@ export default function EpicsList() {
 
       try {
         await dispatch(getProjectEpics({ projectId, limit, offset }));
-   
-      
       } catch (err) {
         console.error(err);
         setError('Failed to load epics');
@@ -145,7 +143,7 @@ export default function EpicsList() {
     };
 
     fetchEpics();
-  }, [projectId, offset, isMobile, currentPage,dispatch]);
+  }, [projectId, offset, isMobile, currentPage, dispatch]);
 
   // ===== Empty State =====
   if (!loading && epics.length === 0) {

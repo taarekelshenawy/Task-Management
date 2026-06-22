@@ -104,5 +104,3 @@ export const getProjectDetails = async (data: { projectId: string }) => {
     throw new Error('No response returned from server');
   }
 };
-
-

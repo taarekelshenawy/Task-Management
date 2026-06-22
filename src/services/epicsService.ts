@@ -112,6 +112,10 @@ export const updateEpicDetails = async ({
       },
     );
 
+    if (response.status === 204) {
+      return true;
+    }
+
     const data = await response.json();
     return data;
   } catch (error) {
