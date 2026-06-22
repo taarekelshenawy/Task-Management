@@ -2,23 +2,23 @@ import { useEffect, useState } from 'react';
 import arrowRight from '../../assets/arrowRight.png';
 import arrowLeft from '../../assets/arrowleft.png';
 import { useParams } from 'react-router-dom';
-import { getProjectEpics } from '../../services/epicsService';
 import Skeleton from '../ui/Skelton';
 import Emptystate from '../ui/Emptystate';
 import { Link } from 'react-router-dom';
 import DetailsModal from './DetailsModal';
 import BreadCrumb from '../../shared/BreadCrumb';
-import type { EpicProps } from '../../types/epics';
 import { getInitials } from '../../utils/Helper';
 import { useRef } from 'react';
+import { getProjectEpics } from '../../store/epicsSlice';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export default function EpicsList() {
-  const [epics, setEpics] = useState<EpicProps[]>([]);
+
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [contentRange, setContentRange] = useState('');
+  // const [contentRange, setContentRange] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [epicId, setEpicId] = useState('');
   const [isMobile, setIsMobile] = useState(
@@ -27,17 +27,21 @@ export default function EpicsList() {
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const limit = 3;
   const offset = (currentPage - 1) * limit;
+   const {data:epics,contentRange}=useAppSelector((state)=>state.epics);
+
 
   const { projectId } = useParams();
 
   if (!projectId) {
     throw new Error('there is no project id');
   }
-  const range = contentRange.split('/')[0];
+  const range = contentRange?.split('/')[0];
   const [start, end] = range.split('-').map(Number);
   const pageItemsCount = end - start + 1;
-  const totalItems = Number(contentRange.split('/')[1] || 0);
+  const totalItems = Number(contentRange?.split('/')[1] || 0);
   const totalPages = Math.ceil(totalItems / limit);
+  const dispatch = useAppDispatch();
+ 
 
   const getPagination = (current: number, total: number) => {
     const pages: (number | string)[] = [];
@@ -128,11 +132,9 @@ export default function EpicsList() {
       setError('');
 
       try {
-        const response = await getProjectEpics({ projectId, limit, offset });
-        const data = await response?.json();
-        const headers = response?.headers.get('Content-Range');
-        setContentRange(headers || '');
-        setEpics(data || []);
+        await dispatch(getProjectEpics({ projectId, limit, offset }));
+   
+      
       } catch (err) {
         console.error(err);
         setError('Failed to load epics');
@@ -143,7 +145,7 @@ export default function EpicsList() {
     };
 
     fetchEpics();
-  }, [projectId, offset, isMobile, currentPage]);
+  }, [projectId, offset, isMobile, currentPage,dispatch]);
 
   // ===== Empty State =====
   if (!loading && epics.length === 0) {

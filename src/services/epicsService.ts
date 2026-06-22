@@ -40,8 +40,8 @@ export const createNewEpic = async (data: {
 
 type epicsProps = {
   projectId: string;
-  limit: number;
-  offset: number;
+  limit?: number;
+  offset?: number;
 };
 export const getProjectEpics = async ({
   projectId,

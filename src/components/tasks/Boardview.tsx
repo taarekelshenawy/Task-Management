@@ -32,7 +32,7 @@ export default function Boardview() {
       <TasksHeader />
 
       {/* Board */}
-      {view === 'Board' ? (
+      {view === 'board' ? (
         <div className="flex gap-4 overflow-x-auto">
           {STATUSES.map((status) => (
             <StatusColumn key={status} status={status} />

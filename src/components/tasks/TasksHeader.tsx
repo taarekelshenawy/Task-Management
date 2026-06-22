@@ -2,7 +2,7 @@ import Select from 'react-select';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const options = [
-  { value: 'Board', label: 'Board View' },
+  { value: 'board', label: 'Board View' },
   { value: 'list', label: 'List View' },
 ];
 
