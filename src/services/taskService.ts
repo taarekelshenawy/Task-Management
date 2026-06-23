@@ -70,19 +70,36 @@ export const createNewTask = async (payload: {
   }
 };
 
-export async function fetchAllTasks(projectId: string) {
-  const res = await apiClient(
-    getBaseUrl(`/rest/v1/project_tasks?project_id=eq.${projectId}`),
+// export async function fetchAllTasks(projectId: string) {
+//   const res = await apiClient(
+//     getBaseUrl(`/rest/v1/project_tasks?project_id=eq.${projectId}`),
+//     {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     },
+//   );
+//   const data = await res.json();
+
+//   return data;
+// }
+
+export const fetchAllTasks = async (
+  projectId: string,
+  limit: number,
+  offset: number,
+) => {
+  return apiClient(
+    getBaseUrl(
+      `/rest/v1/project_tasks?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
+    ),
     {
       headers: {
-        'Content-Type': 'application/json',
+        Prefer: 'count=exact',
       },
     },
   );
-  const data = await res.json();
-
-  return data;
-}
+};
 
 export const getTaskDetails = async (projectId: string, taskId: string) => {
   try {

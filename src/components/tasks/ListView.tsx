@@ -14,18 +14,48 @@ type AllTaskProps = {
   status: string;
 };
 
+
+
 export default function ListView() {
   const { projectId } = useParams();
   const [allTasks, setAllTasks] = useState([]);
   const [openModal,setOpenModal]=useState(false);
   const [taskId,setTaskId]=useState('');
+
+  const [currentPage, setCurrentPage] = useState(1);
+const [contentRange, setContentRange] = useState('');
+const limit = 10;
+const offset = (currentPage - 1) * limit;
+
   if (!projectId) {
     throw new Error('there is no projectId');
   }
 
+  
+
   useEffect(() => {
-    fetchAllTasks(projectId).then(setAllTasks);
-  }, [projectId]);
+  const getTasks = async () => {
+    const response = await fetchAllTasks(
+      projectId,
+      limit,
+      offset,
+    );
+
+    const data = await response.json();
+
+    setAllTasks(data);
+
+    setContentRange(
+      response.headers.get('Content-Range') || '',
+    );
+  };
+
+  getTasks();
+}, [projectId, offset]);
+
+const total = Number(contentRange.split('/')[1] || 0);
+
+const totalPages = Math.ceil(total / limit);
 
   return (
     <div className="overflow-x-auto">
@@ -65,7 +95,7 @@ export default function ListView() {
         <tfoot>
           <tr>
             <td colSpan={6}>
-              <div className="flex justify-between bg-white p-4 items-center w-full">
+              {/* <div className="flex justify-between bg-white p-4 items-center w-full">
                 <p className="font-bold text-secondary">
                   Showing 5 of 24 tasks
                 </p>
@@ -77,7 +107,51 @@ export default function ListView() {
                     <img src={arrowRight} className="w-1 h-2" />
                   </button>
                 </div>
+              </div> */}
+              <div className="flex justify-between bg-white p-4 items-center w-full">
+          <p className="font-bold text-secondary">
+  Showing {allTasks.length} of {total} tasks
+</p>
+
+<div className="flex items-center gap-2">
+
+  <button
+    onClick={() => setCurrentPage((p) => p - 1)}
+    disabled={currentPage === 1}
+    className="w-8 h-8 border flex items-center justify-center disabled:opacity-40"
+  >
+    <img src={arrowLeft} className="w-1 h-2" />
+  </button>
+
+  {Array.from({ length: totalPages }, (_, index) => {
+    const page = index + 1;
+
+    return (
+      <button
+        key={page}
+        onClick={() => setCurrentPage(page)}
+        className={`w-8 h-8 border ${
+          currentPage === page
+            ? 'bg-primary text-white'
+            : ''
+        }`}
+      >
+        {page}
+      </button>
+    );
+  })}
+
+  <button
+    onClick={() => setCurrentPage((p) => p + 1)}
+    disabled={currentPage === totalPages}
+    className="w-8 h-8 border flex items-center justify-center disabled:opacity-40"
+  >
+    <img src={arrowRight} className="w-1 h-2" />
+  </button>
+
+</div>
               </div>
+    
             </td>
           </tr>
         </tfoot>
