@@ -84,4 +84,25 @@ export async function fetchAllTasks(projectId: string) {
   return data;
 }
 
+export const getTaskDetails = async (projectId: string, taskId: string) => {
+  try {
+    const response = await apiClient(
+      getBaseUrl(
+        `/rest/v1/project_tasks?project_id=eq.${projectId}&id=eq.${taskId}`
+      )
+    );
+
+    const data = await response.json();
+
+    // لأن الـ API بيرجع array فيها عنصر واحد
+    return data?.[0] || null;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error('Unknown error occurred');
+    }
+  }
+};
+
 export default getEpicTasks;
