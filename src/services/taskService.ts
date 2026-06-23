@@ -88,8 +88,8 @@ export const getTaskDetails = async (projectId: string, taskId: string) => {
   try {
     const response = await apiClient(
       getBaseUrl(
-        `/rest/v1/project_tasks?project_id=eq.${projectId}&id=eq.${taskId}`
-      )
+        `/rest/v1/project_tasks?project_id=eq.${projectId}&id=eq.${taskId}`,
+      ),
     );
 
     const data = await response.json();

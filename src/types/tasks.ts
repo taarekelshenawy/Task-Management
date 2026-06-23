@@ -15,4 +15,6 @@ export type CreateTaskPayload = {
   assignee_id?: string;
   due_date: string;
   status: 'TO_DO' | 'IN_PROGRESS' | 'DONE';
+  created_at?: string;
+  assignee?: { name: string };
 };

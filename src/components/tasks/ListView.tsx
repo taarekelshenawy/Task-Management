@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { fetchAllTasks } from '../../services/taskService';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import TaskModal from './TaskModal';
 
 type AllTaskProps = {
   task_id: string;
@@ -16,6 +17,8 @@ type AllTaskProps = {
 export default function ListView() {
   const { projectId } = useParams();
   const [allTasks, setAllTasks] = useState([]);
+  const [openModal,setOpenModal]=useState(false);
+  const [taskId,setTaskId]=useState('');
   if (!projectId) {
     throw new Error('there is no projectId');
   }
@@ -43,7 +46,7 @@ export default function ListView() {
             return (
               <tr className="bg-white ">
                 <td className="py-4 text-primary font-medium ">{el.task_id}</td>
-                <td className="py-4 font-bold">{el.title}</td>
+                <td className="py-4 font-bold" onClick={()=>{return(setTaskId(el.id),setOpenModal(true))}}>{el.title}</td>
                 <td className=" py-4 ">
                   <span className="bg-surface-high  px-3 py-1 rounded-full text-sm">
                     {el.status}
@@ -87,6 +90,7 @@ export default function ListView() {
           </button>
         </Link>
       </div>
+      {openModal && <TaskModal projectId={projectId} taskId={taskId}/>}
     </div>
   );
 }

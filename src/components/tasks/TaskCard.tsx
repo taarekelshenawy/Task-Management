@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 
 export default function TaskCard({ task }: { task: TaskProps }) {
   const [openModal, setOpenModal] = useState(false);
-  const {projectId}=useParams()
+  const { projectId } = useParams();
   return (
     <>
       <div
@@ -31,7 +31,7 @@ export default function TaskCard({ task }: { task: TaskProps }) {
           </div>
         </div>
       </div>
-      {openModal && <TaskModal projectId={projectId} taskId={task.id}/>}
+      {openModal && <TaskModal projectId={projectId} taskId={task.id} />}
     </>
   );
 }
