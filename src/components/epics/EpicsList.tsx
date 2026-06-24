@@ -11,13 +11,14 @@ import { getInitials } from '../../utils/Helper';
 import { useRef } from 'react';
 import { getProjectEpics } from '../../store/epicsSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import getPagination from '../../shared/GetPaginationFun';
+import SearchEpics from './SearchEpics';
 
 export default function EpicsList() {
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  // const [contentRange, setContentRange] = useState('');
   const [openModal, setOpenModal] = useState(false);
   const [epicId, setEpicId] = useState('');
   const [isMobile, setIsMobile] = useState(
@@ -30,7 +31,6 @@ export default function EpicsList() {
     (state) => state.epics,
   );
 
-  console.log(epics);
   const { projectId } = useParams();
 
   if (!projectId) {
@@ -43,35 +43,6 @@ export default function EpicsList() {
   const totalPages = Math.ceil(totalItems / limit);
   const dispatch = useAppDispatch();
 
-  const getPagination = (current: number, total: number) => {
-    const pages: (number | string)[] = [];
-
-    if (total <= 5) {
-      for (let i = 1; i <= total; i++) {
-        pages.push(i);
-      }
-      return pages;
-    }
-
-    if (current <= 3) {
-      pages.push(1, 2, 3, '...', total);
-      return pages;
-    }
-
-    if (current === 4) {
-      pages.push(1, 2, 3, current, '...', total);
-      return pages;
-    }
-
-    if (current >= total - 2) {
-      pages.push(1, '...', total - 2, total - 1, total);
-      return pages;
-    }
-
-    pages.push(1, '...', current - 1, current, current + 1, '...', total);
-
-    return pages;
-  };
 
   // ===== Mobile detection (matches Tailwind max-sm: 639px) =====
   useEffect(() => {
@@ -183,6 +154,8 @@ export default function EpicsList() {
           </button>
         </Link>
       </section>
+
+      <SearchEpics/>
 
       {/* Error */}
       {error && <p className="text-center text-red-500">{error}</p>}

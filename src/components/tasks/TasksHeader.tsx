@@ -29,10 +29,7 @@ export default function TasksHeader() {
         }
       />
 
-      {/* <select className="border border-slate-light/20 rounded px-3 py-2">
-          <option>Board View</option>
-          <option>List View</option>
-        </select> */}
+    
     </div>
   );
 }
