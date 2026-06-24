@@ -81,10 +81,6 @@ export const getProjectEpics = createAsyncThunk(
     },
     { rejectWithValue },
   ) => {
-    console.log({
-      searchValue,
-      offset,
-    });
     try {
       let url = `rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`;
 

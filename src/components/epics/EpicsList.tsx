@@ -21,6 +21,7 @@ export default function EpicsList() {
   const [openModal, setOpenModal] = useState(false);
   const [epicId, setEpicId] = useState('');
   const [searchValue, setSearchValue] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
 
   const [isMobile, setIsMobile] = useState(
     () => window.matchMedia('(max-width: 639px)').matches,
@@ -41,6 +42,13 @@ export default function EpicsList() {
   const totalPages = Math.ceil(totalItems / limit);
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    setDebouncedSearch(searchValue);
+  }, 500);
+
+  return () => clearTimeout(timer);
+}, [searchValue]);
   // ===== Mobile detection (matches Tailwind max-sm: 639px) =====
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 639px)');
@@ -97,7 +105,7 @@ export default function EpicsList() {
 
       try {
         await dispatch(
-          getProjectEpics({ projectId, limit, offset, searchValue }),
+          getProjectEpics({ projectId, limit, offset, searchValue:debouncedSearch }),
         );
       } catch (err) {
         console.error(err);
@@ -109,14 +117,20 @@ export default function EpicsList() {
     };
 
     fetchEpics();
-  }, [projectId, offset, isMobile, currentPage, dispatch, searchValue]);
+  }, [projectId, offset, isMobile, currentPage, dispatch,debouncedSearch]);
 
   // ===== Empty State =====
   if (!loading && epics.length === 0) {
     return (
       <Emptystate
-        title="No Epics"
-        description="You don’t have any epics yet. Start by creating your first epic."
+   title={searchValue
+        ? "No epics found matching your search"
+        : "No Epics"}
+      description={
+        searchValue
+          ? "Try a different search term"
+          : "You don’t have any epics yet. Start by creating your first epic."
+      }
         buttonText="+ Create New Epic"
         link={`/project/${projectId}/epics/create`}
       />
