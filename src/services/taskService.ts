@@ -70,20 +70,6 @@ export const createNewTask = async (payload: {
   }
 };
 
-// export async function fetchAllTasks(projectId: string) {
-//   const res = await apiClient(
-//     getBaseUrl(`/rest/v1/project_tasks?project_id=eq.${projectId}`),
-//     {
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//     },
-//   );
-//   const data = await res.json();
-
-//   return data;
-// }
-
 export const fetchAllTasks = async (
   projectId: string,
   limit: number,
@@ -110,8 +96,6 @@ export const getTaskDetails = async (projectId: string, taskId: string) => {
     );
 
     const data = await response.json();
-
-    // لأن الـ API بيرجع array فيها عنصر واحد
     return data?.[0] || null;
   } catch (error) {
     if (error instanceof Error) {

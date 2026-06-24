@@ -38,33 +38,6 @@ export const createNewEpic = async (data: {
   }
 };
 
-type epicsProps = {
-  projectId: string;
-  limit?: number;
-  offset?: number;
-};
-export const getProjectEpics = async ({
-  projectId,
-  limit,
-  offset,
-}: epicsProps) => {
-  try {
-    const response = await apiClient(
-      getBaseUrl(
-        `rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`,
-      ),
-      {
-        headers: {
-          Prefer: 'count=exact',
-        },
-      },
-    );
-
-    return response;
-  } catch (error) {
-    if (error instanceof Error) throw error;
-  }
-};
 
 export const getEpicDetails = async ({
   epicId,
@@ -123,3 +96,31 @@ export const updateEpicDetails = async ({
     throw new Error('Failed to get Epic');
   }
 };
+
+//   projectId,
+//   searchValue,
+// }:{
+//   projectId: string,
+//   searchValue:string;
+// }) => {
+//   try {
+//     const response = await apiClient(
+//       getBaseUrl(`rest/v1/project_epics?project_id=eq.${projectId}&title=ilike.%25${searchValue}%25`),
+//       {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Prefer': `count=exact`,
+//         },
+//       },
+//     );
+
+//   if (!response.ok) {
+//   throw new Error(`Request failed with status ${response.status}`);
+// }
+//     const data = await response.json();
+//     return data;
+//   } catch (error) {
+//     if (error instanceof Error) throw error;
+//     throw new Error('Failed to get Epic');
+//   }
+// };

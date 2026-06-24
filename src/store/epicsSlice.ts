@@ -28,6 +28,43 @@ export const fetchEpicDetails = createAsyncThunk(
   },
 );
 
+// export const getProjectEpics = createAsyncThunk(
+//   'epics/getProjectEpics',
+//   async (
+//     {
+//       projectId,
+//       limit,
+//       offset,
+//     }: { projectId: string; limit: number; offset: number },
+//     { rejectWithValue },
+//   ) => {
+//     try {
+//       const response = await apiClient(
+//         getBaseUrl(
+//           `rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`,
+//         ),
+//         {
+//           headers: {
+//             Prefer: 'count=exact',
+//           },
+//         },
+//       );
+
+//       const data = await response.json();
+//       const contentRange = response.headers.get('Content-Range');
+
+//       return {
+//         data,
+//         contentRange,
+//       };
+//     } catch (error) {
+//       if (error instanceof Error) {
+//         return rejectWithValue(error.message);
+//       }
+//       return rejectWithValue('Failed to get Epics');
+//     }
+//   },
+// );
 export const getProjectEpics = createAsyncThunk(
   'epics/getProjectEpics',
   async (
@@ -35,22 +72,38 @@ export const getProjectEpics = createAsyncThunk(
       projectId,
       limit,
       offset,
-    }: { projectId: string; limit: number; offset: number },
+      searchValue,
+    }: {
+      projectId: string;
+      limit: number;
+      offset: number;
+      searchValue?: string;
+    },
     { rejectWithValue },
   ) => {
+    console.log({
+      searchValue,
+      offset,
+    });
     try {
-      const response = await apiClient(
-        getBaseUrl(
-          `rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`,
-        ),
-        {
-          headers: {
-            Prefer: 'count=exact',
-          },
+      let url = `rest/v1/project_epics?project_id=eq.${projectId}&limit=${limit}&offset=${offset}&order=created_at.asc`;
+
+      if (searchValue?.trim()) {
+        url += `&title=ilike.%25${encodeURIComponent(searchValue)}%25`;
+      }
+      const response = await apiClient(getBaseUrl(url), {
+        headers: {
+          'Content-Type': 'application/json',
+          Prefer: 'count=exact',
         },
-      );
+      });
+
+      if (!response.ok) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
 
       const data = await response.json();
+
       const contentRange = response.headers.get('Content-Range');
 
       return {
@@ -61,17 +114,17 @@ export const getProjectEpics = createAsyncThunk(
       if (error instanceof Error) {
         return rejectWithValue(error.message);
       }
+
       return rejectWithValue('Failed to get Epics');
     }
   },
 );
-
 interface EpicState {
   data: EpicDetailsProps[];
   ProjectEpics: EpicProps[];
-  contentRange: string | null; // 👈 الجديد
+  contentRange: string | null;
   loading: boolean;
-  loadingProjectEpics: boolean; // 👈 الجديد
+  loadingProjectEpics: boolean;
   error: string | null;
 }
 

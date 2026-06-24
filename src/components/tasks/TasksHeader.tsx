@@ -28,8 +28,6 @@ export default function TasksHeader() {
           navigate(`/project/${projectId}/tasks?view=${selectOptions?.value}`)
         }
       />
-
-    
     </div>
   );
 }

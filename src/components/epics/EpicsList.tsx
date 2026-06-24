@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import arrowRight from '../../assets/arrowRight.png';
-import arrowLeft from '../../assets/arrowleft.png';
 import { useParams } from 'react-router-dom';
 import Skeleton from '../ui/Skelton';
 import Emptystate from '../ui/Emptystate';
@@ -11,8 +9,9 @@ import { getInitials } from '../../utils/Helper';
 import { useRef } from 'react';
 import { getProjectEpics } from '../../store/epicsSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import getPagination from '../../shared/GetPaginationFun';
 import SearchEpics from './SearchEpics';
+import Pagination from '../../shared/Pagination';
+import { formatDate } from '../../utils/Helper';
 
 export default function EpicsList() {
   const [loading, setLoading] = useState(false);
@@ -21,6 +20,8 @@ export default function EpicsList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [epicId, setEpicId] = useState('');
+  const [searchValue, setSearchValue] = useState('');
+
   const [isMobile, setIsMobile] = useState(
     () => window.matchMedia('(max-width: 639px)').matches,
   );
@@ -33,9 +34,6 @@ export default function EpicsList() {
 
   const { projectId } = useParams();
 
-  if (!projectId) {
-    throw new Error('there is no project id');
-  }
   const range = contentRange?.split('/')[0];
   const [start, end] = range.split('-').map(Number);
   const pageItemsCount = end - start + 1;
@@ -43,11 +41,9 @@ export default function EpicsList() {
   const totalPages = Math.ceil(totalItems / limit);
   const dispatch = useAppDispatch();
 
-
   // ===== Mobile detection (matches Tailwind max-sm: 639px) =====
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 639px)');
-
     const handleChange = (event: MediaQueryListEvent) => {
       setIsMobile(event.matches);
       setCurrentPage(1);
@@ -57,6 +53,10 @@ export default function EpicsList() {
 
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
+
+  useEffect(() => {
+    console.log('searchValue:', searchValue);
+  }, [searchValue]);
 
   // ===== Infinite scroll (mobile only) =====
   useEffect(() => {
@@ -81,16 +81,9 @@ export default function EpicsList() {
     return () => observer.disconnect();
   }, [isMobile, loading, loadingMore, currentPage, totalPages]);
 
-  // ===== helpers =====
-  const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
-
   // ===== Fetch Epics =====
   useEffect(() => {
+    if(!projectId) return;
     const fetchEpics = async () => {
       const isLoadMore = isMobile && currentPage > 1;
 
@@ -103,7 +96,9 @@ export default function EpicsList() {
       setError('');
 
       try {
-        await dispatch(getProjectEpics({ projectId, limit, offset }));
+        await dispatch(
+          getProjectEpics({ projectId, limit, offset, searchValue }),
+        );
       } catch (err) {
         console.error(err);
         setError('Failed to load epics');
@@ -114,7 +109,7 @@ export default function EpicsList() {
     };
 
     fetchEpics();
-  }, [projectId, offset, isMobile, currentPage, dispatch]);
+  }, [projectId, offset, isMobile, currentPage, dispatch, searchValue]);
 
   // ===== Empty State =====
   if (!loading && epics.length === 0) {
@@ -127,7 +122,10 @@ export default function EpicsList() {
       />
     );
   }
-
+  const handleSearch = (value: string) => {
+    setCurrentPage(1);
+    setSearchValue(value);
+  };
   return (
     <div className="p-7 flex flex-col gap-12">
       <BreadCrumb
@@ -155,7 +153,7 @@ export default function EpicsList() {
         </Link>
       </section>
 
-      <SearchEpics/>
+      <SearchEpics setSearch={handleSearch} />
 
       {/* Error */}
       {error && <p className="text-center text-red-500">{error}</p>}
@@ -179,7 +177,9 @@ export default function EpicsList() {
                   <div className="text-xs text-gray-500 font-bold bg-success p-1 w-fit px-2 rounded">
                     {epic.epic_id}
                   </div>
-
+                  <p className="text-sm text-slate-600 font-bold">
+                    {epic.title || 'No description'}
+                  </p>
                   <p className="text-sm text-slate-600 font-bold">
                     {epic.description || 'No description'}
                   </p>
@@ -222,47 +222,13 @@ export default function EpicsList() {
       )}
 
       {/* Pagination UI only */}
-      <div className="flex justify-between bg-white p-4 items-center ">
-        <p className="font-bold text-secondary">
-          Showing {pageItemsCount} of {totalItems} active projects
-        </p>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setCurrentPage(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="w-8 h-8 border flex items-center justify-center"
-          >
-            <img src={arrowLeft} className="w-1 h-2" />
-          </button>
-
-          {getPagination(currentPage, totalPages).map((page, index) => (
-            <button
-              key={index}
-              disabled={page === '...'}
-              onClick={() => {
-                if (typeof page === 'number') {
-                  setCurrentPage(page);
-                }
-              }}
-              className={`w-8 h-8 border flex items-center justify-center ${
-                currentPage === page ? 'bg-blue-800 text-white' : ''
-              }`}
-            >
-              {page}
-            </button>
-          ))}
-
-          <button
-            disabled={Number(currentPage) === Number(totalPages)}
-            onClick={() => setCurrentPage(currentPage + 1)}
-            className="w-8 h-8 border flex items-center justify-center"
-          >
-            <img src={arrowRight} className="w-1 h-2" />
-          </button>
-        </div>
-      </div>
-
+      <Pagination
+        pageItemsCount={pageItemsCount}
+        totalItems={totalItems}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
+      />
       {openModal && <DetailsModal epicId={epicId} modalStatus={setOpenModal} />}
     </div>
   );
