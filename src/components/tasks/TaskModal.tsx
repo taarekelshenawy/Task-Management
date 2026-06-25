@@ -36,7 +36,7 @@ export default function TaskModal({
       try {
         const data = await getTaskDetails(projectId, taskId);
         setTask(data);
-      } catch (err) {
+      } catch (error:unknown) {
         setError(true);
       } finally {
         setLoading(false);
@@ -130,7 +130,7 @@ export default function TaskModal({
                 <p className="font-bold">Assignee</p>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full bg-surface-high flex items-center justify-center">
-                    {getInitials(task?.assignee?.name)}
+               {getInitials(task.assignee.name)}
                   </div>
                   <p className="text-sm">{task?.assignee?.name}</p>
                 </div>
@@ -187,7 +187,9 @@ export default function TaskModal({
         {!isMobile && (
           <div className="bg-slate-lighter flex-1 p-7 flex flex-col gap-7">
             <span
-              className={`px-2 py-1 text-xs rounded ${statusStyles[task.status]}`}
+              className={`px-2 py-1 text-xs rounded ${
+              statusStyles[task.status as keyof typeof statusStyles]
+            }`}
             >
               {task.status}
             </span>

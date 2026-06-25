@@ -22,6 +22,7 @@ export default function EpicsList() {
   const [epicId, setEpicId] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
+   const dispatch = useAppDispatch();
 
   const [isMobile, setIsMobile] = useState(
     () => window.matchMedia('(max-width: 639px)').matches,
@@ -36,11 +37,12 @@ export default function EpicsList() {
   const { projectId } = useParams();
 
   const range = contentRange?.split('/')[0];
+  
   const [start, end] = range.split('-').map(Number);
   const pageItemsCount = end - start + 1;
   const totalItems = Number(contentRange?.split('/')[1] || 0);
   const totalPages = Math.ceil(totalItems / limit);
-  const dispatch = useAppDispatch();
+ 
 
   useEffect(() => {
     const timer = setTimeout(() => {

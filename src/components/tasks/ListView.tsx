@@ -9,6 +9,7 @@ import Emptystate from '../ui/Emptystate';
 import { TotalFromContentRange } from '../../shared/TotalformContentRange';
 
 type AllTaskProps = {
+  id:string,
   task_id: string;
   title: string;
   assignee: { name: string };
