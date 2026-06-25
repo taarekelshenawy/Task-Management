@@ -67,7 +67,7 @@ export default function ListView({searchValue}:{searchValue:string}) {
     }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto max-sm:hidden">
       <table className="min-w-225 w-full text-center  border-separate border-spacing-0 bg-white">
         <thead className=" font-extrabold text-secondary bg-background uppercase">
           <tr>
