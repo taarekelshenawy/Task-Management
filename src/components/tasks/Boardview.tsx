@@ -21,11 +21,13 @@ import StatusColumn from './StatusColumn';
 import { useLocation } from 'react-router-dom';
 import ListView from './ListView';
 import BreadCrumb from '../../shared/BreadCrumb';
+import { useState } from 'react';
 
 export default function Boardview() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const view = searchParams.get('view');
+  const [searchValue,setSearchValue]=useState('');
 
   return (
     <div className="p-6">
@@ -35,7 +37,7 @@ export default function Boardview() {
         {label:'TASKS'}
         ]}/>
       {/* Header */}
-      <TasksHeader />
+      <TasksHeader setSearchValue={setSearchValue}/>
 
       {/* Board */}
       {view === 'board' ? (
@@ -45,7 +47,7 @@ export default function Boardview() {
           ))}
         </div>
       ) : (
-        <ListView />
+        <ListView searchValue={searchValue}/>
       )}
     </div>
   );

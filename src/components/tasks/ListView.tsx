@@ -5,6 +5,7 @@ import { fetchAllTasks } from '../../services/taskService';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import TaskModal from './TaskModal';
+import Emptystate from '../ui/Emptystate';
 
 type AllTaskProps = {
   task_id: string;
@@ -14,7 +15,7 @@ type AllTaskProps = {
   status: string;
 };
 
-export default function ListView() {
+export default function ListView({searchValue}:{searchValue:string}) {
   const { projectId } = useParams();
   const [allTasks, setAllTasks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -31,7 +32,7 @@ export default function ListView() {
 
   useEffect(() => {
     const getTasks = async () => {
-      const response = await fetchAllTasks(projectId, limit, offset);
+      const response = await fetchAllTasks(projectId, limit, offset,searchValue);
 
       const data = await response.json();
 
@@ -41,11 +42,29 @@ export default function ListView() {
     };
 
     getTasks();
-  }, [projectId, offset]);
+  }, [projectId, offset,searchValue]);
 
   const total = Number(contentRange.split('/')[1] || 0);
 
   const totalPages = Math.ceil(total / limit);
+
+   // ===== Empty State =====
+    if ( allTasks.length === 0) {
+      return (
+        <Emptystate
+     title={searchValue
+          ? "No tasks found matching your search"
+          : "No Epics"}
+        description={
+          searchValue
+            ? "Try a different search term"
+            : "You don’t have any epics yet. Start by creating your first epic."
+        }
+          buttonText="+ Create New Task"
+          link={`/project/${projectId}/epics/create`}
+        />
+      );
+    }
 
   return (
     <div className="overflow-x-auto">
@@ -62,6 +81,7 @@ export default function ListView() {
         </thead>
 
         <tbody className="font-medium">
+          
           {allTasks.map((el: AllTaskProps) => {
             return (
               <tr className="bg-white " key={el.task_id}>
@@ -92,19 +112,7 @@ export default function ListView() {
         <tfoot>
           <tr>
             <td colSpan={6}>
-              {/* <div className="flex justify-between bg-white p-4 items-center w-full">
-                <p className="font-bold text-secondary">
-                  Showing 5 of 24 tasks
-                </p>
-                <div className="flex items-center gap-2">
-                  <button className="w-8 h-8 border flex items-center justify-center">
-                    <img src={arrowLeft} className="w-1 h-2" />
-                  </button>
-                  <button className="w-8 h-8 border flex items-center justify-center">
-                    <img src={arrowRight} className="w-1 h-2" />
-                  </button>
-                </div>
-              </div> */}
+              
               <div className="flex justify-between bg-white p-4 items-center w-full">
                 <p className="font-bold text-secondary">
                   Showing {allTasks.length} of {total} tasks

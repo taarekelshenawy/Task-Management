@@ -3,10 +3,12 @@ import { refreshToken } from '../services/authService';
 import { isTokenExpired } from './cookies';
 
 export const apiClient = async (url: string, options: RequestInit = {}) => {
-  if (!isTokenExpired()) {
-    await refreshToken();
-  }
+  
 
+if (isTokenExpired()) {
+  await refreshToken();
+}
+  
   let accessToken = Cookies.get('access_token');
   let response = await fetch(url, {
     ...options,
@@ -16,8 +18,8 @@ export const apiClient = async (url: string, options: RequestInit = {}) => {
       Authorization: `Bearer ${accessToken}`,
     },
   });
+  console.log(response.status, url);
 
-  // 🟢 لو التوكن انتهى
   if (response.status === 401) {
     await refreshToken();
 
@@ -30,6 +32,7 @@ export const apiClient = async (url: string, options: RequestInit = {}) => {
         Authorization: `Bearer ${accessToken}`,
       },
     });
+    
   }
 
   return response;

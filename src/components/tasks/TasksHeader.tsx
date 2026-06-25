@@ -7,7 +7,7 @@ const options = [
   { value: 'list', label: 'List View' },
 ];
 
-export default function TasksHeader() {
+export default function TasksHeader({setSearchValue}:{setSearchValue:(e:string)=>void}) {
   const navigate = useNavigate();
   const { projectId } = useParams();
   return (
@@ -19,6 +19,7 @@ export default function TasksHeader() {
         </p>
       </div>
       <input
+      onChange={(e)=>setSearchValue(e.target.value)}
         placeholder="Search tasks..."
         className="border rounded px-3 py-2 w-64 bg-surface-high"
       />
