@@ -74,10 +74,10 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                 <Link
                   to="/project"
                   onClick={() => setIsMobileOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <FolderKanban size={20} />
-                  {!collapsed && <span>Projects</span>}
+                  {!collapsed && <span className='font-bold text-slate-dark'>Projects</span>}
                 </Link>
               </li>
 
@@ -85,10 +85,10 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                 <Link
                   to={`/project/${projectId}/epics/`}
                   onClick={() => setIsMobileOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <Flag size={20} />
-                  {!collapsed && <span>Project Epics</span>}
+                  {!collapsed && <span className='font-bold text-slate-dark'>Project Epics</span>}
                 </Link>
               </li>
 
@@ -96,10 +96,10 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                 <Link
                   to={`/project/${projectId}/tasks?view=board`}
                   onClick={() => setIsMobileOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <ListTodo size={20} />
-                  {!collapsed && <span>Project Tasks</span>}
+                  {!collapsed && <span className='font-bold text-slate-dark'>Project Tasks</span>}
                 </Link>
               </li>
 
@@ -107,10 +107,10 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                 <Link
                   to={`/project/${projectId}/members`}
                   onClick={() => setIsMobileOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <Users size={20} />
-                  {!collapsed && <span>Project Members</span>}
+                  {!collapsed && <span className='font-bold text-slate-dark'>Project Members</span>}
                 </Link>
               </li>
 
@@ -118,10 +118,10 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                 <Link
                   to={`/project/${projectId}/edit`}
                   onClick={() => setIsMobileOpen(false)}
-                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100"
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <Info size={20} />
-                  {!collapsed && <span>Project Details</span>}
+                  {!collapsed && <span className='font-bold text-slate-dark'>Project Details</span>}
                 </Link>
               </li>
             </ul>
