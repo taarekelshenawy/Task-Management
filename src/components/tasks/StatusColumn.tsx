@@ -26,14 +26,15 @@ export default function StatusColumn({
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const statusColor = {
-    TO_DO: 'bg-slate-md/20',
-    IN_PROGRESS: 'bg-primary',
-    BLOCKED: 'bg-[#BA1A1A]',
-    IN_REVIEW: 'bg-[#4F5F7B]',
-    READY_FOR_QA: 'bg-[#4F5F7B]',
-    REOPENED: 'bg-[#4F5F7B]',
-    READY_FOR_PRODUCTION: 'bg-[#4F5F7B]',
-    DONE: 'bg-[#4F5F7B]',
+
+     TO_DO: 'bg-status-todo',
+  IN_PROGRESS: 'bg-status-in-progress',
+  BLOCKED: 'bg-status-blocked',
+  IN_REVIEW: 'bg-status-default',
+  READY_FOR_QA: 'bg-status-default',
+  REOPENED: 'bg-status-default',
+  READY_FOR_PRODUCTION: 'bg-status-default',
+  DONE: 'bg-status-default',
   };
 
   const loadTasks = async (reset = false) => {

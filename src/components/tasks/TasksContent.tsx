@@ -4,32 +4,20 @@ export type Task = {
   status: string;
 };
 
-const STATUSES = [
-  'TO_DO',
-  'IN_PROGRESS',
-  'BLOCKED',
-  'IN_REVIEW',
-  'READY_FOR_QA',
-  'REOPENED',
-  'READY_FOR_PRODUCTION',
-  'DONE',
-];
-
 import TasksHeader from './TasksHeader';
-// TasksBoardPage.tsx
 import StatusColumn from './StatusColumn';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import ListView from './ListView';
 import BreadCrumb from '../../shared/BreadCrumb';
 import { useState } from 'react';
 import TasksMobile from './TasksMobile';
+import { STATUSES } from '../constants/constants';
 
 export default function TasksContent() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const view = searchParams.get('view');
   const [searchValue,setSearchValue]=useState('');
-  const {projectId}=useParams();
   
 
   return (

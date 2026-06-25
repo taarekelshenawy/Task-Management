@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import TaskModal from './TaskModal';
 import Emptystate from '../ui/Emptystate';
+import { TotalFromContentRange } from '../../shared/TotalformContentRange';
 
 type AllTaskProps = {
   task_id: string;
@@ -20,7 +21,6 @@ export default function ListView({searchValue}:{searchValue:string}) {
   const [allTasks, setAllTasks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
   const [taskId, setTaskId] = useState('');
-
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
   const limit = 10;
@@ -31,20 +31,32 @@ export default function ListView({searchValue}:{searchValue:string}) {
   }
 
   useEffect(() => {
-    const getTasks = async () => {
-      const response = await fetchAllTasks(projectId, limit, offset,searchValue);
+  const getTasks = async () => {
+    try {
+      const response = await fetchAllTasks(
+        projectId,
+        limit,
+        offset,
+        searchValue,
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch tasks');
+      }
 
       const data = await response.json();
 
       setAllTasks(data);
-
       setContentRange(response.headers.get('Content-Range') || '');
-    };
+    } catch (error) {
+      console.error('Failed to fetch tasks:', error);
+    }
+  };
 
-    getTasks();
-  }, [projectId, offset,searchValue]);
+  getTasks();
+}, [projectId, offset, searchValue]);
 
-  const total = Number(contentRange.split('/')[1] || 0);
+  const total = TotalFromContentRange(contentRange);
 
   const totalPages = Math.ceil(total / limit);
 
@@ -61,7 +73,7 @@ export default function ListView({searchValue}:{searchValue:string}) {
             : "You don’t have any epics yet. Start by creating your first epic."
         }
           buttonText="+ Create New Task"
-          link={`/project/${projectId}/epics/create`}
+          link={`/project/${projectId}/tasks/new`}
         />
       );
     }

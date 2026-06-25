@@ -53,10 +53,10 @@ const router = createBrowserRouter([
       { path: ':projectId/tasks/new', element: <AddNewTask /> },
     ],
   },
-  // {
-  //   path: '*',
-  //   element: <Navigate to="/login" replace />,
-  // },
+  {
+    path: '*',
+    element: <Navigate to="/login" replace />,
+  },
 ]);
 
 export default function Routes() {

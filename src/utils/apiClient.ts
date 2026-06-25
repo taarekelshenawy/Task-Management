@@ -18,7 +18,7 @@ if (isTokenExpired()) {
       Authorization: `Bearer ${accessToken}`,
     },
   });
-  console.log(response.status, url);
+
 
   if (response.status === 401) {
     await refreshToken();
