@@ -20,6 +20,7 @@ import TasksHeader from './TasksHeader';
 import StatusColumn from './StatusColumn';
 import { useLocation } from 'react-router-dom';
 import ListView from './ListView';
+import BreadCrumb from '../../shared/BreadCrumb';
 
 export default function Boardview() {
   const location = useLocation();
@@ -28,6 +29,11 @@ export default function Boardview() {
 
   return (
     <div className="p-6">
+      <BreadCrumb items={[
+        {label:'Projects',href:'/project'},
+        {label:'PROJECT ALPHA',href:'/project'},
+        {label:'TASKS'}
+        ]}/>
       {/* Header */}
       <TasksHeader />
 

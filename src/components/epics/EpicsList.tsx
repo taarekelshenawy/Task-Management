@@ -180,6 +180,7 @@ export default function EpicsList() {
           {epics.map((epic) => {
             return (
               <div
+             
                 onClick={() => {
                   return (setOpenModal(true), setEpicId(epic.id));
                 }}

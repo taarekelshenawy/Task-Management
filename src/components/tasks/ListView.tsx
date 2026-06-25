@@ -64,7 +64,7 @@ export default function ListView() {
         <tbody className="font-medium">
           {allTasks.map((el: AllTaskProps) => {
             return (
-              <tr className="bg-white ">
+              <tr className="bg-white " key={el.task_id}>
                 <td className="py-4 text-primary font-medium ">{el.task_id}</td>
                 <td
                   className="py-4 font-bold"

@@ -11,7 +11,7 @@ export default function TaskCard({ task }: { task: TaskProps }) {
     <>
       <div
         onClick={() => setOpenModal(true)}
-        className="bg-white p-3 rounded-lg shadow-sm border hover:shadow-md transition"
+        className="bg-white flex flex-col gap-5 p-3 rounded-lg shadow-sm  hover:shadow-md transition"
       >
         {/* Title */}
         <p className="text-sm font-medium">{task.title}</p>
@@ -26,7 +26,7 @@ export default function TaskCard({ task }: { task: TaskProps }) {
           </span>
 
           {/* Avatar initials */}
-          <div className="w-6 h-6 flex items-center justify-center rounded-full bg-primary text-white font-semibold">
+          <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary text-white font-semibold">
             {getInitials(task.assignee.name)}
           </div>
         </div>
