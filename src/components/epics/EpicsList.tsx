@@ -35,13 +35,9 @@ export default function EpicsList() {
   );
 
   const { projectId } = useParams();
-
-  const range = contentRange?.split('/')[0];
-  
-  const [start, end] = range.split('-').map(Number);
-  const pageItemsCount = end - start + 1;
-  const totalItems = Number(contentRange?.split('/')[1] || 0);
+const totalItems = Number(contentRange?.split('/')[1] || 0);
   const totalPages = Math.ceil(totalItems / limit);
+  
  
 
   useEffect(() => {
@@ -145,6 +141,12 @@ export default function EpicsList() {
     setCurrentPage(1);
     setSearchValue(value);
   };
+
+  const range = contentRange?.split('/')[0];
+ if(!range) return;
+  const [start, end] = range.split('-').map(Number);
+  const pageItemsCount = end - start + 1;
+  
   return (
     <div className="p-7 flex flex-col gap-12">
       <BreadCrumb
