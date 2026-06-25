@@ -38,7 +38,6 @@ export const createNewEpic = async (data: {
   }
 };
 
-
 export const getEpicDetails = async ({
   epicId,
   projectId,

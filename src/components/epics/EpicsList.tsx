@@ -43,12 +43,12 @@ export default function EpicsList() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-  const timer = setTimeout(() => {
-    setDebouncedSearch(searchValue);
-  }, 500);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchValue);
+    }, 500);
 
-  return () => clearTimeout(timer);
-}, [searchValue]);
+    return () => clearTimeout(timer);
+  }, [searchValue]);
   // ===== Mobile detection (matches Tailwind max-sm: 639px) =====
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 639px)');
@@ -91,7 +91,7 @@ export default function EpicsList() {
 
   // ===== Fetch Epics =====
   useEffect(() => {
-    if(!projectId) return;
+    if (!projectId) return;
     const fetchEpics = async () => {
       const isLoadMore = isMobile && currentPage > 1;
 
@@ -105,7 +105,12 @@ export default function EpicsList() {
 
       try {
         await dispatch(
-          getProjectEpics({ projectId, limit, offset, searchValue:debouncedSearch }),
+          getProjectEpics({
+            projectId,
+            limit,
+            offset,
+            searchValue: debouncedSearch,
+          }),
         );
       } catch (err) {
         console.error(err);
@@ -117,20 +122,18 @@ export default function EpicsList() {
     };
 
     fetchEpics();
-  }, [projectId, offset, isMobile, currentPage, dispatch,debouncedSearch]);
+  }, [projectId, offset, isMobile, currentPage, dispatch, debouncedSearch]);
 
   // ===== Empty State =====
   if (!loading && epics.length === 0) {
     return (
       <Emptystate
-   title={searchValue
-        ? "No epics found matching your search"
-        : "No Epics"}
-      description={
-        searchValue
-          ? "Try a different search term"
-          : "You don’t have any epics yet. Start by creating your first epic."
-      }
+        title={searchValue ? 'No epics found matching your search' : 'No Epics'}
+        description={
+          searchValue
+            ? 'Try a different search term'
+            : 'You don’t have any epics yet. Start by creating your first epic.'
+        }
         buttonText="+ Create New Epic"
         link={`/project/${projectId}/epics/create`}
       />
@@ -180,7 +183,6 @@ export default function EpicsList() {
           {epics.map((epic) => {
             return (
               <div
-             
                 onClick={() => {
                   return (setOpenModal(true), setEpicId(epic.id));
                 }}

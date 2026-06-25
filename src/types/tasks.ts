@@ -18,3 +18,22 @@ export type CreateTaskPayload = {
   created_at?: string;
   assignee?: { name: string };
 };
+
+export type TaskDetailsProps = {
+  id: string;
+  task_id: string;
+  title: string;
+  description: string;
+  status: string;
+  due_date: string;
+  created_at: string;
+
+  assignee: {
+    name: string;
+  } | null;
+
+  epic_id: {
+    id: string;
+    epic_id: string;
+  };
+};

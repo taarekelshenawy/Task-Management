@@ -3,13 +3,14 @@ import { fetchTasks } from '../../services/taskService';
 import TaskCard from './TaskCard';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { TaskProps } from '../../types/tasks';
+import { Link } from 'react-router-dom';
 
 type StatusColumnProps = {
   status: string;
   searchValue: string;
 };
 
-const LIMIT =2;
+const LIMIT = 2;
 
 export default function StatusColumn({
   status,
@@ -26,15 +27,14 @@ export default function StatusColumn({
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
   const statusColor = {
-
-     TO_DO: 'bg-status-todo',
-  IN_PROGRESS: 'bg-status-in-progress',
-  BLOCKED: 'bg-status-blocked',
-  IN_REVIEW: 'bg-status-default',
-  READY_FOR_QA: 'bg-status-default',
-  REOPENED: 'bg-status-default',
-  READY_FOR_PRODUCTION: 'bg-status-default',
-  DONE: 'bg-status-default',
+    TO_DO: 'bg-status-todo',
+    IN_PROGRESS: 'bg-status-in-progress',
+    BLOCKED: 'bg-status-blocked',
+    IN_REVIEW: 'bg-status-default',
+    READY_FOR_QA: 'bg-status-default',
+    REOPENED: 'bg-status-default',
+    READY_FOR_PRODUCTION: 'bg-status-default',
+    DONE: 'bg-status-default',
   };
 
   const loadTasks = async (reset = false) => {
@@ -65,7 +65,6 @@ export default function StatusColumn({
     }
   };
 
- 
   useEffect(() => {
     setOffset(0);
     setTasks([]);
@@ -133,33 +132,23 @@ export default function StatusColumn({
       </div>
 
       <div className="w-full h-13 border-2 border-dashed border-gray-400 rounded flex items-center justify-center cursor-pointer">
-        <span className="text-gray-500 font-medium">
-          + ADD NEW TASK
-        </span>
+        <Link to={`/project/${projectId}/tasks/new`}>
+          <span className="text-gray-500 font-medium">+ ADD NEW TASK</span>
+        </Link>
       </div>
 
       {/* Tasks */}
       <div className="space-y-2">
-        {tasks.map((task) => (
+        {tasks?.map((task) => (
           <TaskCard key={task.id} task={task} />
         ))}
 
         {loading && (
-          <p className="text-center text-sm text-gray-500">
-            Loading...
-          </p>
+          <p className="text-center text-sm text-gray-500">Loading...</p>
         )}
 
-        {hasMore && (
-          <div
-            ref={loadMoreRef}
-            className="h-4"
-          />
-        )}
+        {hasMore && <div ref={loadMoreRef} className="h-4" />}
       </div>
     </div>
   );
 }
-
-
-

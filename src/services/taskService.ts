@@ -17,21 +17,19 @@ const getEpicTasks = async (epicId: string) => {
   }
 };
 
-export async function fetchTasks(projectId: string, 
-  status: string,  searchValue:string,
-   limit:number,
-  offset:number,
+export async function fetchTasks(
+  projectId: string,
+  status: string,
+  searchValue: string,
+  limit: number,
+  offset: number,
 ) {
-   let url=`/rest/v1/project_tasks?project_id=eq.${projectId}&status=eq.${status}&limit=${limit}
+  let url = `/rest/v1/project_tasks?project_id=eq.${projectId}&status=eq.${status}&limit=${limit}
 &offset=${offset}`;
-  if(searchValue.trim()){
-    url=`${url}&title=ilike.%25${searchValue}%25`
+  if (searchValue.trim()) {
+    url = `${url}&title=ilike.%25${searchValue}%25`;
   }
-  const res = await apiClient(
-    getBaseUrl(
-      url,
-    ),
-  );
+  const res = await apiClient(getBaseUrl(url));
   const data = await res.json();
 
   return data;
@@ -83,23 +81,18 @@ export const fetchAllTasks = async (
   projectId: string,
   limit: number,
   offset: number,
-  searchValue:string,
+  searchValue: string,
 ) => {
-  let url=`/rest/v1/project_tasks?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`;
-  if(searchValue.trim()){
-    url=`${url}&title=ilike.%25${searchValue}%25`
+  let url = `/rest/v1/project_tasks?project_id=eq.${projectId}&limit=${limit}&offset=${offset}`;
+  if (searchValue.trim()) {
+    url = `${url}&title=ilike.%25${searchValue}%25`;
   }
-  return apiClient(
-    getBaseUrl(
-      url
-    ),
-    {
-      headers: {
-       'Content-Type': 'application/json',
-        Prefer: 'count=exact',
-      },
+  return apiClient(getBaseUrl(url), {
+    headers: {
+      'Content-Type': 'application/json',
+      Prefer: 'count=exact',
     },
-  );
+  });
 };
 
 export const getTaskDetails = async (projectId: string, taskId: string) => {

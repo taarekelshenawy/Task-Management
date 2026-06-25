@@ -3,7 +3,8 @@ import epicIcon from '../../assets/epicIcon.png';
 import copyIcon from '../../assets/copyIcon.png';
 import { useEffect, useState } from 'react';
 import { getTaskDetails } from '../../services/taskService';
-import type { CreateTaskPayload } from '../../types/tasks';
+import { formatDate } from '../../utils/Helper';
+import type { TaskDetailsProps } from '../../types/tasks';
 
 const statusStyles = {
   TO_DO: 'bg-gray-200 text-gray-700',
@@ -11,21 +12,19 @@ const statusStyles = {
   done: 'bg-green-100 text-green-700',
 };
 
-const formatDate = (date) => {
-  if (!date) return '-';
-  return new Date(date).toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-};
-
-export default function TaskModal({ projectId, taskId }) {
+export default function TaskModal({
+  projectId,
+  taskId,
+  setOpenModal,
+}: {
+  projectId: string;
+  taskId: string;
+  setOpenModal: (e: boolean) => void;
+}) {
   const [isMobile, setIsMobile] = useState(false);
-  const [task, setTask] = useState<CreateTaskPayload | null>(null);
+  const [task, setTask] = useState<TaskDetailsProps | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  //   const status = task?.status?.toLowerCase();
 
   useEffect(() => {
     if (!projectId || !taskId) return;
@@ -95,7 +94,12 @@ export default function TaskModal({ projectId, taskId }) {
                 <p>{task.task_id || '-'}</p>
               </p>
 
-              <button className="text-lg font-bold">✕</button>
+              <button
+                className="text-lg font-bold cursor-pointer"
+                onClick={() => setOpenModal(false)}
+              >
+                ✕
+              </button>
             </div>
           )}
 
@@ -169,7 +173,10 @@ export default function TaskModal({ projectId, taskId }) {
                 <img src={copyIcon} />
                 <p>Copy link</p>
               </div>
-              <button className="bg-surface-high w-18 h-7 cursor-pointer">
+              <button
+                onClick={() => setOpenModal(false)}
+                className="bg-surface-high w-18 h-7 cursor-pointer"
+              >
                 close
               </button>
             </div>
@@ -194,18 +201,6 @@ export default function TaskModal({ projectId, taskId }) {
             ) : (
               <p className="text-sm">Unassigned</p>
             )}
-            {/* <div className="flex flex-col gap-4">
-              <p className="font-bold">Assignee</p>
-              <div className="flex items-center gap-3 bg-white p-2">
-                <div className="w-7 h-7 rounded-full bg-surface-high flex justify-center items-center">
-                  {getInitials('Mahmoud Taha')}
-                </div>
-                <div>
-                  <p>Mahmoud Taha</p>
-                  <p>Senior Frontend Engineer</p>
-                </div>
-              </div>
-            </div> */}
 
             <div className="flex flex-col gap-4">
               <p>Reporter</p>

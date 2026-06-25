@@ -12,18 +12,17 @@ import { createNewTask } from '../../services/taskService';
 
 import type { CreateTaskPayload } from '../../types/tasks';
 import { createTaskSchema } from '../../utils/validationSchema';
+import { Controller } from 'react-hook-form';
+import Select from 'react-select';
 
 export default function AddTask() {
   const { projectId } = useParams();
-
-  if (!projectId) {
-    throw new Error('Project ID is missing');
-  }
 
   const { data: epicDetails } = useAppSelector((state) => state.epics);
   const { members } = useAppSelector((state) => state.Project);
 
   const {
+    control,
     register,
     handleSubmit,
     reset,
@@ -36,6 +35,7 @@ export default function AddTask() {
   // CREATE TASK
   // =========================
   const onSubmit = async (data: CreateTaskPayload) => {
+    if (!projectId) return;
     try {
       const payload: CreateTaskPayload = {
         epic_id: data.epic_id,
@@ -74,7 +74,7 @@ export default function AddTask() {
         ]}
       />
 
-      <FetchGuard projectId={projectId} />
+      <FetchGuard projectId={projectId!} />
 
       {/* HEADER */}
       <section className="max-sm:hidden flex justify-between items-center mt-7">
@@ -158,20 +158,38 @@ export default function AddTask() {
           <div>
             <label className="font-bold">Epic</label>
 
-            <select
-              {...register('epic_id')}
-              className="bg-surface-high h-13 rounded px-3 w-full"
-            >
-              <option value="" disabled>
-                Select Epic
-              </option>
-
-              {epicDetails.map((el) => (
-                <option key={el.id} value={el.id}>
-                  {el.title}
-                </option>
-              ))}
-            </select>
+            <Controller
+              name="epic_id"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  options={epicDetails.map((epic) => ({
+                    value: epic.id,
+                    label: epic.epic_id,
+                  }))}
+                  value={
+                    epicDetails
+                      .map((epic) => ({
+                        value: epic.id,
+                        label: epic.epic_id,
+                      }))
+                      .find((option) => option.value === field.value) || null
+                  }
+                  onChange={(option) => field.onChange(option?.value)}
+                  placeholder="Select Epic"
+                  styles={{
+                    control: (base) => ({
+                      ...base,
+                      minHeight: '52px',
+                      backgroundColor: '#D7E2FF',
+                      border: 'none',
+                      borderRadius: '6px',
+                      boxShadow: 'none',
+                    }),
+                  }}
+                />
+              )}
+            />
 
             {errors.epic_id && (
               <p className="text-red-800 text-sm">{errors.epic_id.message}</p>

@@ -7,11 +7,12 @@ import { useParams } from 'react-router-dom';
 export default function TaskCard({ task }: { task: TaskProps }) {
   const [openModal, setOpenModal] = useState(false);
   const { projectId } = useParams();
+  console.log('openModal', openModal);
   return (
     <>
       <div
         onClick={() => setOpenModal(true)}
-        className="bg-white flex flex-col gap-5 p-3 rounded-lg shadow-sm  hover:shadow-md transition"
+        className="bg-white cursor-pointer flex flex-col gap-5 p-3 rounded-lg shadow-sm  hover:shadow-md transition"
       >
         {/* Title */}
         <p className="text-sm font-medium">{task.title}</p>
@@ -31,7 +32,15 @@ export default function TaskCard({ task }: { task: TaskProps }) {
           </div>
         </div>
       </div>
-      {openModal && <TaskModal projectId={projectId} taskId={task.id} />}
+      {openModal ? (
+        <TaskModal
+          projectId={projectId!}
+          taskId={task.id}
+          setOpenModal={setOpenModal}
+        />
+      ) : (
+        ''
+      )}
     </>
   );
 }

@@ -16,7 +16,7 @@ type AllTaskProps = {
   status: string;
 };
 
-export default function ListView({searchValue}:{searchValue:string}) {
+export default function ListView({ searchValue }: { searchValue: string }) {
   const { projectId } = useParams();
   const [allTasks, setAllTasks] = useState([]);
   const [openModal, setOpenModal] = useState(false);
@@ -31,52 +31,50 @@ export default function ListView({searchValue}:{searchValue:string}) {
   }
 
   useEffect(() => {
-  const getTasks = async () => {
-    try {
-      const response = await fetchAllTasks(
-        projectId,
-        limit,
-        offset,
-        searchValue,
-      );
+    const getTasks = async () => {
+      try {
+        const response = await fetchAllTasks(
+          projectId,
+          limit,
+          offset,
+          searchValue,
+        );
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch tasks');
+        if (!response.ok) {
+          throw new Error('Failed to fetch tasks');
+        }
+
+        const data = await response.json();
+
+        setAllTasks(data);
+        setContentRange(response.headers.get('Content-Range') || '');
+      } catch (error) {
+        console.error('Failed to fetch tasks:', error);
       }
+    };
 
-      const data = await response.json();
-
-      setAllTasks(data);
-      setContentRange(response.headers.get('Content-Range') || '');
-    } catch (error) {
-      console.error('Failed to fetch tasks:', error);
-    }
-  };
-
-  getTasks();
-}, [projectId, offset, searchValue]);
+    getTasks();
+  }, [projectId, offset, searchValue]);
 
   const total = TotalFromContentRange(contentRange);
 
   const totalPages = Math.ceil(total / limit);
 
-   // ===== Empty State =====
-    if ( allTasks.length === 0) {
-      return (
-        <Emptystate
-     title={searchValue
-          ? "No tasks found matching your search"
-          : "No Epics"}
+  // ===== Empty State =====
+  if (allTasks.length === 0) {
+    return (
+      <Emptystate
+        title={searchValue ? 'No tasks found matching your search' : 'No Epics'}
         description={
           searchValue
-            ? "Try a different search term"
-            : "You don’t have any epics yet. Start by creating your first epic."
+            ? 'Try a different search term'
+            : 'You don’t have any epics yet. Start by creating your first epic.'
         }
-          buttonText="+ Create New Task"
-          link={`/project/${projectId}/tasks/new`}
-        />
-      );
-    }
+        buttonText="+ Create New Task"
+        link={`/project/${projectId}/tasks/new`}
+      />
+    );
+  }
 
   return (
     <div className="overflow-x-auto max-sm:hidden">
@@ -93,13 +91,14 @@ export default function ListView({searchValue}:{searchValue:string}) {
         </thead>
 
         <tbody className="font-medium">
-          
           {allTasks.map((el: AllTaskProps) => {
             return (
               <tr className="bg-white " key={el.task_id}>
-                <td className="py-4 text-primary font-medium ">{el.task_id}</td>
+                <td className="py-4 text-primary font-medium cursor-pointer">
+                  {el.task_id}
+                </td>
                 <td
-                  className="py-4 font-bold"
+                  className="py-4 font-bold cursor-pointer"
                   onClick={() => {
                     return (setTaskId(el.id), setOpenModal(true));
                   }}
@@ -124,7 +123,6 @@ export default function ListView({searchValue}:{searchValue:string}) {
         <tfoot>
           <tr>
             <td colSpan={6}>
-              
               <div className="flex justify-between bg-white p-4 items-center w-full">
                 <p className="font-bold text-secondary">
                   Showing {allTasks.length} of {total} tasks
@@ -176,7 +174,13 @@ export default function ListView({searchValue}:{searchValue:string}) {
           </button>
         </Link>
       </div>
-      {openModal && <TaskModal projectId={projectId} taskId={taskId} />}
+      {openModal && (
+        <TaskModal
+          projectId={projectId}
+          taskId={taskId}
+          setOpenModal={setOpenModal}
+        />
+      )}
     </div>
   );
 }

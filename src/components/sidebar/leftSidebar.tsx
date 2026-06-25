@@ -77,7 +77,9 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <FolderKanban size={20} />
-                  {!collapsed && <span className='font-bold text-slate-dark'>Projects</span>}
+                  {!collapsed && (
+                    <span className="font-bold text-slate-dark">Projects</span>
+                  )}
                 </Link>
               </li>
 
@@ -88,7 +90,11 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <Flag size={20} />
-                  {!collapsed && <span className='font-bold text-slate-dark'>Project Epics</span>}
+                  {!collapsed && (
+                    <span className="font-bold text-slate-dark">
+                      Project Epics
+                    </span>
+                  )}
                 </Link>
               </li>
 
@@ -99,7 +105,11 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <ListTodo size={20} />
-                  {!collapsed && <span className='font-bold text-slate-dark'>Project Tasks</span>}
+                  {!collapsed && (
+                    <span className="font-bold text-slate-dark">
+                      Project Tasks
+                    </span>
+                  )}
                 </Link>
               </li>
 
@@ -110,7 +120,11 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <Users size={20} />
-                  {!collapsed && <span className='font-bold text-slate-dark'>Project Members</span>}
+                  {!collapsed && (
+                    <span className="font-bold text-slate-dark">
+                      Project Members
+                    </span>
+                  )}
                 </Link>
               </li>
 
@@ -121,7 +135,11 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                   className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
                 >
                   <Info size={20} />
-                  {!collapsed && <span className='font-bold text-slate-dark'>Project Details</span>}
+                  {!collapsed && (
+                    <span className="font-bold text-slate-dark">
+                      Project Details
+                    </span>
+                  )}
                 </Link>
               </li>
             </ul>
