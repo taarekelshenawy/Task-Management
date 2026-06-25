@@ -23,7 +23,7 @@ import ListView from './ListView';
 import BreadCrumb from '../../shared/BreadCrumb';
 import { useState } from 'react';
 
-export default function Boardview() {
+export default function TasksContent() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const view = searchParams.get('view');
@@ -43,7 +43,7 @@ export default function Boardview() {
       {view === 'board' ? (
         <div className="flex gap-4 overflow-x-auto">
           {STATUSES.map((status) => (
-            <StatusColumn key={status} status={status} />
+            <StatusColumn key={status} status={status}   searchValue={searchValue} />
           ))}
         </div>
       ) : (
