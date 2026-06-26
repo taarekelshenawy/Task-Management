@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import TaskModal from './TaskModal';
 import Emptystate from '../ui/Emptystate';
 import { TotalFromContentRange } from '../../shared/TotalformContentRange';
+import { getInitials } from '../../utils/Helper';
 
 type AllTaskProps = {
   id:string,
@@ -27,11 +28,9 @@ export default function ListView({ searchValue }: { searchValue: string }) {
   const limit = 10;
   const offset = (currentPage - 1) * limit;
 
-  if (!projectId) {
-    throw new Error('there is no projectId');
-  }
 
   useEffect(() => {
+    if(!projectId) return;
     const getTasks = async () => {
       try {
         const response = await fetchAllTasks(
@@ -111,8 +110,17 @@ export default function ListView({ searchValue }: { searchValue: string }) {
                     {el.status}
                   </span>
                 </td>
-                <td className="py-4">{el.due_date}</td>
-                <td className="py-4">{el.assignee.name}</td>
+                <td className="py-4">{new Date(el.due_date).toDateString()}</td>
+                <td className="py-4">
+                  <div className='flex items-center justify-center  gap-2'>
+                   <div className='w-7 h-7 rounded-full bg-surface-high flex items-center justify-center'>
+                    {getInitials(el.assignee.name)}
+                  </div>
+                  <p>{el.assignee.name}</p>
+
+                  </div>
+                 
+                </td>
                 <td className="py-4">
                   <button>⋯</button>
                 </td>
@@ -177,7 +185,7 @@ export default function ListView({ searchValue }: { searchValue: string }) {
       </div>
       {openModal && (
         <TaskModal
-          projectId={projectId}
+          projectId={projectId!}
           taskId={taskId}
           setOpenModal={setOpenModal}
         />

@@ -13,11 +13,10 @@ export default function ProjectMembers() {
   const dispatch = useAppDispatch();
   const { projectId } = useParams();
 
-  if (!projectId) {
-    throw new Error('there is no project Id');
-  }
+
 
   useEffect(() => {
+    if(!projectId) return ;
     const fetchProjectMembers = async () => {
       try {
         const result = await dispatch(getProjectMembers({ projectId }));

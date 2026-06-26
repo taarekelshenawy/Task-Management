@@ -19,11 +19,10 @@ export default function EditProject() {
   ]);
 
   const { projectId } = useParams();
-  if (!projectId) {
-    throw new Error('Project ID is missing');
-  }
+
 
   useEffect(() => {
+    if(!projectId) return;
     const fetchProjectDetails = async () => {
       try {
         const response = await getProjectDetails({ projectId });
