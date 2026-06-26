@@ -82,7 +82,7 @@ export default function ListView({ searchValue }: { searchValue: string }) {
         </thead>
 
         <tbody className="font-medium">
-          {allTasks.map((el: AllTaskProps) => {
+          {allTasks?.map((el: AllTaskProps) => {
             return (
               <tr className="bg-white " key={el.task_id}>
                 <td className="py-4 text-primary font-medium cursor-pointer">

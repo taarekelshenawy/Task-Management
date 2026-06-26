@@ -114,4 +114,16 @@ export const getTaskDetails = async (projectId: string, taskId: string) => {
   }
 };
 
+export async function updateTaskStatus(taskId: string, status: string) {
+  await apiClient(getBaseUrl(`/rest/v1/tasks?id=eq.${taskId}`), {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      status,
+    }),
+  });
+}
+
 export default getEpicTasks;

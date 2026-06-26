@@ -1,5 +1,6 @@
 import Select from 'react-select';
 import { useNavigate, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const options = [
   { value: 'board', label: 'Board View' },
@@ -28,7 +29,7 @@ export default function TasksHeader({
       />
 
       <button className="hidden max-sm:block w-full h-12 bg-primary text-white font-bold rounded text-lg">
-        + Create Task
+        <Link to={`/project/:${projectId}/tasks/new`}>+ Create Task</Link>
       </button>
 
       <Select

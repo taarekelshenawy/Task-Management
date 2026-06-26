@@ -3,19 +3,37 @@ import type { TaskProps } from '../../types/tasks';
 import { getInitials } from '../../utils/Helper';
 import TaskModal from './TaskModal';
 import { useParams } from 'react-router-dom';
+import { useDraggable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
 
 export default function TaskCard({ task }: { task: TaskProps }) {
   const [openModal, setOpenModal] = useState(false);
   const { projectId } = useParams();
-  console.log('openModal', openModal);
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task.id,
+    data: {
+      task,
+      status: task.status,
+    },
+  });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+  };
   return (
     <>
       <div
-        onClick={() => setOpenModal(true)}
+        ref={setNodeRef}
+        style={style}
+        onClick={() => {
+          setOpenModal(true);
+        }}
         className="bg-white cursor-pointer flex flex-col gap-5 p-3 rounded-lg shadow-sm  hover:shadow-md transition"
       >
         {/* Title */}
-        <p className="text-sm font-medium">{task.title}</p>
+        <div {...listeners} {...attributes} className="cursor-grab">
+          <p className="text-sm font-medium">{task.title}</p>
+        </div>
 
         {/* Footer */}
         <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
