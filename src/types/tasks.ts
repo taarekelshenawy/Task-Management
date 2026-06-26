@@ -30,10 +30,19 @@ export type TaskDetailsProps = {
 
   assignee: {
     name: string;
-  } ;
+  };
 
   epic_id: {
     id: string;
     epic_id: string;
   };
+};
+
+export type AllTaskProps = {
+  id: string;
+  task_id: string;
+  title: string;
+  assignee: { name: string };
+  due_date: string;
+  status: string;
 };

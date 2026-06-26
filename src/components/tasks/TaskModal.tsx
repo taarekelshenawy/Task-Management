@@ -5,12 +5,7 @@ import { useEffect, useState } from 'react';
 import { getTaskDetails } from '../../services/taskService';
 import { formatDate } from '../../utils/Helper';
 import type { TaskDetailsProps } from '../../types/tasks';
-
-const statusStyles = {
-  TO_DO: 'bg-gray-200 text-gray-700',
-  'in progress': 'bg-blue-100 text-blue-700',
-  done: 'bg-green-100 text-green-700',
-};
+import { statusStyles } from '../constants/constants';
 
 export default function TaskModal({
   projectId,
@@ -36,7 +31,7 @@ export default function TaskModal({
       try {
         const data = await getTaskDetails(projectId, taskId);
         setTask(data);
-      } catch (error:unknown) {
+      } catch (error: unknown) {
         setError(true);
       } finally {
         setLoading(false);
@@ -130,7 +125,7 @@ export default function TaskModal({
                 <p className="font-bold">Assignee</p>
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 rounded-full bg-surface-high flex items-center justify-center">
-               {getInitials(task.assignee.name)}
+                    {getInitials(task.assignee.name)}
                   </div>
                   <p className="text-sm">{task?.assignee?.name}</p>
                 </div>
@@ -188,8 +183,8 @@ export default function TaskModal({
           <div className="bg-slate-lighter flex-1 p-7 flex flex-col gap-7">
             <span
               className={`px-2 py-1 text-xs rounded ${
-              statusStyles[task.status as keyof typeof statusStyles]
-            }`}
+                statusStyles[task.status as keyof typeof statusStyles]
+              }`}
             >
               {task.status}
             </span>

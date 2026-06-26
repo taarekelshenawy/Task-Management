@@ -4,6 +4,7 @@ import TaskCard from './TaskCard';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { TaskProps } from '../../types/tasks';
 import { Link } from 'react-router-dom';
+import { statusColor } from '../constants/constants';
 
 type StatusColumnProps = {
   status: string;
@@ -26,25 +27,12 @@ export default function StatusColumn({
 
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  const statusColor = {
-    TO_DO: 'bg-status-todo',
-    IN_PROGRESS: 'bg-status-in-progress',
-    BLOCKED: 'bg-status-blocked',
-    IN_REVIEW: 'bg-status-default',
-    READY_FOR_QA: 'bg-status-default',
-    REOPENED: 'bg-status-default',
-    READY_FOR_PRODUCTION: 'bg-status-default',
-    DONE: 'bg-status-default',
-  };
-
   const loadTasks = async (reset = false) => {
     if (!projectId) return;
-
     try {
       setLoading(true);
 
       const currentOffset = reset ? 0 : offset;
-
       const data = await fetchTasks(
         projectId,
         status,
@@ -125,7 +113,7 @@ export default function StatusColumn({
               )}`,
             )
           }
-          className="text-lg font-bold text-blue-600"
+          className="text-lg font-bold text-blue-600 cursor-pointer"
         >
           +
         </button>

@@ -1,9 +1,3 @@
-export type Task = {
-  id: string;
-  title: string;
-  status: string;
-};
-
 import TasksHeader from './TasksHeader';
 import StatusColumn from './StatusColumn';
 import { useLocation } from 'react-router-dom';

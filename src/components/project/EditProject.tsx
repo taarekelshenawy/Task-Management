@@ -20,9 +20,8 @@ export default function EditProject() {
 
   const { projectId } = useParams();
 
-
   useEffect(() => {
-    if(!projectId) return;
+    if (!projectId) return;
     const fetchProjectDetails = async () => {
       try {
         const response = await getProjectDetails({ projectId });

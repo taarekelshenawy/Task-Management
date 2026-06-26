@@ -31,7 +31,6 @@ export default function AddTask() {
     resolver: zodResolver(createTaskSchema),
   });
 
-  // =========================
   // CREATE TASK
   // =========================
   const onSubmit = async (data: CreateTaskPayload) => {

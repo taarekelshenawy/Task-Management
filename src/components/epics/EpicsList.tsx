@@ -22,7 +22,7 @@ export default function EpicsList() {
   const [epicId, setEpicId] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
-   const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const [isMobile, setIsMobile] = useState(
     () => window.matchMedia('(max-width: 639px)').matches,
@@ -35,10 +35,8 @@ export default function EpicsList() {
   );
 
   const { projectId } = useParams();
-const totalItems = Number(contentRange?.split('/')[1] || 0);
+  const totalItems = Number(contentRange?.split('/')[1] || 0);
   const totalPages = Math.ceil(totalItems / limit);
-  
- 
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -143,10 +141,10 @@ const totalItems = Number(contentRange?.split('/')[1] || 0);
   };
 
   const range = contentRange?.split('/')[0];
- if(!range) return;
+  if (!range) return;
   const [start, end] = range.split('-').map(Number);
   const pageItemsCount = end - start + 1;
-  
+
   return (
     <div className="p-7 flex flex-col gap-12">
       <BreadCrumb

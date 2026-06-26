@@ -1,5 +1,3 @@
-import arrowLeft from '../../assets/arrowleft.png';
-import arrowRight from '../../assets/arrowRight.png';
 import { useEffect, useState } from 'react';
 import { fetchAllTasks } from '../../services/taskService';
 import { useParams } from 'react-router-dom';
@@ -8,15 +6,9 @@ import TaskModal from './TaskModal';
 import Emptystate from '../ui/Emptystate';
 import { TotalFromContentRange } from '../../shared/TotalformContentRange';
 import { getInitials } from '../../utils/Helper';
-
-type AllTaskProps = {
-  id:string,
-  task_id: string;
-  title: string;
-  assignee: { name: string };
-  due_date: string;
-  status: string;
-};
+import type { AllTaskProps } from '../../types/tasks';
+import { toast } from 'react-toastify';
+import Pagination from '../../shared/Pagination';
 
 export default function ListView({ searchValue }: { searchValue: string }) {
   const { projectId } = useParams();
@@ -28,9 +20,8 @@ export default function ListView({ searchValue }: { searchValue: string }) {
   const limit = 10;
   const offset = (currentPage - 1) * limit;
 
-
   useEffect(() => {
-    if(!projectId) return;
+    if (!projectId) return;
     const getTasks = async () => {
       try {
         const response = await fetchAllTasks(
@@ -41,7 +32,7 @@ export default function ListView({ searchValue }: { searchValue: string }) {
         );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch tasks');
+          toast.error('Failed to fetch tasks');
         }
 
         const data = await response.json();
@@ -112,14 +103,12 @@ export default function ListView({ searchValue }: { searchValue: string }) {
                 </td>
                 <td className="py-4">{new Date(el.due_date).toDateString()}</td>
                 <td className="py-4">
-                  <div className='flex items-center justify-center  gap-2'>
-                   <div className='w-7 h-7 rounded-full bg-surface-high flex items-center justify-center'>
-                    {getInitials(el.assignee.name)}
+                  <div className="flex items-center justify-center  gap-2">
+                    <div className="w-7 h-7 rounded-full bg-surface-high flex items-center justify-center">
+                      {getInitials(el.assignee.name)}
+                    </div>
+                    <p>{el.assignee.name}</p>
                   </div>
-                  <p>{el.assignee.name}</p>
-
-                  </div>
-                 
                 </td>
                 <td className="py-4">
                   <button>⋯</button>
@@ -132,45 +121,14 @@ export default function ListView({ searchValue }: { searchValue: string }) {
         <tfoot>
           <tr>
             <td colSpan={6}>
-              <div className="flex justify-between bg-white p-4 items-center w-full">
-                <p className="font-bold text-secondary">
-                  Showing {allTasks.length} of {total} tasks
-                </p>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setCurrentPage((p) => p - 1)}
-                    disabled={currentPage === 1}
-                    className="w-8 h-8 border flex items-center justify-center disabled:opacity-40"
-                  >
-                    <img src={arrowLeft} className="w-1 h-2" />
-                  </button>
-
-                  {Array.from({ length: totalPages }, (_, index) => {
-                    const page = index + 1;
-
-                    return (
-                      <button
-                        key={page}
-                        onClick={() => setCurrentPage(page)}
-                        className={`w-8 h-8 border ${
-                          currentPage === page ? 'bg-primary text-white' : ''
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    );
-                  })}
-
-                  <button
-                    onClick={() => setCurrentPage((p) => p + 1)}
-                    disabled={currentPage === totalPages}
-                    className="w-8 h-8 border flex items-center justify-center disabled:opacity-40"
-                  >
-                    <img src={arrowRight} className="w-1 h-2" />
-                  </button>
-                </div>
-              </div>
+              {/* Pagination UI only */}
+              <Pagination
+                pageItemsCount={allTasks.length}
+                totalItems={total}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+              />
             </td>
           </tr>
         </tfoot>
