@@ -46,6 +46,7 @@ export default function EditProject() {
   });
 
   const onSubmit: SubmitHandler<projectProps> = async (data) => {
+    if(!projectId) return;
     const payload = { ...data, projectId };
     try {
       await handleEditProject(payload);
