@@ -6,6 +6,10 @@ import emailIcon from '../../assets/emaiIcon.png';
 import z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { inviteMemberSchema } from '../../utils/validationSchema';
+import { inviteMemberFunc } from '../../services/invtiteMemberService';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 
 type Inputs = z.infer<typeof inviteMemberSchema>;
 export default function InviteMemberModal({
@@ -20,7 +24,32 @@ export default function InviteMemberModal({
   } = useForm<Inputs>({
     resolver: zodResolver(inviteMemberSchema),
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const {projectId}=useParams();
+
+
+  const onSubmit: SubmitHandler<Inputs> =async (data) =>{
+    if(!projectId) return;
+    const payload ={...data,
+    p_project_id:projectId,
+  p_app_url:'http://localhost:5175',
+  p_base_url:import.meta.env.VITE_SUPABASE_URL
+
+    }
+  
+        try{
+        await inviteMemberFunc(payload)
+         toast.success('Invitation sent successfully')
+
+        }catch(error){
+            if(error instanceof Error){
+             toast.error(error.message)
+            }
+          
+
+        }
+        
+
+  };
   return (
     <div className="fixed z-50 inset-0 bg-black/20 flex flex-col items-center justify-center px-4">
       <div className="bg-white p-7 flex flex-col gap-5 max-w-full rounded ">
@@ -61,14 +90,14 @@ export default function InviteMemberModal({
                 <input
                   placeholder="Enter email address"
                   id="email"
-                  {...register('email')}
+                  {...register('p_email')}
                   className="outline-none w-full"
                 />
                 <img src={emailIcon} alt="email-icon"></img>
               </div>
 
-              {errors.email && (
-                <span className="text-red-500">{errors.email.message}</span>
+              {errors.p_email && (
+                <span className="text-red-500">{errors.p_email.message}</span>
               )}
             </div>
 

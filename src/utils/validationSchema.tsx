@@ -117,5 +117,5 @@ export default signUpSchema;
 
 
 export const inviteMemberSchema = z.object({
-  email: z.string().min(1, 'Email is required').email('Invalid email address'),
+  p_email: z.string().min(1, 'Email is required').email('Invalid email address'),
 });
