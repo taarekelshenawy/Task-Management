@@ -36,7 +36,7 @@ export const loginFunction = async (
       throw new Error((result as any)?.msg || 'Login failed');
     }
 
-    // 🟢 save cookies
+    // // 🟢 save cookies
     Cookies.set('access_token', result.access_token, {
       expires: new Date(result.expires_at * 1000),
     });
@@ -46,6 +46,9 @@ export const loginFunction = async (
     });
 
     Cookies.set('expires_at', result.expires_at.toString());
+   
+
+
 
     return result;
   } catch (error) {
@@ -158,7 +161,7 @@ export const registerFunction = async (
       );
     }
 
-    // 🟢 save cookies
+    // // 🟢 save cookies
     Cookies.set('access_token', data.access_token, {
       expires: new Date(data.expires_at * 1000),
     });
@@ -170,6 +173,7 @@ export const registerFunction = async (
     if (data.expires_at) {
       Cookies.set('expires_at', data.expires_at.toString());
     }
+  
 
     return data;
   } catch (error) {

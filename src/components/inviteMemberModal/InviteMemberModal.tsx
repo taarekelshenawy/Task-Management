@@ -10,7 +10,6 @@ import { inviteMemberFunc } from '../../services/invtiteMemberService';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-
 type Inputs = z.infer<typeof inviteMemberSchema>;
 export default function InviteMemberModal({
   setOpenInviteModal,
@@ -24,31 +23,25 @@ export default function InviteMemberModal({
   } = useForm<Inputs>({
     resolver: zodResolver(inviteMemberSchema),
   });
-  const {projectId}=useParams();
+  const { projectId } = useParams();
 
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (!projectId) return;
+    const payload = {
+      ...data,
+      p_project_id: projectId,
+      p_app_url: 'http://localhost:5174',
+      p_base_url: import.meta.env.VITE_SUPABASE_URL,
+    };
 
-  const onSubmit: SubmitHandler<Inputs> =async (data) =>{
-    if(!projectId) return;
-    const payload ={...data,
-    p_project_id:projectId,
-  p_app_url:'http://localhost:5175',
-  p_base_url:import.meta.env.VITE_SUPABASE_URL
-
+    try {
+      await inviteMemberFunc(payload);
+      toast.success('Invitation sent successfully');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      }
     }
-  
-        try{
-        await inviteMemberFunc(payload)
-         toast.success('Invitation sent successfully')
-
-        }catch(error){
-            if(error instanceof Error){
-             toast.error(error.message)
-            }
-          
-
-        }
-        
-
   };
   return (
     <div className="fixed z-50 inset-0 bg-black/20 flex flex-col items-center justify-center px-4">
