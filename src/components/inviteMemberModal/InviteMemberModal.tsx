@@ -30,7 +30,7 @@ export default function InviteMemberModal({
     const payload = {
       ...data,
       p_project_id: projectId,
-      p_app_url: 'http://localhost:5174',
+      p_app_url: 'http://localhost:5175',
       p_base_url: import.meta.env.VITE_SUPABASE_URL,
     };
 

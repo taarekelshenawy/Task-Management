@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginFunction } from '../../services/authService';
 import { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 type Inputs = {
   email: string;
@@ -15,7 +16,7 @@ type Inputs = {
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-
+    const location = useLocation();
   const navigate = useNavigate();
 
   const {
@@ -28,13 +29,16 @@ export default function Login() {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const payload = { rememberMe, ...data };
+
+
+const from = location.state?.from || '/project';
     try {
       setLoading(true);
       await loginFunction(payload);
 
       toast.success('Login success');
       setLoading(false);
-      navigate('/project');
+      navigate(from, { replace: true });
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Something went wrong';

@@ -13,17 +13,17 @@ export default function ProjectMembers() {
   const { members, loading } = useAppSelector((state) => state.Project);
   const dispatch = useAppDispatch();
   const { projectId } = useParams();
-  const [openInviteModal, setOpenInviteModal] = useState(true);
+  const [openInviteModal, setOpenInviteModal] = useState(false);
 
   useEffect(() => {
     if (!projectId) return;
     const fetchProjectMembers = async () => {
       try {
-        const result = await dispatch(getProjectMembers({ projectId }));
+         await dispatch(getProjectMembers({ projectId }));
 
-        if (getProjectMembers.fulfilled.match(result)) {
-          toast.success('Members loaded successfully');
-        }
+        // if (getProjectMembers.fulfilled.match(result)) {
+        //   toast.success('Members loaded successfully');
+        // }
       } catch (error) {
         if (error instanceof Error) {
           toast.error(error.message);
@@ -49,9 +49,9 @@ export default function ProjectMembers() {
           Project Members
         </h1>
 
-        <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
+        <button onClick={()=>setOpenInviteModal(true)} className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
           <img src={inviteIcon} />
-          <span className="font-bold">Invite Member</span>
+          <span className="font-bold" >Invite Member</span>
         </button>
       </section>
 

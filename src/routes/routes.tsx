@@ -58,9 +58,9 @@ const router = createBrowserRouter([
   {
     path: '/invite',
     element: 
-    <ProtectedRoute>
+
  <InvitePage />
-    </ProtectedRoute>
+
          
      ,
   },

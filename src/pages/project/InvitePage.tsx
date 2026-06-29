@@ -1,30 +1,120 @@
 import SignUpIcon from '../../assets/Icon.svg';
-import { Link } from 'react-router-dom';
-import { useSearchParams } from 'react-router-dom';
+import { Link,  useSearchParams } from 'react-router-dom';
+import { acceptInvitation } from '../../services/invtiteMemberService';
+import { toast } from 'react-toastify';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getAccessToken } from '../../utils/cookies';
+import { useEffect } from 'react';
 
 export default function InvitePage() {
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get("token");
-    
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const token = searchParams.get('token');
+
+
+  const location = useLocation();
+
+useEffect(() => {
+  const token = getAccessToken();
+
+  if (!token) {
+    navigate('/login', {
+      state: {
+        from: location.pathname + location.search,
+      },
+      replace: true,
+    });
+  }
+}, [location, navigate]);
+
+  const handleAcceptInvitation = async () => {
+    if (!token) {
+      toast.error('Invalid invitation token');
+      return;
+    }
+
+    try {
+      await acceptInvitation({
+        p_token: token,
+      });
+
+      toast.success('Invitation accepted successfully');
+      navigate('/project');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Something went wrong');
+      }
+    }
+  };
+
+
+
   return (
-    <div className='flex flex-col justify-center items-center h-screen'>
-      <div >
-        <div className="flex items-center justify-center  gap-2 font-bold px-10 py-8  ">
-          <img src={SignUpIcon} />
+    <div className="flex flex-col justify-center items-center h-screen">
+      <div>
+        <div className="flex items-center justify-center gap-2 font-bold px-10 py-8">
+          <img src={SignUpIcon} alt="Logo" />
           <h1 className="text-slate-dark text-xl">
-            <Link to="/"> TASKLY</Link>
+            <Link to="/">TASKLY</Link>
           </h1>
         </div>
-        <div className='bg-white relative shadow-[0px_24px_48px_-12px_#041B3C0F]  flex flex-col gap-4 max-w-141.75 p-12  '>
-              <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r  from-primary-container to-primary rounded-t-xl" />
-            <div className='flex justify-center  '>
-                  <p className='text-center font-bold p-1 bg-[#E0E8FF] w-52 rounded-2xl'>New Project Invitation</p>
-            </div>
-          
-          <h1 className='text-3xl font-semibold text-slate-dark'>You've been invited to join new project</h1>
-          <button className='cursor-pointer w-full h-10 bg-linear-to-r from-primary-container to-primary text-white'>Accept Invitation</button>
+
+        <div className="bg-white relative shadow-[0px_24px_48px_-12px_#041B3C0F] flex flex-col gap-4 max-w-141.75 p-12">
+          <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-primary-container to-primary rounded-t-xl" />
+
+          <div className="flex justify-center">
+            <p className="text-center font-bold p-1 bg-[#E0E8FF] w-52 rounded-2xl">
+              New Project Invitation
+            </p>
+          </div>
+
+          <h1 className="text-3xl font-semibold text-slate-dark">
+            You've been invited to join a new project
+          </h1>
+
+          <button
+            onClick={handleAcceptInvitation}
+            className="cursor-pointer w-full h-10 bg-linear-to-r from-primary-container to-primary text-white"
+          >
+            Accept Invitation
+          </button>
         </div>
       </div>
     </div>
   );
 }
+
+
+
+// import SignUpIcon from '../../assets/Icon.svg';
+// import { Link } from 'react-router-dom';
+// import { useSearchParams } from 'react-router-dom';
+
+// export default function InvitePage() {
+//     const [searchParams] = useSearchParams();
+//     const token = searchParams.get("token");
+    
+//   return (
+//     <div className='flex flex-col justify-center items-center h-screen'>
+//       <div >
+//         <div className="flex items-center justify-center  gap-2 font-bold px-10 py-8  ">
+//           <img src={SignUpIcon} />
+//           <h1 className="text-slate-dark text-xl">
+//             <Link to="/"> TASKLY</Link>
+//           </h1>
+//         </div>
+//         <div className='bg-white relative shadow-[0px_24px_48px_-12px_#041B3C0F]  flex flex-col gap-4 max-w-141.75 p-12  '>
+//               <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r  from-primary-container to-primary rounded-t-xl" />
+//             <div className='flex justify-center  '>
+//                   <p className='text-center font-bold p-1 bg-[#E0E8FF] w-52 rounded-2xl'>New Project Invitation</p>
+//             </div>
+          
+//           <h1 className='text-3xl font-semibold text-slate-dark'>You've been invited to join new project</h1>
+//           <button className='cursor-pointer w-full h-10 bg-linear-to-r from-primary-container to-primary text-white'>Accept Invitation</button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
