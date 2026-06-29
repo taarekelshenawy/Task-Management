@@ -46,7 +46,7 @@ export default function TaskModal({
       setIsMobile(window.innerWidth < 600);
     };
 
-    handleResize(); // أول render
+    handleResize();
 
     window.addEventListener('resize', handleResize);
 

@@ -1,5 +1,5 @@
 import inviteIcon from '../../assets/InviteIcon.png';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -7,11 +7,13 @@ import { getProjectMembers } from '../../store/projectSlice';
 import BreadCrumb from '../../shared/BreadCrumb';
 import { MemberSkeleton } from './MemberSkelton';
 import { getInitials } from '../../utils/Helper';
+import InviteMemberModal from '../inviteMemberModal/InviteMemberModal';
 
 export default function ProjectMembers() {
   const { members, loading } = useAppSelector((state) => state.Project);
   const dispatch = useAppDispatch();
   const { projectId } = useParams();
+  const [openInviteModal, setOpenInviteModal] = useState(true);
 
   useEffect(() => {
     if (!projectId) return;
@@ -112,6 +114,11 @@ export default function ProjectMembers() {
           )}
         </tbody>
       </table>
+      {openInviteModal ? (
+        <InviteMemberModal setOpenInviteModal={setOpenInviteModal} />
+      ) : (
+        ''
+      )}
     </div>
   );
 }
