@@ -6,6 +6,12 @@ import { getTaskDetails } from '../../services/taskService';
 import { formatDate } from '../../utils/Helper';
 import type { TaskDetailsProps } from '../../types/tasks';
 import { statusStyles } from '../constants/constants';
+import { useForm } from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
+import Select from 'react-select';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { taskModalSchema } from '../../utils/validationSchema';
+import z from 'zod';
 
 export default function TaskModal({
   projectId,
@@ -20,6 +26,16 @@ export default function TaskModal({
   const [task, setTask] = useState<TaskDetailsProps | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  type TaskModalInputs = z.infer<typeof taskModalSchema>;
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TaskModalInputs>({
+    resolver: zodResolver(taskModalSchema),
+  });
+
+  const onSubmit: SubmitHandler<TaskModalInputs> = (data) => console.log(data);
 
   useEffect(() => {
     if (!projectId || !taskId) return;
@@ -52,7 +68,12 @@ export default function TaskModal({
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  console.log(task);
+  const options = [{ value: task?.assignee.name, label: task?.assignee.name }];
+  const optionsStatus = [{ value: task?.status, label: task?.status }];
+  const optionsEpic = [
+    { value: task?.epic.epic_id, label: task?.epic.epic_id },
+  ];
   if (loading) {
     return (
       <div className="z-50 fixed inset-0 flex items-center justify-center bg-black/40 text-white">
@@ -79,8 +100,12 @@ export default function TaskModal({
 
   return (
     <div className="z-50 px-6 py-4 flex flex-col justify-center items-center max-sm:justify-end max-sm:p-0 fixed top-0 inset-0 bg-black/35 ">
-      <div className="flex md:max-w-4xl w-full bg-white">
-        {/* LEFT SIDE */}
+      {/* <div className="flex md:max-w-4xl w-full bg-white"> */}
+      {/* LEFT SIDE */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex md:max-w-4xl w-full bg-white"
+      >
         <div className="flex-2 p-7">
           {/* MOBILE HEADER */}
           {isMobile && (
@@ -106,16 +131,30 @@ export default function TaskModal({
                 </p>
                 <div className="flex items-center">
                   <img src={epicIcon} />
-                  <p className="ml-2">
-                    {task.epic_id.epic_id} (Core UI Overhaul)
-                  </p>
+                  <div className="ml-2 flex  items-center gap-2">
+                    {/* {task.epic.epic_id}  */}
+                    <Select
+                      className="text-sm  gap-2"
+                      // {...register('assignee_id')}
+                      value={optionsEpic[0]}
+                      // onChange={handleChange}
+                      options={optionsEpic}
+                      placeholder="Choose... assignee"
+                    />
+                    <p>(Core UI Overhaul)</p>
+                  </div>
                 </div>
               </div>
             )}
 
-            <h1 className="font-bold text-3xl mt-3 max-sm:text-2xl">
-              {task.title}
-            </h1>
+            <input
+              value={task.title}
+              {...register('title')}
+              className="font-bold text-3xl mt-3 max-sm:text-2xl outline-none hover:border-b"
+              required
+            />
+            {errors.title && <span>{errors.title.message}</span>}
+            {/* </h1> */}
           </div>
 
           {isMobile && (
@@ -156,9 +195,13 @@ export default function TaskModal({
           {/* DESCRIPTION (LAST in mobile) */}
           <div className={`flex flex-col gap-4 ${isMobile ? 'mt-6' : 'mt-16'}`}>
             <h3 className="font-bold text-secondary">Description</h3>
-            <p className="font-medium leading-6">
-              {task.description || 'No description'}
-            </p>
+
+            <textarea
+              value={task.description}
+              {...register('description')}
+              className="font-medium leading-6 px-2"
+            />
+            {errors.title && <span>{errors.description?.message}</span>}
           </div>
 
           {/* FOOTER */}
@@ -186,14 +229,30 @@ export default function TaskModal({
                 statusStyles[task.status as keyof typeof statusStyles]
               }`}
             >
-              {task.status}
+              <label htmlFor="status">Status</label>
+              <Select
+                value={optionsStatus[0]}
+                // onChange={handleChange}
+                options={optionsStatus}
+                placeholder="Choose..."
+              />
+              {/* {task.status} */}
             </span>
+
             {task?.assignee?.name ? (
               <div className="flex items-center gap-3">
                 <div className="w-6 h-6 rounded-full bg-surface-high flex items-center justify-center">
                   {getInitials(task?.assignee?.name)}
                 </div>
-                <p className="text-sm">{task?.assignee?.name}</p>
+                {/* <p className="text-sm">{task?.assignee?.name}</p> */}
+                <Select
+                  className="text-sm w-full"
+                  // {...register('assignee_id')}
+                  value={options[0]}
+                  // onChange={handleChange}
+                  options={options}
+                  placeholder="Choose... assignee"
+                />
               </div>
             ) : (
               <p className="text-sm">Unassigned</p>
@@ -214,7 +273,13 @@ export default function TaskModal({
             <div className="flex flex-col gap-4">
               <div className="flex justify-between">
                 <p>Due Date</p>
-                <p>{new Date(task.due_date).toDateString()}</p>
+                {/* <p>{new Date(task.due_date).toDateString()}</p> */}
+                <input
+                  type="Date"
+                  value={new Date(task.due_date).toDateString()}
+                  {...register('due_date')}
+                />
+                {errors.due_date && <span>This field is required</span>}
               </div>
               <div className="flex justify-between">
                 <p>Created At</p>
@@ -223,7 +288,9 @@ export default function TaskModal({
             </div>
           </div>
         )}
-      </div>
+      </form>
+
+      {/* </div> */}
     </div>
   );
 }

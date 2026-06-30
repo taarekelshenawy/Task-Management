@@ -46,9 +46,6 @@ export const loginFunction = async (
     });
 
     Cookies.set('expires_at', result.expires_at.toString());
-   
-
-
 
     return result;
   } catch (error) {
@@ -173,7 +170,6 @@ export const registerFunction = async (
     if (data.expires_at) {
       Cookies.set('expires_at', data.expires_at.toString());
     }
-  
 
     return data;
   } catch (error) {

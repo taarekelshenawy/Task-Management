@@ -32,7 +32,7 @@ export type TaskDetailsProps = {
     name: string;
   };
 
-  epic_id: {
+  epic: {
     id: string;
     epic_id: string;
   };

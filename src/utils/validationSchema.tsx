@@ -121,3 +121,19 @@ export const inviteMemberSchema = z.object({
     .min(1, 'Email is required')
     .email('Invalid email address'),
 });
+
+export const taskModalSchema = z.object({
+  title: z.string().trim().min(1, 'Title is required'),
+
+  description: z.string().optional(),
+
+  assignee_id: z.string().nullable().optional(),
+
+  due_date: z.string().nullable().optional(),
+
+  epic_id: z.string().nullable().optional(),
+
+  status: z.enum(['TODO', 'IN_PROGRESS', 'IN_REVIEW', 'DONE'], {
+    message: 'Status is required',
+  }),
+});

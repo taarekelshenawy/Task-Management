@@ -16,7 +16,7 @@ type Inputs = {
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-    const location = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const {
@@ -30,8 +30,7 @@ export default function Login() {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const payload = { rememberMe, ...data };
 
-
-const from = location.state?.from || '/project';
+    const from = location.state?.from || '/project';
     try {
       setLoading(true);
       await loginFunction(payload);

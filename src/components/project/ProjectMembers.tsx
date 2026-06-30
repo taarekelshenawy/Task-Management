@@ -19,7 +19,7 @@ export default function ProjectMembers() {
     if (!projectId) return;
     const fetchProjectMembers = async () => {
       try {
-         await dispatch(getProjectMembers({ projectId }));
+        await dispatch(getProjectMembers({ projectId }));
 
         // if (getProjectMembers.fulfilled.match(result)) {
         //   toast.success('Members loaded successfully');
@@ -49,9 +49,12 @@ export default function ProjectMembers() {
           Project Members
         </h1>
 
-        <button onClick={()=>setOpenInviteModal(true)} className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
+        <button
+          onClick={() => setOpenInviteModal(true)}
+          className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white"
+        >
           <img src={inviteIcon} />
-          <span className="font-bold" >Invite Member</span>
+          <span className="font-bold">Invite Member</span>
         </button>
       </section>
 
