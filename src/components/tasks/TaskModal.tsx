@@ -14,6 +14,7 @@ import z from 'zod';
 import { Controller } from 'react-hook-form';
 import { updateTask } from '../../services/taskService';
 import { toast } from 'react-toastify';
+import { fetchTasks } from '../../services/taskService';
 
 export default function TaskModal({
   projectId,
@@ -28,6 +29,8 @@ export default function TaskModal({
   const [task, setTask] = useState<TaskDetailsProps | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+   const LIMIT = 100;
+  const OFFSET = 0;
   // const { members } = useAppSelector((state) => state.Project);
 
    const options = [{ value: task?.assignee.name, label: task?.assignee.name }];
@@ -85,22 +88,14 @@ export default function TaskModal({
     const newTitle = e.target.value.trim();
 
     if (newTitle === task?.title) return;
-
-    // const previousTask = task;
-
-    // Optimistic Update
-    // setTask((prev) => prev  ? { ...prev, title: newTitle, }
-    //     : prev,
-    // );
     try {
       if(!task?.id) return;
       await updateTask(task.id, {
         title: newTitle,
       });
+      await fetchTasks(projectId,task.status,'',LIMIT, OFFSET);
       toast.success("Task title updated")
     } catch {
-      // // Rollback
-      // setTask(previousTask);
       toast.error('Failed to update title');
     }
   };
