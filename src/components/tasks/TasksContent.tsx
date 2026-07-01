@@ -7,25 +7,24 @@ import TasksMobile from './TasksMobile';
 import BoardView from './BoardView';
 import { useEffect } from 'react';
 
-
 export default function TasksContent() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const view = searchParams.get('view');
   const [searchValue, setSearchValue] = useState('');
-  const [isMobile,setIsMobile]=useState(false);
- 
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 640);
-  };
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
 
-  window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', handleResize);
 
-  return () => {
-    window.removeEventListener("resize", handleResize);
-  };
-}, []);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <div className="p-6">
       <BreadCrumb
@@ -40,12 +39,11 @@ export default function TasksContent() {
 
       {/* Board */}
       {view === 'board' ? (
-        <BoardView searchValue={searchValue}/>
+        <BoardView searchValue={searchValue} />
       ) : (
         <ListView searchValue={searchValue} />
       )}
-      {isMobile ? <TasksMobile searchValue={searchValue} /> :""}
-      
+      {isMobile ? <TasksMobile searchValue={searchValue} /> : ''}
     </div>
   );
 }

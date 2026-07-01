@@ -1,4 +1,4 @@
-import { getInitials } from '../../utils/Helper';
+import { getInitials, handleTaskUpdate } from '../../utils/Helper';
 import epicIcon from '../../assets/epicIcon.png';
 import copyIcon from '../../assets/copyIcon.png';
 import { useEffect, useState } from 'react';
@@ -11,10 +11,9 @@ import Select from 'react-select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { taskModalSchema } from '../../utils/validationSchema';
 import z from 'zod';
-import { Controller } from 'react-hook-form';
 import { updateTask } from '../../services/taskService';
 import { toast } from 'react-toastify';
-import { fetchTasks } from '../../services/taskService';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function TaskModal({
   projectId,
@@ -29,21 +28,20 @@ export default function TaskModal({
   const [task, setTask] = useState<TaskDetailsProps | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-   const LIMIT = 100;
-  const OFFSET = 0;
-  // const { members } = useAppSelector((state) => state.Project);
-
-   const options = [{ value: task?.assignee.name, label: task?.assignee.name }];
-  const optionsStatus = [{ value: task?.status, label: task?.status }];
+  const options = [{ value: task?.assignee.name, label: task?.assignee.name }];
+  const STATUS_OPTIONS = [
+    { value: 'TO_DO', label: 'Todo' },
+    { value: 'IN_PROGRESS', label: 'In Progress' },
+    { value: 'DONE', label: 'Done' },
+    { value: 'BLOCKED', label: 'Blocked' },
+  ];
   const optionsEpic = [
     { value: task?.epic.epic_id, label: task?.epic.epic_id },
   ];
 
-
   type TaskModalInputs = z.infer<typeof taskModalSchema>;
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors },
   } = useForm<TaskModalInputs>({
@@ -54,7 +52,6 @@ export default function TaskModal({
 
   useEffect(() => {
     if (!projectId || !taskId) return;
-
     const fetchTask = async () => {
       setLoading(true);
       setError(false);
@@ -76,31 +73,29 @@ export default function TaskModal({
     const handleResize = () => {
       setIsMobile(window.innerWidth < 600);
     };
-
     handleResize();
-
     window.addEventListener('resize', handleResize);
-
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const queryClient = useQueryClient();
+
   const handleTitleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const newTitle = e.target.value.trim();
-
     if (newTitle === task?.title) return;
     try {
-      if(!task?.id) return;
+      if (!task?.id) return;
       await updateTask(task.id, {
         title: newTitle,
       });
-      await fetchTasks(projectId,task.status,'',LIMIT, OFFSET);
-      toast.success("Task title updated")
+      queryClient.invalidateQueries({
+        queryKey: ['tasks', projectId],
+      });
+      toast.success('Task title updated');
     } catch {
       toast.error('Failed to update title');
     }
   };
- 
-
 
   // ui loading and error
   if (loading) {
@@ -156,80 +151,27 @@ export default function TaskModal({
             {!isMobile && (
               <div className="flex items-center gap-2">
                 <p className="text-primary font-bold w-19 text-center rounded h-5 bg-surface-high">
-                  {task.task_id || '-'}
+                  {task.task_id}
                 </p>
                 <div className="flex items-center">
                   <img src={epicIcon} />
                   <div className="ml-2 flex  items-center gap-2">
-                    {/* {task.epic.epic_id}  */}
-                    {/* <Controller
-                      name="epic_id"
-                      control={control}
-                      defaultValue={task?.epic?.epic_id}
-                      render={({ field }) => (
-                        <Select
-                          options={optionsEpic}
-                          value={optionsEpic.find(
-                            (option) => option.value === field.value,
-                          )}
-                          onChange={(selected) =>
-                            field.onChange(selected?.value)
-                          }
-                          placeholder="Choose..."
-                        />
-                      )}
-                    /> */}
-                    <Controller
-                      name="epic_id"
-                      control={control}
-                      render={({ field }) => (
-                        <Select
-                          options={optionsEpic}
-                          value={optionsEpic.find(
-                            (option) => option.value === field.value,
-                          )}
-                          onChange={async (selected) => {
-                            if (!selected) return;
-
-                            const previousTask = task;
-
-                            field.onChange(selected.value);
-
-                            setTask((prev) =>
-                              prev
-                                ? {
-                                    ...prev,
-                                    epic: {
-                                      ...prev.epic,
-                                      epic_id: selected.value,
-                                      name: selected.label,
-                                    },
-                                  }
-                                : prev,
-                            );
-
-                            try {
-                              await updateTask(task.id, {
-                                epic_id: selected.value,
-                              });
-                            } catch {
-                              setTask(previousTask);
-                              field.onChange(previousTask.epic.epic_id);
-
-                              toast.error('Failed to update epic');
-                            }
-                          }}
-                        />
-                      )}
-                    />
-                    {/* <Select
-                      className="text-sm  gap-2"
-                      // {...register('assignee_id')}
-                      value={optionsEpic[0]}
-                      // onChange={handleChange}
+                    <Select
                       options={optionsEpic}
-                      placeholder="Choose... assignee"
-                    /> */}
+                      value={optionsEpic.find(
+                        (option) => option.value === task.epic?.epic_id,
+                      )}
+                      onChange={(selected) => {
+                        if (!selected?.value) return;
+                        handleTaskUpdate(
+                          task.id,
+                          setTask,
+                          selected.value,
+                          'epic_id',
+                        );
+                      }}
+                    />
+
                     <p>(Core UI Overhaul)</p>
                   </div>
                 </div>
@@ -239,8 +181,6 @@ export default function TaskModal({
             <input
               {...register('title')}
               defaultValue={task.title}
-              // value={task.title}
-              
               onBlur={handleTitleBlur}
               className="font-bold text-3xl mt-3 max-sm:text-2xl outline-none hover:border-b"
               required
@@ -265,8 +205,6 @@ export default function TaskModal({
               {/* Due Date */}
               <div className="p-2 bg-surface-low flex flex-col gap-1">
                 <p className="text-xs text-gray-500">Due Date</p>
-                {/* <p >22 Oct 2025</p> */}
-                {/* <p className="text-sm">{}</p> */}
                 <input
                   type="Date"
                   className="text-sm"
@@ -293,39 +231,21 @@ export default function TaskModal({
           {/* DESCRIPTION (LAST in mobile) */}
           <div className={`flex flex-col gap-4 ${isMobile ? 'mt-6' : 'mt-16'}`}>
             <h3 className="font-bold text-secondary">Description</h3>
-
-            {/* <textarea
-              value={task.description}
-              {...register('description')}
-              className="font-medium leading-6 px-2"
-            /> */}
             <textarea
               defaultValue={task.description}
               {...register('description')}
-              onBlur={async (e) => {
+              onBlur={(e) => {
                 const newDescription = e.target.value;
 
-                if (newDescription === task.description) return;
+                if (!newDescription || newDescription === task.description)
+                  return;
 
-                const previousTask = task;
-
-                setTask((prev) =>
-                  prev
-                    ? {
-                        ...prev,
-                        description: newDescription,
-                      }
-                    : prev,
+                handleTaskUpdate(
+                  task.id,
+                  setTask,
+                  newDescription,
+                  'description',
                 );
-
-                try {
-                  await updateTask(task.id, {
-                    description: newDescription,
-                  });
-                } catch {
-                  setTask(previousTask);
-                  toast.error('Failed to update description');
-                }
               }}
             />
             {errors.title && <span>{errors.description?.message}</span>}
@@ -351,52 +271,23 @@ export default function TaskModal({
         {/* RIGHT SIDE */}
         {!isMobile && (
           <div className="bg-slate-lighter flex-1 p-7 flex flex-col gap-7">
-            {/* <span
-              className={`px-2 py-1 text-xs rounded ${
-                statusStyles[task.status as keyof typeof statusStyles]
-              }`}
-            > */}
             <div className="flex flex-col gap-5">
               <label htmlFor="status">Status</label>
 
-              <Controller
-                name="status"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    options={optionsStatus}
-                    value={optionsStatus.find(
-                      (option) => option.value === field.value,
-                    )}
-                    onChange={async (selected) => {
-                      if (!selected) return;
+              <Select
+                value={{
+                  value: task.status,
+                  label: task.status,
+                }}
+                options={STATUS_OPTIONS}
+                onChange={async (selected) => {
+                  if (!selected) return;
 
-                      const previousTask = task;
-
-                      field.onChange(selected.value);
-
-                      setTask((prev) =>
-                        prev
-                          ? {
-                              ...prev,
-                              status: selected.value,
-                            }
-                          : prev,
-                      );
-
-                      try {
-                        await updateTask(task.id, {
-                          status: selected.value,
-                        });
-                      } catch {
-                        setTask(previousTask);
-                        field.onChange(previousTask.status);
-
-                        toast.error('Failed to update status');
-                      }
-                    }}
-                  />
-                )}
+                  handleTaskUpdate(task.id, setTask, selected.value, 'status');
+                  queryClient.invalidateQueries({
+                    queryKey: ['tasks', projectId],
+                  });
+                }}
               />
             </div>
 
@@ -407,63 +298,22 @@ export default function TaskModal({
                 <div className="w-6 h-6 rounded-full bg-surface-high flex items-center justify-center">
                   {getInitials(task?.assignee?.name)}
                 </div>
-                {/* <Controller
-                  name="assignee_id"
-                  control={control}
-                  defaultValue={task?.assignee?.id}
-                  render={({ field }) => (
-                    <Select
-                      options={options}
-                      value={options.find(
-                        (option) => option.value === field.value,
-                      )}
-                      onChange={(selected) => field.onChange(selected?.value)}
-                      placeholder="Choose assignee..."
-                    />
+
+                <Select
+                  options={options}
+                  value={options.find(
+                    (option) => option.value === task.assignee?.id,
                   )}
-                /> */}
-                <Controller
-                  name="assignee_id"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      options={options}
-                      value={options.find(
-                        (option) => option.value === field.value,
-                      )}
-                      onChange={async (selected) => {
-                        if (!selected) return;
+                  onChange={(selected) => {
+                    if (!selected?.value) return;
 
-                        const previousTask = task;
-
-                        field.onChange(selected.value);
-
-                        setTask((prev) =>
-                          prev
-                            ? {
-                                ...prev,
-                                assignee: {
-                                  ...prev.assignee,
-                                  id: selected.value,
-                                  name: selected.label,
-                                },
-                              }
-                            : prev,
-                        );
-
-                        try {
-                          await updateTask(task.id, {
-                            assignee_id: selected.value,
-                          });
-                        } catch {
-                          setTask(previousTask);
-                          field.onChange(previousTask.assignee.id);
-
-                          toast.error('Failed to update assignee');
-                        }
-                      }}
-                    />
-                  )}
+                    handleTaskUpdate(
+                      task.id,
+                      setTask,
+                      selected.value,
+                      'assignee_id',
+                    );
+                  }}
                 />
               </div>
             ) : (
@@ -485,40 +335,15 @@ export default function TaskModal({
             <div className="flex flex-col gap-4">
               <div className="flex justify-between">
                 <p>Due Date</p>
-                {/* <input
-                  type="Date"
-                  className="text-sm"
-                  value={task.due_date?.split('T')[0]}
-                  {...register('due_date')}
-                ></input> */}
-
                 <input
                   type="date"
                   defaultValue={task.due_date?.split('T')[0]}
-                  onChange={async (e) => {
+                  onChange={(e) => {
                     const newDate = e.target.value || null;
 
-                    const previousTask = task;
+                    if (!newDate) return;
 
-                    setTask((prev) =>
-                      prev
-                        ? {
-                            ...prev,
-                            due_date: newDate
-                              ? `${newDate}T00:00:00+00:00`
-                              : null,
-                          }
-                        : prev,
-                    );
-
-                    try {
-                      await updateTask(task.id, {
-                        due_date: newDate,
-                      });
-                    } catch {
-                      setTask(previousTask);
-                      toast.error('Failed to update due date');
-                    }
+                    handleTaskUpdate(task.id, setTask, newDate, 'due_date');
                   }}
                 />
 

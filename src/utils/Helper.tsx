@@ -16,3 +16,34 @@ export const formatDate = (date: string) =>
     month: 'short',
     year: 'numeric',
   });
+
+import { updateTask } from '../services/taskService';
+import { toast } from 'react-toastify';
+import type { TaskDetailsProps } from '../types/tasks';
+
+
+export async function handleTaskUpdate(
+  taskId: string,
+  setTask: React.Dispatch<React.SetStateAction<TaskDetailsProps | null>>,
+  value: string,
+  field: string,
+) {
+  try {
+    await updateTask(taskId, {
+      [field]: value,
+    });
+
+    setTask((prev) => {
+      if (!prev) return prev;
+
+      return {
+        ...prev,
+        [field]: value,
+      };
+    });
+
+    toast.success(`task ${field} updated`);
+  } catch {
+    toast.error(`Failed to update ${field}`);
+  }
+}
