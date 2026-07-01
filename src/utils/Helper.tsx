@@ -21,7 +21,6 @@ import { updateTask } from '../services/taskService';
 import { toast } from 'react-toastify';
 import type { TaskDetailsProps } from '../types/tasks';
 
-
 export async function handleTaskUpdate(
   taskId: string,
   setTask: React.Dispatch<React.SetStateAction<TaskDetailsProps | null>>,
