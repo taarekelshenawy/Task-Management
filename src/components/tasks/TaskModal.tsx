@@ -5,13 +5,15 @@ import { useEffect, useState } from 'react';
 import { getTaskDetails } from '../../services/taskService';
 import { formatDate } from '../../utils/Helper';
 import type { TaskDetailsProps } from '../../types/tasks';
-import { statusStyles } from '../constants/constants';
 import { useForm } from 'react-hook-form';
 import type { SubmitHandler } from 'react-hook-form';
 import Select from 'react-select';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { taskModalSchema } from '../../utils/validationSchema';
 import z from 'zod';
+import { Controller } from 'react-hook-form';
+import { updateTask } from '../../services/taskService';
+import { toast } from 'react-toastify';
 
 export default function TaskModal({
   projectId,
@@ -26,15 +28,25 @@ export default function TaskModal({
   const [task, setTask] = useState<TaskDetailsProps | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  // const { members } = useAppSelector((state) => state.Project);
+
+   const options = [{ value: task?.assignee.name, label: task?.assignee.name }];
+  const optionsStatus = [{ value: task?.status, label: task?.status }];
+  const optionsEpic = [
+    { value: task?.epic.epic_id, label: task?.epic.epic_id },
+  ];
+
+
   type TaskModalInputs = z.infer<typeof taskModalSchema>;
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<TaskModalInputs>({
     resolver: zodResolver(taskModalSchema),
   });
-
+  console.log(task?.due_date);
   const onSubmit: SubmitHandler<TaskModalInputs> = (data) => console.log(data);
 
   useEffect(() => {
@@ -68,12 +80,34 @@ export default function TaskModal({
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  console.log(task);
-  const options = [{ value: task?.assignee.name, label: task?.assignee.name }];
-  const optionsStatus = [{ value: task?.status, label: task?.status }];
-  const optionsEpic = [
-    { value: task?.epic.epic_id, label: task?.epic.epic_id },
-  ];
+
+  const handleTitleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
+    const newTitle = e.target.value.trim();
+
+    if (newTitle === task?.title) return;
+
+    // const previousTask = task;
+
+    // Optimistic Update
+    // setTask((prev) => prev  ? { ...prev, title: newTitle, }
+    //     : prev,
+    // );
+    try {
+      if(!task?.id) return;
+      await updateTask(task.id, {
+        title: newTitle,
+      });
+      toast.success("Task title updated")
+    } catch {
+      // // Rollback
+      // setTask(previousTask);
+      toast.error('Failed to update title');
+    }
+  };
+ 
+
+
+  // ui loading and error
   if (loading) {
     return (
       <div className="z-50 fixed inset-0 flex items-center justify-center bg-black/40 text-white">
@@ -133,14 +167,74 @@ export default function TaskModal({
                   <img src={epicIcon} />
                   <div className="ml-2 flex  items-center gap-2">
                     {/* {task.epic.epic_id}  */}
-                    <Select
+                    {/* <Controller
+                      name="epic_id"
+                      control={control}
+                      defaultValue={task?.epic?.epic_id}
+                      render={({ field }) => (
+                        <Select
+                          options={optionsEpic}
+                          value={optionsEpic.find(
+                            (option) => option.value === field.value,
+                          )}
+                          onChange={(selected) =>
+                            field.onChange(selected?.value)
+                          }
+                          placeholder="Choose..."
+                        />
+                      )}
+                    /> */}
+                    <Controller
+                      name="epic_id"
+                      control={control}
+                      render={({ field }) => (
+                        <Select
+                          options={optionsEpic}
+                          value={optionsEpic.find(
+                            (option) => option.value === field.value,
+                          )}
+                          onChange={async (selected) => {
+                            if (!selected) return;
+
+                            const previousTask = task;
+
+                            field.onChange(selected.value);
+
+                            setTask((prev) =>
+                              prev
+                                ? {
+                                    ...prev,
+                                    epic: {
+                                      ...prev.epic,
+                                      epic_id: selected.value,
+                                      name: selected.label,
+                                    },
+                                  }
+                                : prev,
+                            );
+
+                            try {
+                              await updateTask(task.id, {
+                                epic_id: selected.value,
+                              });
+                            } catch {
+                              setTask(previousTask);
+                              field.onChange(previousTask.epic.epic_id);
+
+                              toast.error('Failed to update epic');
+                            }
+                          }}
+                        />
+                      )}
+                    />
+                    {/* <Select
                       className="text-sm  gap-2"
                       // {...register('assignee_id')}
                       value={optionsEpic[0]}
                       // onChange={handleChange}
                       options={optionsEpic}
                       placeholder="Choose... assignee"
-                    />
+                    /> */}
                     <p>(Core UI Overhaul)</p>
                   </div>
                 </div>
@@ -148,8 +242,11 @@ export default function TaskModal({
             )}
 
             <input
-              value={task.title}
               {...register('title')}
+              defaultValue={task.title}
+              // value={task.title}
+              
+              onBlur={handleTitleBlur}
               className="font-bold text-3xl mt-3 max-sm:text-2xl outline-none hover:border-b"
               required
             />
@@ -174,7 +271,13 @@ export default function TaskModal({
               <div className="p-2 bg-surface-low flex flex-col gap-1">
                 <p className="text-xs text-gray-500">Due Date</p>
                 {/* <p >22 Oct 2025</p> */}
-                <p className="text-sm">{formatDate(task.due_date)}</p>
+                {/* <p className="text-sm">{}</p> */}
+                <input
+                  type="Date"
+                  className="text-sm"
+                  value={task.due_date?.split('T')[0]}
+                  {...register('due_date')}
+                ></input>
               </div>
 
               {/* Reporter */}
@@ -196,10 +299,39 @@ export default function TaskModal({
           <div className={`flex flex-col gap-4 ${isMobile ? 'mt-6' : 'mt-16'}`}>
             <h3 className="font-bold text-secondary">Description</h3>
 
-            <textarea
+            {/* <textarea
               value={task.description}
               {...register('description')}
               className="font-medium leading-6 px-2"
+            /> */}
+            <textarea
+              defaultValue={task.description}
+              {...register('description')}
+              onBlur={async (e) => {
+                const newDescription = e.target.value;
+
+                if (newDescription === task.description) return;
+
+                const previousTask = task;
+
+                setTask((prev) =>
+                  prev
+                    ? {
+                        ...prev,
+                        description: newDescription,
+                      }
+                    : prev,
+                );
+
+                try {
+                  await updateTask(task.id, {
+                    description: newDescription,
+                  });
+                } catch {
+                  setTask(previousTask);
+                  toast.error('Failed to update description');
+                }
+              }}
             />
             {errors.title && <span>{errors.description?.message}</span>}
           </div>
@@ -224,34 +356,119 @@ export default function TaskModal({
         {/* RIGHT SIDE */}
         {!isMobile && (
           <div className="bg-slate-lighter flex-1 p-7 flex flex-col gap-7">
-            <span
+            {/* <span
               className={`px-2 py-1 text-xs rounded ${
                 statusStyles[task.status as keyof typeof statusStyles]
               }`}
-            >
+            > */}
+            <div className="flex flex-col gap-5">
               <label htmlFor="status">Status</label>
-              <Select
-                value={optionsStatus[0]}
-                // onChange={handleChange}
-                options={optionsStatus}
-                placeholder="Choose..."
+
+              <Controller
+                name="status"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    options={optionsStatus}
+                    value={optionsStatus.find(
+                      (option) => option.value === field.value,
+                    )}
+                    onChange={async (selected) => {
+                      if (!selected) return;
+
+                      const previousTask = task;
+
+                      field.onChange(selected.value);
+
+                      setTask((prev) =>
+                        prev
+                          ? {
+                              ...prev,
+                              status: selected.value,
+                            }
+                          : prev,
+                      );
+
+                      try {
+                        await updateTask(task.id, {
+                          status: selected.value,
+                        });
+                      } catch {
+                        setTask(previousTask);
+                        field.onChange(previousTask.status);
+
+                        toast.error('Failed to update status');
+                      }
+                    }}
+                  />
+                )}
               />
-              {/* {task.status} */}
-            </span>
+            </div>
+
+            {/* </span> */}
 
             {task?.assignee?.name ? (
               <div className="flex items-center gap-3">
                 <div className="w-6 h-6 rounded-full bg-surface-high flex items-center justify-center">
                   {getInitials(task?.assignee?.name)}
                 </div>
-                {/* <p className="text-sm">{task?.assignee?.name}</p> */}
-                <Select
-                  className="text-sm w-full"
-                  // {...register('assignee_id')}
-                  value={options[0]}
-                  // onChange={handleChange}
-                  options={options}
-                  placeholder="Choose... assignee"
+                {/* <Controller
+                  name="assignee_id"
+                  control={control}
+                  defaultValue={task?.assignee?.id}
+                  render={({ field }) => (
+                    <Select
+                      options={options}
+                      value={options.find(
+                        (option) => option.value === field.value,
+                      )}
+                      onChange={(selected) => field.onChange(selected?.value)}
+                      placeholder="Choose assignee..."
+                    />
+                  )}
+                /> */}
+                <Controller
+                  name="assignee_id"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      options={options}
+                      value={options.find(
+                        (option) => option.value === field.value,
+                      )}
+                      onChange={async (selected) => {
+                        if (!selected) return;
+
+                        const previousTask = task;
+
+                        field.onChange(selected.value);
+
+                        setTask((prev) =>
+                          prev
+                            ? {
+                                ...prev,
+                                assignee: {
+                                  ...prev.assignee,
+                                  id: selected.value,
+                                  name: selected.label,
+                                },
+                              }
+                            : prev,
+                        );
+
+                        try {
+                          await updateTask(task.id, {
+                            assignee_id: selected.value,
+                          });
+                        } catch {
+                          setTask(previousTask);
+                          field.onChange(previousTask.assignee.id);
+
+                          toast.error('Failed to update assignee');
+                        }
+                      }}
+                    />
+                  )}
                 />
               </div>
             ) : (
@@ -273,12 +490,43 @@ export default function TaskModal({
             <div className="flex flex-col gap-4">
               <div className="flex justify-between">
                 <p>Due Date</p>
-                {/* <p>{new Date(task.due_date).toDateString()}</p> */}
-                <input
+                {/* <input
                   type="Date"
-                  value={new Date(task.due_date).toDateString()}
+                  className="text-sm"
+                  value={task.due_date?.split('T')[0]}
                   {...register('due_date')}
+                ></input> */}
+
+                <input
+                  type="date"
+                  defaultValue={task.due_date?.split('T')[0]}
+                  onChange={async (e) => {
+                    const newDate = e.target.value || null;
+
+                    const previousTask = task;
+
+                    setTask((prev) =>
+                      prev
+                        ? {
+                            ...prev,
+                            due_date: newDate
+                              ? `${newDate}T00:00:00+00:00`
+                              : null,
+                          }
+                        : prev,
+                    );
+
+                    try {
+                      await updateTask(task.id, {
+                        due_date: newDate,
+                      });
+                    } catch {
+                      setTask(previousTask);
+                      toast.error('Failed to update due date');
+                    }
+                  }}
                 />
+
                 {errors.due_date && <span>This field is required</span>}
               </div>
               <div className="flex justify-between">

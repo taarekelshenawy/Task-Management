@@ -127,3 +127,40 @@ export async function updateTaskStatus(taskId: string, status: string) {
 }
 
 export default getEpicTasks;
+
+type UpdateTaskPayload = Partial<{
+  title: string;
+  description: string;
+  assignee_id: string | null;
+  due_date: string | null;
+  epic_id: string | null;
+  status: string;
+}>;
+
+export const updateTask = async (taskId: string, data: UpdateTaskPayload) => {
+  try {
+    const response = await apiClient(
+      getBaseUrl(`rest/v1/tasks?id=eq.${taskId}`),
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation',
+        },
+        body: JSON.stringify(data),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Failed to update task');
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+
+    throw new Error('Unexpected error');
+  }
+};

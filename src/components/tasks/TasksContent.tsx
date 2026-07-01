@@ -1,131 +1,31 @@
 import TasksHeader from './TasksHeader';
-import StatusColumn from './StatusColumn';
 import { useLocation } from 'react-router-dom';
 import ListView from './ListView';
 import BreadCrumb from '../../shared/BreadCrumb';
 import { useState } from 'react';
 import TasksMobile from './TasksMobile';
-import { DndContext } from '@dnd-kit/core';
-import { updateTaskStatus } from '../../services/taskService';
-import { fetchTasks } from '../../services/taskService';
-import { useParams } from 'react-router-dom';
+import BoardView from './BoardView';
 import { useEffect } from 'react';
-import { STATUSES } from '../constants/constants';
-import type { TaskProps } from '../../types/tasks';
-import { toast } from 'react-toastify';
 
-type Status = (typeof STATUSES)[number];
+
 export default function TasksContent() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const view = searchParams.get('view');
   const [searchValue, setSearchValue] = useState('');
-  const LIMIT = 100;
-  const OFFSET = 0;
-
-  const { projectId } = useParams();
-
-  const [tasksByStatus, setTasksByStatus] = useState<
-    Record<Status, TaskProps[]>
-  >({
-    TO_DO: [],
-    IN_PROGRESS: [],
-    BLOCKED: [],
-    IN_REVIEW: [],
-    READY_FOR_QA: [],
-    REOPENED: [],
-    READY_FOR_PRODUCTION: [],
-    DONE: [],
-  });
+  const [isMobile,setIsMobile]=useState(false);
+ 
   useEffect(() => {
-    async function loadTasks() {
-      if (!projectId) return;
-      try {
-        const [
-          todo,
-          inProgress,
-          blocked,
-          inReview,
-          readyForQa,
-          reopened,
-          readyForProduction,
-          done,
-        ] = await Promise.all([
-          fetchTasks(projectId, 'TO_DO', searchValue, LIMIT, OFFSET),
-          fetchTasks(projectId, 'IN_PROGRESS', searchValue, LIMIT, OFFSET),
-          fetchTasks(projectId, 'BLOCKED', searchValue, LIMIT, OFFSET),
-          fetchTasks(projectId, 'IN_REVIEW', searchValue, LIMIT, OFFSET),
-          fetchTasks(projectId, 'READY_FOR_QA', searchValue, LIMIT, OFFSET),
-          fetchTasks(projectId, 'REOPENED', searchValue, LIMIT, OFFSET),
-          fetchTasks(
-            projectId,
-            'READY_FOR_PRODUCTION',
-            searchValue,
-            LIMIT,
-            OFFSET,
-          ),
-          fetchTasks(projectId, 'DONE', searchValue, LIMIT, OFFSET),
-        ]);
-
-        setTasksByStatus({
-          TO_DO: todo,
-          IN_PROGRESS: inProgress,
-          BLOCKED: blocked,
-          IN_REVIEW: inReview,
-          READY_FOR_QA: readyForQa,
-          REOPENED: reopened,
-          READY_FOR_PRODUCTION: readyForProduction,
-          DONE: done,
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    }
-
-    loadTasks();
-  }, [projectId, searchValue]);
-
-  const handleDragEnd = async (event: any) => {
-    const { active, over } = event;
-    const previousTasks = tasksByStatus;
-
-    if (!over) return;
-
-    const taskId = active.id as string;
-    const oldStatus = active.data.current?.status as Status;
-    const newStatus = over.id as Status;
-
-    if (oldStatus === newStatus) return;
-    const movedTask = tasksByStatus[oldStatus].find(
-      (task) => task.id === taskId,
-    );
-
-    if (!movedTask) return;
-
-    setTasksByStatus((prev) => ({
-      ...prev,
-
-      [oldStatus]: prev[oldStatus].filter((task) => task.id !== taskId),
-
-      [newStatus]: [
-        ...prev[newStatus],
-        {
-          ...movedTask,
-          status: newStatus,
-        },
-      ],
-    }));
-
-    try {
-      await updateTaskStatus(taskId, newStatus);
-    } catch (error: unknown) {
-      setTasksByStatus(previousTasks);
-      if (error instanceof Error) {
-        toast.error(error.message);
-      }
-    }
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 640);
   };
 
+  window.addEventListener("resize", handleResize);
+
+  return () => {
+    window.removeEventListener("resize", handleResize);
+  };
+}, []);
   return (
     <div className="p-6">
       <BreadCrumb
@@ -140,21 +40,12 @@ export default function TasksContent() {
 
       {/* Board */}
       {view === 'board' ? (
-        <div className="flex gap-4 overflow-x-auto max-sm:hidden">
-          <DndContext onDragEnd={handleDragEnd}>
-            {STATUSES.map((status) => (
-              <StatusColumn
-                key={status}
-                status={status}
-                tasks={tasksByStatus[status]}
-              />
-            ))}
-          </DndContext>
-        </div>
+        <BoardView searchValue={searchValue}/>
       ) : (
         <ListView searchValue={searchValue} />
       )}
-      <TasksMobile searchValue={searchValue} />
+      {isMobile ? <TasksMobile searchValue={searchValue} /> :""}
+      
     </div>
   );
 }
