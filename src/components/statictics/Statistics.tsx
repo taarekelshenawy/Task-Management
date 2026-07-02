@@ -6,33 +6,58 @@ import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
 import { statisticStatusOptions } from '../constants/constants';
-import TotalTaskImg from '../../assets/totalTask.png';
-import CompleteTaskImg from '../../assets/completTask.png';
-import OverdueTaskImg from '../../assets/overduetask.png';
 import useGetTaskStatistics from '../../hooks/useGetTasksStatistics';
 import { differenceInCalendarDays } from 'date-fns';
 import { toast } from 'react-toastify';
+import useGetTasksCountPerProject from '../../hooks/useGetTasksCountPerProject';
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { STATUS_COLORS } from '../constants/constants';
+import StatisticsCards from './StatisticsCards';
+import StatisticsCalender from './StatisticsCalender';
+import ChartData from './ChartData';
+import ProjectCounts from './ProjectCounts';
 
 export default function Statictics() {
-  const projectOptions = [
-    { value: 'All Projects', label: 'All Projects' },
-    { value: 'vue', label: 'List of projects' },
-  ];
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-
   const [open, setOpen] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const { data, isLoading, error } = useGetTaskStatistics(
+  const { data: projectCounts } = useGetTasksCountPerProject(
+    startDate,
+    endDate,
+  );
+
+  const projectOptions = [
+    { value: 'All Projects', label: 'All Projects' },
+    ...(projectCounts?.map((project) => ({
+      value: project.project_name,
+      label: project.project_name,
+    })) ?? []),
+  ];
+
+  const { data } = useGetTaskStatistics(
     startDate,
     endDate,
     selectedProject,
     selectedStatus,
   );
 
-  console.log(data);
+  const statuses: Record<string, number> = {};
+
+  data?.daily.forEach((day) => {
+    Object.entries(day.statuses).forEach(([status, count]) => {
+      statuses[status] = (statuses[status] || 0) + count;
+    });
+  });
+
+  const chartData = Object.entries(statuses).map(([status, count]) => ({
+    name: status,
+    value: count,
+  }));
+
+  const total = chartData.reduce((sum, item) => sum + item.value, 0);
   return (
     <div className="flex flex-col w-full overflow-hidden p-3 gap-10">
       <ProjectHeader />
@@ -67,7 +92,6 @@ export default function Statictics() {
                 onSelect={(range) => {
                   if (!range) return;
 
-                  // لو المستخدم اختار بداية ونهاية
                   if (range.from && range.to) {
                     const days = differenceInCalendarDays(range.to, range.from);
 
@@ -118,80 +142,67 @@ export default function Statictics() {
           />
         </div>
       </div>
-
-      <div className="grid grid-cols-3 gap-10">
-        <div className="flex justify-between rounded bg-white p-4">
-          <div>
-            <p className="font-bold text-slate-dark/60">TOTAL TASKS</p>
-            <p className="text-3xl font-bold mt-2">{data?.total_tasks}</p>
-          </div>
-          <div>
-            <img src={TotalTaskImg}></img>
-          </div>
-        </div>
-        <div className="flex justify-between rounded bg-white p-4 items-center">
-          <div>
-            <p className="font-bold text-slate-dark/60">COMPLETED TASKS</p>
-            <p className="text-3xl font-bold mt-2">{data?.done_tasks}</p>
-          </div>
-          <div>
-            <img src={CompleteTaskImg}></img>
-          </div>
-        </div>
-        <div className="flex justify-between bg-white p-4 rounded">
-          <div>
-            <p className="font-bold text-slate-dark/60">OVERDUE TASKS</p>
-            <p className="text-3xl font-bold mt-2 text-red-500">
-              {data?.overdue_tasks}
-            </p>
-          </div>
-          <div>
-            <img src={OverdueTaskImg}></img>
-          </div>
-        </div>
-      </div>
+      <StatisticsCards data={data} />
 
       {/* calender */}
-
       <div className="flex gap-5 items-center">
         {data?.daily.map((item) => (
-          <div
-            key={item.day}
-            className="w-52 min-h-96 rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
-          >
-            {/* Header */}
-            <div className="p-4">
-              <p className="text-sm text-gray-500 font-bold">
-                {format(new Date(item.day), 'EEE')}
-              </p>
+          <StatisticsCalender item={item} />
+        ))}
+      </div>
 
-              <h3 className="text-xl font-bold text-slate-dark">
-                {format(new Date(item.day), 'dd MMM')}
-              </h3>
+      <div className="flex items-center justify-between px-8 mt-20">
+        {/* Left Side */}
+        <div className="flex flex-col">
+          <h2 className="text-2xl font-bold text-slate-dark mb-6">
+            Tasks by Status
+          </h2>
+
+          <div className="flex items-center gap-8">
+            {/* Pie Chart */}
+            <div className="relative h-64 w-80 flex-shrink-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    dataKey="value"
+                    innerRadius={60}
+                    outerRadius={85}
+                    paddingAngle={3}
+                  >
+                    {chartData.map((entry) => (
+                      <Cell
+                        key={entry.name}
+                        fill={STATUS_COLORS[entry.name] ?? '#CBD5E1'}
+                      />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-sm text-gray-500">Total</span>
+                <span className="text-3xl font-bold">{total}</span>
+              </div>
             </div>
 
-            {/* Statuses */}
-            <div className="space-y-3 p-4">
-              {Object.entries(item.statuses).map(([status, count]) => (
-                <div
-                  key={status}
-                  className="flex items-center justify-between rounded-lg bg-gray-100 px-3 py-2"
-                >
-                  <span className="text-sm font-medium">
-                    {status.replaceAll('_', ' ')}
-                  </span>
-
-                  <span className="rounded-full bg-blue-500 px-2 py-0.5 text-xs text-white">
-                    {count}
-                  </span>
-                </div>
+            {/* Status Legend */}
+            <div className="flex flex-col gap-4">
+              {chartData.map((item) => (
+                <ChartData item={item} />
               ))}
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Projects */}
+        <div className="flex flex-col gap-4  ">
+          <h2 className="font-bold text-xl">All Projects</h2>
+          {projectCounts?.map((project) => (
+            <ProjectCounts project={project} />
+          ))}
+        </div>
       </div>
     </div>
-
-   
   );
 }

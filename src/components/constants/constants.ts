@@ -44,3 +44,10 @@ export const statisticStatusOptions = [
   { value: 'READY_FOR_PRODUCTION', label: 'READY FOR PRODUCTION' },
   { value: 'DONE', label: 'DONE' },
 ];
+
+export const STATUS_COLORS: Record<string, string> = {
+  TO_DO: '#3B82F6',
+  IN_PROGRESS: '#F59E0B',
+  DONE: '#22C55E',
+  OVERDUE: '#EF4444',
+};
