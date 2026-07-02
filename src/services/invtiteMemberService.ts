@@ -32,10 +32,8 @@ type AcceptInvitationData = {
   p_token: string;
 };
 
-export const acceptInvitation = async (
-  data: AcceptInvitationData,
-) => {
-    console.log(data)
+export const acceptInvitation = async (data: AcceptInvitationData) => {
+  console.log(data);
   try {
     const response = await apiClient(
       getBaseUrl('rest/v1/rpc/accept_invitation'),
@@ -51,8 +49,6 @@ export const acceptInvitation = async (
     if (!response.ok) {
       throw new Error('Failed to accept invitation');
     }
-
-  
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message);

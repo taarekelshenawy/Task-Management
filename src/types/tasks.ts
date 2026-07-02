@@ -25,16 +25,17 @@ export type TaskDetailsProps = {
   title: string;
   description: string;
   status: string;
-  due_date: string;
+  due_date: string | null;
   created_at: string;
 
   assignee: {
     name: string;
   };
 
-  epic_id: {
+  epic: {
     id: string;
     epic_id: string;
+    title: string;
   };
 };
 

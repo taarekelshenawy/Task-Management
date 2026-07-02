@@ -1,5 +1,5 @@
 import SignUpIcon from '../../assets/Icon.svg';
-import { Link,  useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { acceptInvitation } from '../../services/invtiteMemberService';
 import { toast } from 'react-toastify';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -11,21 +11,20 @@ export default function InvitePage() {
   const navigate = useNavigate();
   const token = searchParams.get('token');
 
-
   const location = useLocation();
 
-useEffect(() => {
-  const token = getAccessToken();
+  useEffect(() => {
+    const token = getAccessToken();
 
-  if (!token) {
-    navigate('/login', {
-      state: {
-        from: location.pathname + location.search,
-      },
-      replace: true,
-    });
-  }
-}, [location, navigate]);
+    if (!token) {
+      navigate('/login', {
+        state: {
+          from: location.pathname + location.search,
+        },
+        replace: true,
+      });
+    }
+  }, [location, navigate]);
 
   const handleAcceptInvitation = async () => {
     if (!token) {
@@ -48,8 +47,6 @@ useEffect(() => {
       }
     }
   };
-
-
 
   return (
     <div className="flex flex-col justify-center items-center h-screen">
@@ -86,8 +83,6 @@ useEffect(() => {
   );
 }
 
-
-
 // import SignUpIcon from '../../assets/Icon.svg';
 // import { Link } from 'react-router-dom';
 // import { useSearchParams } from 'react-router-dom';
@@ -95,7 +90,7 @@ useEffect(() => {
 // export default function InvitePage() {
 //     const [searchParams] = useSearchParams();
 //     const token = searchParams.get("token");
-    
+
 //   return (
 //     <div className='flex flex-col justify-center items-center h-screen'>
 //       <div >
@@ -110,7 +105,7 @@ useEffect(() => {
 //             <div className='flex justify-center  '>
 //                   <p className='text-center font-bold p-1 bg-[#E0E8FF] w-52 rounded-2xl'>New Project Invitation</p>
 //             </div>
-          
+
 //           <h1 className='text-3xl font-semibold text-slate-dark'>You've been invited to join new project</h1>
 //           <button className='cursor-pointer w-full h-10 bg-linear-to-r from-primary-container to-primary text-white'>Accept Invitation</button>
 //         </div>

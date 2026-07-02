@@ -57,12 +57,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/invite',
-    element: 
-
- <InvitePage />
-
-         
-     ,
+    element: <InvitePage />,
   },
   {
     path: '*',

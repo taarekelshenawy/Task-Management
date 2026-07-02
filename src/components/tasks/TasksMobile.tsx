@@ -37,7 +37,7 @@ export default function TasksMobile({ searchValue }: { searchValue: string }) {
     getTasks();
   }, [projectId, searchValue]);
   return (
-    <div className="hidden max-sm:block">
+    <div>
       {allTasks?.map((task) => {
         return (
           <div className="mb-5">
