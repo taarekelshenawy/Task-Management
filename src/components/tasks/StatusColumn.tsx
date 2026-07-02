@@ -13,7 +13,6 @@ type StatusColumnProps = {
 export default function StatusColumn({ status, tasks }: StatusColumnProps) {
   const { projectId } = useParams();
   const navigate = useNavigate();
-  console.log(tasks);
 
   const { setNodeRef } = useDroppable({
     id: status,

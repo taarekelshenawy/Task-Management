@@ -3,7 +3,9 @@ import { updateTask } from '../services/taskService';
 import type { TaskProps } from '../types/tasks';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
+import { STATUSES } from '../components/constants/constants';
 
+type Status = (typeof STATUSES)[number];
 export default function useUpdateTaskStatus(
   projectId: string,
   searchValue: string,

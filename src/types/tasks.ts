@@ -35,6 +35,7 @@ export type TaskDetailsProps = {
   epic: {
     id: string;
     epic_id: string;
+    title: string;
   };
 };
 
