@@ -145,7 +145,7 @@ export default function TaskDetails({
           <div className={`flex flex-col gap-4 max-sm:mt-6 mt-16`}>
             <h3 className="font-bold text-secondary">Description</h3>
             <textarea
-            className="px-4 py-2"
+              className="px-4 py-2"
               defaultValue={task.description}
               onBlur={(e) => {
                 const newDescription = e.target.value;

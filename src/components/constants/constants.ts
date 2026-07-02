@@ -32,3 +32,15 @@ export const STATUS_OPTIONS = [
   { value: 'DONE', label: 'Done' },
   { value: 'BLOCKED', label: 'Blocked' },
 ];
+
+export  const statisticStatusOptions = [
+    { value: null, label: 'All Statuses' },
+    { value: 'TO_DO', label: 'TO DO' },
+    { value: 'IN_PROGRESS', label: 'IN PROGRESS' },
+    { value: 'BLOCKED', label: 'BLOCKED' },
+    { value: 'IN_REVIEW', label: 'IN REVIEW' },
+    { value: 'READY_FOR_QA', label: 'READY FOR QA' },
+    { value: 'REOPENED', label: 'REOPENED' },
+    { value: 'READY_FOR_PRODUCTION', label: 'READY FOR PRODUCTION' },
+    { value: 'DONE', label: 'DONE' },
+  ];

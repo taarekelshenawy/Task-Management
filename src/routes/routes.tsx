@@ -17,6 +17,7 @@ import AuthLayout from '../layouts/AuthLayout';
 import TasksPage from '../pages/project/TasksPage';
 import AddNewTask from '../pages/project/AddNewTask';
 import InvitePage from '../pages/project/InvitePage';
+import StatisticsPage from '../pages/project/StatisticsPage';
 
 const router = createBrowserRouter([
   {
@@ -59,6 +60,11 @@ const router = createBrowserRouter([
     path: '/invite',
     element: <InvitePage />,
   },
+  {
+    path: 'my-statistics',
+    element: <StatisticsPage />,
+  },
+
   {
     path: '*',
     element: <Navigate to="/login" replace />,

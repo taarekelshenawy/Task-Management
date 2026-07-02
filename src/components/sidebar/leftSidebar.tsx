@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import SignUpIcon from '../../assets/Icon.svg';
 import { logoutFunction } from '../../services/authService';
+import StatisticIcon from '../../assets/staticsIcon.png';
 
 import {
   FolderKanban,
@@ -79,6 +80,21 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                   <FolderKanban size={20} />
                   {!collapsed && (
                     <span className="font-bold text-slate-dark">Projects</span>
+                  )}
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/my-statistics"
+                  onClick={() => setIsMobileOpen(false)}
+                  className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
+                >
+                  <img src={StatisticIcon}></img>
+                  {!collapsed && (
+                    <span className="font-bold text-slate-dark">
+                      My Statistics
+                    </span>
                   )}
                 </Link>
               </li>
@@ -207,6 +223,18 @@ export default function Sidebar({ projectId }: { projectId?: string }) {
                   {!collapsed && <span>Projects</span>}
                 </Link>
               </li>
+              <Link
+                to="/my-statistics"
+                onClick={() => setIsMobileOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg hover:bg-white"
+              >
+                <img src={StatisticIcon}></img>
+                {!collapsed && (
+                  <span className="font-bold text-slate-dark">
+                    My Statistics
+                  </span>
+                )}
+              </Link>
             </ul>
           </nav>
 
