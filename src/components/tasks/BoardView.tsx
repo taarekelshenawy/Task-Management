@@ -13,16 +13,17 @@ export default function BoardView({ searchValue }: { searchValue: string }) {
   const updateTaskStatusMutation = useUpdateTaskStatus(projectId!, searchValue);
 
   const queries = useGetAllTasks(projectId!, searchValue, limit, offset);
-  const tasksByStatus = {
-    TO_DO: queries[0].data ?? [],
-    IN_PROGRESS: queries[1].data ?? [],
-    BLOCKED: queries[2].data ?? [],
-    IN_REVIEW: queries[3].data ?? [],
-    READY_FOR_QA: queries[4].data ?? [],
-    REOPENED: queries[5].data ?? [],
-    READY_FOR_PRODUCTION: queries[6].data ?? [],
-    DONE: queries[7].data ?? [],
-  };
+
+  const tasksByStatus: Record<Status, any[]> = {
+  TO_DO: queries[0].data ?? [],
+  IN_PROGRESS: queries[1].data ?? [],
+  BLOCKED: queries[2].data ?? [],
+  IN_REVIEW: queries[3].data ?? [],
+  READY_FOR_QA: queries[4].data ?? [],
+  REOPENED: queries[5].data ?? [],
+  READY_FOR_PRODUCTION: queries[6].data ?? [],
+  DONE: queries[7].data ?? [],
+};
 
   const handleDragEnd = async (event: any) => {
     const { active, over } = event;

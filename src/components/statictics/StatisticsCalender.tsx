@@ -1,6 +1,12 @@
 import { format } from 'date-fns';
 
-export default function StatisticsCalender({ item }) {
+type StatisticsCalenderProps = {
+  item: {
+    day: string;
+    statuses: Record<string, number>;
+  };
+};
+export default function StatisticsCalender({ item }:StatisticsCalenderProps) {
   return (
     <div
       key={item.day}
