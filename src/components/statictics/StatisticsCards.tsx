@@ -1,6 +1,6 @@
 import TotalTaskImg from '../../assets/totalTask.png';
 import CompleteTaskImg from '../../assets/completTask.png';
-import OverdueTaskImg from '../../assets/overduetask.png';
+import OverdueTaskImg from '../../assets/overdueIcon.png'
 
 export default function StatisticsCards({ data }) {
   return (
