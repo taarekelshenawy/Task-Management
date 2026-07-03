@@ -46,7 +46,10 @@ export default function Statictics() {
 
   const statuses: Record<string, number> = {};
 
-  data?.daily.forEach((day) => {
+  data?.daily.forEach((day: {
+  day: string;
+  statuses: Record<string, number>;
+}) => {
     Object.entries(day.statuses as Record<string, number>).forEach(([status, count]) => {
       statuses[status] = (statuses[status] || 0) + count;
     });
@@ -146,7 +149,7 @@ export default function Statictics() {
 
       {/* calender */}
       <div className="flex gap-5 items-center">
-        {data?.daily.map((item) => (
+        {data?.daily.map((item: { day: string; statuses: Record<string, number> }) => (
           <StatisticsCalender item={item} />
         ))}
       </div>
