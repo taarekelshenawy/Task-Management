@@ -1,4 +1,13 @@
-export default function ProjectCounts({ project }) {
+type Project = {
+  project_name: string;
+  tasks_count: number;
+};
+
+type ProjectProps = {
+  project: Project;
+};
+
+export default function ProjectCounts({project}:ProjectProps) {
   return (
     <div
       key={project.project_name}

@@ -47,7 +47,7 @@ export default function Statictics() {
   const statuses: Record<string, number> = {};
 
   data?.daily.forEach((day) => {
-    Object.entries(day.statuses).forEach(([status, count]) => {
+    Object.entries(day.statuses as Record<string, number>).forEach(([status, count]) => {
       statuses[status] = (statuses[status] || 0) + count;
     });
   });

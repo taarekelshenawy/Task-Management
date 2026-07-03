@@ -1,5 +1,11 @@
 import { STATUS_COLORS } from '../constants/constants';
-export default function ChartData({ item }) {
+
+type ChartDataProps = {
+  item: {
+    name: string;
+  };
+};
+export default function ChartData({ item }:ChartDataProps) {
   return (
     <div key={item.name} className="flex items-center gap-3">
       <span
