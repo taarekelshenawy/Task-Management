@@ -74,7 +74,7 @@ export default function useUpdateTaskStatus(
       };
     },
 
-    onError: (error, variables, context) => {
+    onError: (_, __, context) => {
       queryClient.setQueryData(
         ['tasks', projectId, context?.oldStatus, searchValue],
         context?.previousOld,
