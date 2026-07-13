@@ -33,10 +33,10 @@ export default function Statictics() {
     initialRange,
   );
   const [startDate, setStartDate] = useState<string>(
-    format(appliedRange.from, 'yyyy-MM-dd'),
+    format(appliedRange.from!, 'yyyy-MM-dd'),
   );
   const [endDate, setEndDate] = useState<string>(
-    format(appliedRange.to, 'yyyy-MM-dd'),
+    format(appliedRange.to!, 'yyyy-MM-dd'),
   );
 
   const { data: projectCounts } = useGetTasksCountPerProject(
