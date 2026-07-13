@@ -133,8 +133,7 @@ type SignUpResponse = {
   access_token: string;
   refresh_token: string;
   expires_at: number;
-  //   user?: any;
-  //   session?: any;
+  msg?: string;
 };
 
 export const registerFunction = async (
@@ -153,9 +152,7 @@ export const registerFunction = async (
     const data: SignUpResponse = await response.json();
 
     if (!response.ok) {
-      throw new Error(
-        (data as any)?.msg || (data as any)?.error || 'Signup failed',
-      );
+      throw new Error(data?.msg);
     }
 
     // // 🟢 save cookies
@@ -176,7 +173,6 @@ export const registerFunction = async (
     if (error instanceof Error) {
       throw error;
     }
-
     throw new Error('Unknown error');
   }
 };

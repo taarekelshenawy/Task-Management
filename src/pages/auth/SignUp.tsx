@@ -24,6 +24,7 @@ export default function SignUp() {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(signUpSchema),
@@ -40,8 +41,10 @@ export default function SignUp() {
       navigate('/project');
     } catch (error) {
       if (error instanceof Error) {
-        toast(error.message);
+        toast.error(error.message);
       }
+      setLoading(false);
+      reset();
     }
   };
 

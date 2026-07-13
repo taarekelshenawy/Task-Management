@@ -7,6 +7,7 @@ export default function useGetTaskStatistics(
   projectId: string | null,
   status: string | null,
 ) {
+  console.log(startDate, endDate);
   return useQuery({
     queryKey: ['task-statistics', startDate, endDate, projectId, status],
 

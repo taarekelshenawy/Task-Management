@@ -6,7 +6,7 @@ type StatisticsCalenderProps = {
     statuses: Record<string, number>;
   };
 };
-export default function StatisticsCalender({ item }:StatisticsCalenderProps) {
+export default function StatisticsCalender({ item }: StatisticsCalenderProps) {
   return (
     <div
       key={item.day}
@@ -25,20 +25,24 @@ export default function StatisticsCalender({ item }:StatisticsCalenderProps) {
 
       {/* Statuses */}
       <div className="space-y-3 p-4">
-        {Object.entries(item.statuses).map(([status, count]) => (
-          <div
-            key={status}
-            className="flex items-center justify-between rounded-lg bg-gray-100 px-3 py-2"
-          >
-            <span className="text-sm font-medium">
-              {status.replaceAll('_', ' ')}
-            </span>
+        {Object.keys(item.statuses).length === 0 ? (
+          <p className="text-center text-gray-500">There are no tasks.</p>
+        ) : (
+          Object.entries(item.statuses).map(([status, count]) => (
+            <div
+              key={status}
+              className="flex items-center justify-between rounded-lg bg-gray-100 px-3 py-2"
+            >
+              <span className="text-sm font-medium">
+                {status.replaceAll('_', ' ')}
+              </span>
 
-            <span className="rounded-full bg-blue-500 px-2 py-0.5 text-xs text-white">
-              {count}
-            </span>
-          </div>
-        ))}
+              <span className="rounded-full bg-blue-500 px-2 py-0.5 text-xs text-white">
+                {count}
+              </span>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

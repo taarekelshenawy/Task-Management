@@ -16,26 +16,33 @@ import StatisticsCards from './StatisticsCards';
 import StatisticsCalender from './StatisticsCalender';
 import ChartData from './ChartData';
 import ProjectCounts from './ProjectCounts';
+import { startOfWeek, endOfWeek } from 'date-fns';
 
 export default function Statictics() {
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+
+  const initialRange: DateRange = {
+    from: startOfWeek(new Date(), { weekStartsOn: 6 }),
+    to: endOfWeek(new Date(), { weekStartsOn: 6 }),
+  };
+
+  const [appliedRange, setAppliedRange] = useState(initialRange);
+  const [draftRange, setDraftRange] = useState<DateRange | undefined>(
+    initialRange,
+  );
+  const [startDate, setStartDate] = useState<string>(
+    format(appliedRange.from, 'yyyy-MM-dd'),
+  );
+  const [endDate, setEndDate] = useState<string>(
+    format(appliedRange.to, 'yyyy-MM-dd'),
+  );
+
   const { data: projectCounts } = useGetTasksCountPerProject(
     startDate,
     endDate,
   );
-
-  const projectOptions = [
-    { value: 'All Projects', label: 'All Projects' },
-    ...(projectCounts?.map((project) => ({
-      value: project.project_name,
-      label: project.project_name,
-    })) ?? []),
-  ];
 
   const { data } = useGetTaskStatistics(
     startDate,
@@ -46,19 +53,27 @@ export default function Statictics() {
 
   const statuses: Record<string, number> = {};
 
-  data?.daily.forEach((day: {
-  day: string;
-  statuses: Record<string, number>;
-}) => {
-    Object.entries(day.statuses as Record<string, number>).forEach(([status, count]) => {
-      statuses[status] = (statuses[status] || 0) + count;
-    });
-  });
+  data?.daily.forEach(
+    (day: { day: string; statuses: Record<string, number> }) => {
+      Object.entries(day.statuses as Record<string, number>).forEach(
+        ([status, count]) => {
+          statuses[status] = (statuses[status] || 0) + count;
+        },
+      );
+    },
+  );
 
   const chartData = Object.entries(statuses).map(([status, count]) => ({
     name: status,
     value: count,
   }));
+  const projectOptions = [
+    { value: 'All Projects', label: 'All Projects' },
+    ...(projectCounts?.map((project) => ({
+      value: project.project_name,
+      label: project.project_name,
+    })) ?? []),
+  ];
 
   const total = chartData.reduce((sum, item) => sum + item.value, 0);
   return (
@@ -72,15 +87,18 @@ export default function Statictics() {
       </div>
       <div className="flex justify-between items-center">
         <div
-          onClick={() => setOpen(!open)}
+          onClick={() => {
+            setOpen(true);
+            setDraftRange(undefined);
+          }}
           className="rounded-md px-4 py-2 cursor-pointer relative"
         >
-          <p className="font-extrabold">
-            {dateRange?.from && dateRange?.to
-              ? `< ${format(dateRange.from, 'MMM dd, yyyy')} - ${format(
-                  dateRange.to,
+          <p className="font-extrabold text-slate-dark">
+            {appliedRange?.from && appliedRange?.to
+              ? `${format(appliedRange.from, 'MMM dd')} - ${format(
+                  appliedRange.to,
                   'MMM dd, yyyy',
-                )} >`
+                )}`
               : 'Select Date Range'}
           </p>
 
@@ -91,30 +109,31 @@ export default function Statictics() {
             >
               <DayPicker
                 mode="range"
-                selected={dateRange}
+                selected={draftRange}
                 onSelect={(range) => {
                   if (!range) return;
 
                   if (range.from && range.to) {
                     const days = differenceInCalendarDays(range.to, range.from);
 
-                    if (days > 6) {
-                      toast.error('You can select a maximum of 7 days');
+                    if (days !== 6) {
+                      toast.error('Please select exactly 7 days');
                       return;
                     }
-                  }
 
-                  setDateRange(range);
+                    setDraftRange(range);
+                    setAppliedRange(range);
 
-                  if (range.from) {
                     setStartDate(format(range.from, 'yyyy-MM-dd'));
+                    setEndDate(format(range.to, 'yyyy-MM-dd'));
+
+                    setOpen(false);
+                    return;
                   }
 
-                  if (range.to) {
-                    setEndDate(format(range.to, 'yyyy-MM-dd'));
-                    setOpen(false);
-                  }
+                  setDraftRange(range);
                 }}
+                min={2}
               />
             </div>
           )}
@@ -149,9 +168,11 @@ export default function Statictics() {
 
       {/* calender */}
       <div className="flex gap-5 items-center">
-        {data?.daily.map((item: { day: string; statuses: Record<string, number> }) => (
-          <StatisticsCalender item={item} />
-        ))}
+        {data?.daily.map(
+          (item: { day: string; statuses: Record<string, number> }) => (
+            <StatisticsCalender item={item} />
+          ),
+        )}
       </div>
 
       <div className="flex items-center justify-between px-8 mt-20">

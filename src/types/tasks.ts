@@ -29,7 +29,7 @@ export type TaskDetailsProps = {
   created_at: string;
 
   assignee: {
-    id:string,
+    id: string;
     name: string;
   };
 

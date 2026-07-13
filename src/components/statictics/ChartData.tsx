@@ -5,7 +5,7 @@ type ChartDataProps = {
     name: string;
   };
 };
-export default function ChartData({ item }:ChartDataProps) {
+export default function ChartData({ item }: ChartDataProps) {
   return (
     <div key={item.name} className="flex items-center gap-3">
       <span

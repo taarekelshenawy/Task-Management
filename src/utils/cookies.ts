@@ -9,7 +9,5 @@ export const isTokenExpired = () => {
 
   if (!expiresAt) return true;
 
-  console.log(expiresAt);
-
   return Date.now() / 1000 > Number(expiresAt);
 };

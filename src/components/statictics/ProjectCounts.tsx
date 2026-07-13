@@ -7,7 +7,7 @@ type ProjectProps = {
   project: Project;
 };
 
-export default function ProjectCounts({project}:ProjectProps) {
+export default function ProjectCounts({ project }: ProjectProps) {
   return (
     <div
       key={project.project_name}
