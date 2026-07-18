@@ -29,7 +29,6 @@ export const getTasksCountPerProject = async (data: {
   p_end_date: string;
 }) => {
   try {
-    console.log(data);
     const response = await apiClient(
       getBaseUrl('/rest/v1/rpc/get_tasks_count_per_project'),
       {

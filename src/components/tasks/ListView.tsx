@@ -17,6 +17,7 @@ export default function ListView({ searchValue }: { searchValue: string }) {
   const [taskId, setTaskId] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
+  const [loading, setLoading] = useState(false);
   const limit = 10;
   const offset = (currentPage - 1) * limit;
 
@@ -24,6 +25,7 @@ export default function ListView({ searchValue }: { searchValue: string }) {
     if (!projectId) return;
     const getTasks = async () => {
       try {
+        setLoading(true);
         const response = await fetchAllTasks(
           projectId,
           limit,
@@ -39,8 +41,10 @@ export default function ListView({ searchValue }: { searchValue: string }) {
 
         setAllTasks(data);
         setContentRange(response.headers.get('Content-Range') || '');
+        setLoading(false);
       } catch (error) {
         console.error('Failed to fetch tasks:', error);
+        setLoading(false);
       }
     };
 
@@ -50,9 +54,10 @@ export default function ListView({ searchValue }: { searchValue: string }) {
   const total = TotalFromContentRange(contentRange);
 
   const totalPages = Math.ceil(total / limit);
+  console.log(allTasks);
 
   // ===== Empty State =====
-  if (allTasks.length === 0) {
+  if (allTasks.length === 0 && !loading) {
     return (
       <Emptystate
         title={searchValue ? 'No tasks found matching your search' : 'No Epics'}

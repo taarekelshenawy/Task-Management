@@ -2,7 +2,7 @@ import inviteIcon from '../../assets/InviteIcon.png';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import BreadCrumb from '../../shared/BreadCrumb';
 import FetchGuard from '../../shared/ProjectMembersLoader';
@@ -20,6 +20,7 @@ export default function AddTask() {
 
   const { data: epicDetails } = useAppSelector((state) => state.epics);
   const { members } = useAppSelector((state) => state.Project);
+  const navigate = useNavigate();
 
   const {
     control,
@@ -53,6 +54,7 @@ export default function AddTask() {
       console.log('Task Created:', response);
 
       toast.success('Task created successfully');
+      navigate(`/project/${projectId}/tasks`);
 
       reset();
     } catch (error) {

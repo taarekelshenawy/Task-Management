@@ -2,22 +2,32 @@ import { STATUS_COLORS } from '../constants/constants';
 
 type ChartDataProps = {
   item: {
+    value: number;
     name: string;
   };
+  total: number;
 };
-export default function ChartData({ item }: ChartDataProps) {
-  return (
-    <div key={item.name} className="flex items-center gap-3">
-      <span
-        className="w-4 h-4 rounded-full"
-        style={{
-          backgroundColor: STATUS_COLORS[item.name] ?? '#CBD5E1',
-        }}
-      />
 
-      <span className="capitalize text-slate-dark">
-        {item.name.replaceAll('_', ' ')}
-      </span>
+export default function ChartData({ item, total }: ChartDataProps) {
+  const perCentage = (item: number) => {
+    const result = (item / total) * 100;
+    return result;
+  };
+  return (
+    <div className="flex flex-col gap-2 ">
+      <div className="flex justify-between">
+        <p>{item.name}</p>
+        <p>{item.value}</p>
+      </div>
+      <div className="w-full relative h-2 bg-gray-300 rounded-2xl">
+        <div
+          className="h-full rounded-full"
+          style={{
+            width: `${perCentage(item.value)}%`,
+            backgroundColor: STATUS_COLORS[item.name],
+          }}
+        />
+      </div>
     </div>
   );
 }

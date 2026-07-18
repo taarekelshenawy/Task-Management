@@ -10,13 +10,14 @@ import useGetTaskStatistics from '../../hooks/useGetTasksStatistics';
 import { differenceInCalendarDays } from 'date-fns';
 import { toast } from 'react-toastify';
 import useGetTasksCountPerProject from '../../hooks/useGetTasksCountPerProject';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell } from 'recharts';
 import { STATUS_COLORS } from '../constants/constants';
 import StatisticsCards from './StatisticsCards';
 import StatisticsCalender from './StatisticsCalender';
-import ChartData from './ChartData';
 import ProjectCounts from './ProjectCounts';
 import { startOfWeek, endOfWeek } from 'date-fns';
+import { ResponsiveContainer } from 'recharts';
+import ChartData from './ChartData';
 
 export default function Statictics() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
@@ -67,6 +68,7 @@ export default function Statictics() {
     name: status,
     value: count,
   }));
+
   const projectOptions = [
     { value: 'All Projects', label: 'All Projects' },
     ...(projectCounts?.map((project) => ({
@@ -76,6 +78,7 @@ export default function Statictics() {
   ];
 
   const total = chartData.reduce((sum, item) => sum + item.value, 0);
+
   return (
     <div className="flex flex-col w-full overflow-hidden p-3 gap-10">
       <ProjectHeader />
@@ -177,14 +180,14 @@ export default function Statictics() {
 
       <div className="flex items-center justify-between px-8 mt-20">
         {/* Left Side */}
-        <div className="flex flex-col">
+        <div className="flex flex-col flex-1">
           <h2 className="text-2xl font-bold text-slate-dark mb-6">
             Tasks by Status
           </h2>
 
           <div className="flex items-center gap-8">
             {/* Pie Chart */}
-            <div className="relative h-64 w-80 flex-shrink-0">
+            <div className="relative h-64 w-80 shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -211,9 +214,9 @@ export default function Statictics() {
             </div>
 
             {/* Status Legend */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 max-w-50 w-full">
               {chartData.map((item) => (
-                <ChartData item={item} />
+                <ChartData item={item} total={total} />
               ))}
             </div>
           </div>

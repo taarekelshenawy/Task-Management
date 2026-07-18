@@ -46,7 +46,7 @@ export default function TaskCard({ task }: { task: TaskProps }) {
 
           {/* Avatar initials */}
           <div className="w-7 h-7 flex items-center justify-center rounded-full bg-primary text-white font-semibold">
-            {getInitials(task.assignee.name)}
+            {task.assignee.name ? getInitials(task.assignee.name) : 'N/A'}
           </div>
         </div>
       </div>

@@ -10,6 +10,9 @@ import { updateTask } from '../../services/taskService';
 import { useParams } from 'react-router-dom';
 import type { TaskDetailsProps } from '../../types/tasks';
 import { STATUS_OPTIONS } from '../constants/constants';
+import { useAppSelector } from '../../store/hooks';
+import ProjectMembersLoader from '../../shared/ProjectMembersLoader';
+import UnassignedIcon from '../../assets/unassigned.svg';
 
 export default function TaskDetails({
   task,
@@ -20,13 +23,17 @@ export default function TaskDetails({
   setOpenModal: (e: boolean) => void;
   setTask: React.Dispatch<React.SetStateAction<TaskDetailsProps | null>>;
 }) {
-  const options = [{ value: task?.assignee.name, label: task?.assignee.name }];
-  const optionsEpic = [
-    { value: task?.epic.epic_id, label: task?.epic.epic_id },
+  const { members } = useAppSelector((state) => state.Project);
+  const options = [
+    { value: null, label: 'Unassigned' },
+    ...members.map((member) => ({
+      value: member.user_id,
+      label: member.metadata.name,
+    })),
   ];
 
   const { projectId } = useParams();
-
+  console.log(task);
   const handleTitleBlur = async (e: React.FocusEvent<HTMLInputElement>) => {
     const newTitle = e.target.value.trim();
     if (!newTitle) {
@@ -51,6 +58,7 @@ export default function TaskDetails({
   const queryClient = useQueryClient();
   return (
     <>
+      <ProjectMembersLoader projectId={projectId!} />
       <form className="flex md:max-w-4xl w-full bg-white">
         <div className="flex-2 p-7">
           {/* MOBILE HEADER */}
@@ -74,24 +82,11 @@ export default function TaskDetails({
               </p>
               <div className="flex items-center">
                 <img src={epicIcon} />
-                <div className="ml-2 flex  items-center gap-2">
-                  <Select
-                    options={optionsEpic}
-                    value={optionsEpic.find(
-                      (option) => option.value === task.epic?.epic_id,
-                    )}
-                    onChange={(selected) => {
-                      if (!selected?.value) return;
-                      handleTaskUpdate(
-                        task.id,
-                        setTask,
-                        selected.value,
-                        'epic_id',
-                      );
-                    }}
-                  />
 
-                  <p>({task.epic.title})</p>
+                <div className="ml-2 flex  items-center ">
+                  <p>{task.epic.epic_id}</p>
+
+                  <p>({task.title})</p>
                 </div>
               </div>
             </div>
@@ -99,7 +94,7 @@ export default function TaskDetails({
             <input
               defaultValue={task.title}
               onBlur={handleTitleBlur}
-              className="font-bold text-3xl mt-3 max-sm:text-2xl outline-none hover:border-b"
+              className="font-bold text-3xl mt-4 max-sm:text-2xl outline-none hover:border-b"
               required
             />
           </div>
@@ -109,10 +104,7 @@ export default function TaskDetails({
             <div className="p-2 bg-surface-low flex flex-col gap-2">
               <p className="font-bold">Assignee</p>
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-surface-high flex items-center justify-center">
-                  {getInitials(task.assignee.name)}
-                </div>
-                <p className="text-sm">{task?.assignee?.name}</p>
+                <p className="text-sm">{task.assignee?.name || ''}</p>
               </div>
             </div>
 
@@ -130,7 +122,7 @@ export default function TaskDetails({
             {/* Reporter */}
             <div className="p-2 bg-surface-low flex flex-col gap-2">
               <p className="font-bold">Reporter</p>
-              <p className="text-sm">{task?.assignee?.name}</p>
+              <p className="text-sm">{task.assignee?.name || ''}</p>
             </div>
 
             {/* Created At */}
@@ -145,13 +137,18 @@ export default function TaskDetails({
           <div className={`flex flex-col gap-4 max-sm:mt-6 mt-16`}>
             <h3 className="font-bold text-secondary">Description</h3>
             <textarea
-              className="px-4 py-2"
-              defaultValue={task.description}
+              className="px-2 py-2 font-bold text-slate-dark"
+              defaultValue={
+                task.description === null
+                  ? 'No description provided'
+                  : task.description
+              }
               onBlur={(e) => {
-                const newDescription = e.target.value;
+                let newDescription = e.target.value || null;
 
-                if (!newDescription || newDescription === task.description)
-                  return;
+                if (!newDescription) {
+                  newDescription = null;
+                }
 
                 handleTaskUpdate(
                   task.id,
@@ -168,11 +165,11 @@ export default function TaskDetails({
           <div className="mt-32 flex justify-between ">
             <div className="flex items-center gap-2">
               <img src={copyIcon} />
-              <p>Copy link</p>
+              <p className="font-bold text-secondary">Copy link</p>
             </div>
             <button
               onClick={() => setOpenModal(false)}
-              className="bg-surface-high w-18 h-7 cursor-pointer"
+              className="bg-surface-high w-18 h-9 cursor-pointer rounded"
             >
               close
             </button>
@@ -183,7 +180,9 @@ export default function TaskDetails({
 
         <div className="bg-slate-lighter flex-1 p-7 flex flex-col gap-7">
           <div className="flex flex-col gap-5">
-            <label htmlFor="status">Status</label>
+            <label htmlFor="status" className="font-bold">
+              Status
+            </label>
 
             <Select
               value={{
@@ -202,41 +201,61 @@ export default function TaskDetails({
             />
           </div>
 
-          {task?.assignee?.name ? (
-            <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-surface-high flex items-center justify-center">
-                {getInitials(task?.assignee?.name)}
-              </div>
+          <div className="flex flex-col gap-4">
+            <p className="font-bold">Assignee</p>
+
+            <div className="flex items-center gap-3 bg-white p-2 rounded-lg">
+              {!task.assignee?.id ? (
+                <div className="w-6 h-6 rounded-full bg-surface-high flex items-center justify-center">
+                  <img
+                    src={UnassignedIcon}
+                    alt="Unassigned"
+                    className="w-3 h-3"
+                  />
+                </div>
+              ) : (
+                <div className="w-7 h-7 rounded-xl bg-surface-high flex items-center justify-center text-[11px] font-bold">
+                  {getInitials(task.assignee.name)}
+                </div>
+              )}
 
               <Select
+                className="w-full border-none"
+                styles={{
+                  control: (base) => ({
+                    ...base,
+                    border: 'none',
+                    boxShadow: 'none',
+                  }),
+                }}
                 options={options}
                 value={options.find(
-                  (option) => option.value === task.assignee?.id,
+                  (option) => option.value === (task.assignee?.id ?? null),
                 )}
                 onChange={(selected) => {
-                  if (!selected?.value) return;
-
                   handleTaskUpdate(
                     task.id,
                     setTask,
-                    selected.value,
+                    selected!.value || null,
                     'assignee_id',
+                    members,
                   );
+                  queryClient.invalidateQueries({
+                    queryKey: ['tasks', projectId],
+                  });
                 }}
               />
             </div>
-          ) : (
-            <p className="text-sm">Unassigned</p>
-          )}
+          </div>
 
           <div className="flex flex-col gap-4">
             <p>Reporter</p>
             <div className="flex items-center gap-3">
-              <div className="w-7 h-7 rounded-full bg-surface-high flex justify-center items-center">
-                {getInitials(`${task?.assignee?.name}`)}
+              <div className="w-7 h-7 rounded-xl bg-surface-high flex items-center justify-center text-[11px] font-bold">
+                {getInitials(`${task?.created_by?.name || ''}`)}
               </div>
               <div>
-                <p>{task?.assignee?.name}</p>
+                <p>{task?.created_by?.name}</p>
               </div>
             </div>
           </div>

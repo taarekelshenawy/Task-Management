@@ -8,7 +8,6 @@ export default function ProtectedRoute({
   children: React.ReactNode;
 }) {
   const token = getAccessToken();
-  console.log(token);
   const navigate = useNavigate();
 
   useEffect(() => {

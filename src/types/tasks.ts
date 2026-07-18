@@ -27,6 +27,9 @@ export type TaskDetailsProps = {
   status: string;
   due_date: string | null;
   created_at: string;
+  created_by: {
+    name: string;
+  };
 
   assignee: {
     id: string;
