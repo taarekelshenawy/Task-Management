@@ -31,10 +31,10 @@ export type TaskDetailsProps = {
     name: string;
   };
 
-  assignee: {
+    assignee: {
     id: string;
     name: string;
-  };
+  } | null;
 
   epic: {
     id: string;
