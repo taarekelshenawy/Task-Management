@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { registerFunction } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 type Inputs = {
   email: string;
@@ -225,12 +226,12 @@ export default function SignUp() {
         {/* LOGIN LINK */}
         <p className="text-center text-sm text-gray-600 mt-8">
           Already have an account?{' '}
-          <a
-            href="/login"
+          <Link
+            to='/login'
             className="text-blue-600 font-medium hover:underline"
           >
             Log in
-          </a>
+          </Link>
         </p>
       </form>
     </>

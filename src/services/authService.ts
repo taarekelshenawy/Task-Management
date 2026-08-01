@@ -31,6 +31,7 @@ export const loginFunction = async (
     );
 
     const result: LoginResponse = await response.json();
+    console.log(result)
 
     if (!response.ok) {
       throw new Error((result as any)?.msg || 'Login failed');
@@ -44,8 +45,10 @@ export const loginFunction = async (
     Cookies.set('refresh_token', result.refresh_token, {
       expires: rememberMe ? 30 : 1,
     });
+   
 
-    Cookies.set('expires_at', result.expires_at.toString());
+    Cookies.set('token_exp', result.expires_at.toString());
+
 
     return result;
   } catch (error) {
