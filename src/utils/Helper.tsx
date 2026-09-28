@@ -44,7 +44,6 @@ export async function handleTaskUpdate(
     });
 
     setTask((prev) => {
-      
       if (!prev) return prev;
 
       if (field === 'assignee_id') {

@@ -34,7 +34,7 @@ export default function DetailsModal({
     assignee_id: '',
     deadline: '',
   });
-  console.log(updatedData)
+  console.log(updatedData);
 
   useEffect(() => {
     if (!projectId) return;

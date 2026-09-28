@@ -6,7 +6,7 @@ export const getAccessToken = () => {
 
 export const isTokenExpired = () => {
   const expiresAt = Cookies.get('token_exp');
-  console.log('expired',expiresAt)
+  console.log('expired', expiresAt);
 
   if (!expiresAt) return true;
 

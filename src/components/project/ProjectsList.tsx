@@ -6,6 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import Skeleton from '../ui/Skelton';
 import Emptystate from '../ui/Emptystate';
 import type { projectListProps } from '../../types/project';
+import dropDownIcon from '../../assets/dropDownIcon.png';
 
 export default function ProjectsList() {
   const location = useLocation();
@@ -154,10 +155,10 @@ export default function ProjectsList() {
               </p>
             </div>
 
-            <button className="flex items-center gap-2 bg-primary w-45 h-11 justify-center text-white">
+            <button className="flex items-center  gap-2 bg-linear-to-br  from-[#003D9B] to-[#0052CC] w-45 h-11 rounded-xs justify-center text-white">
               <Link to="add">
                 {' '}
-                <span className="font-bold">+ Create New Project</span>
+                <span className="font-medium">+ Create New Project</span>
               </Link>
             </button>
           </section>
@@ -172,7 +173,7 @@ export default function ProjectsList() {
               <Skeleton count={3} />
             </>
           ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-10 max-sm:grid-cols-1">
               {projects.map((project) => (
                 <Link to={`/project/${project.id}/epics`}>
                   <div
@@ -180,31 +181,39 @@ export default function ProjectsList() {
                     className="bg-white max-w-76 max-h-80 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
                   >
                     <div>
-                      <h3 className="text-lg font-semibold text-slate-800 mb-2">
-                        {project.name}
-                      </h3>
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                          {project.name}
+                        </h3>
+                        <Link to={`/project/${project.id}/edit`}>
+                          <div className="relative group inline-block">
+                            <img
+                              src={dropDownIcon}
+                              alt="dropdownIcon"
+                              className="cursor-pointer"
+                            />
+
+                            <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block bg-gray-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap shadow-md">
+                              Edit
+                            </span>
+                          </div>
+                        </Link>
+                      </div>
 
                       <p className="text-sm text-slate-600 font-bold">
                         {project.description || 'No description provided'}
                       </p>
                     </div>
 
-                    <div className="pt-4 flex justify-between">
-                      <p className="text-xs text-slate-500">Created at</p>
-
-                      <time className="text-sm font-medium text-slate-700">
-                        {formatDate(project.created_at)}
-                      </time>
-                    </div>
-
-                    <div className="flex justify-end mt-4">
-                      <Link
-                        to={`/project/${project.id}/edit`}
-                        onClick={(e) => e.stopPropagation()}
-                        className="max-w-20 px-4 py-2 rounded-lg bg-amber-500 text-white text-sm font-medium hover:bg-amber-600 transition-all duration-200 shadow-sm"
-                      >
-                        Edit
-                      </Link>
+                    <div className="pt-4 flex justify-between items-center">
+                      <p className="text-xs text-slate-500 font-bold">
+                        CREATED AT
+                      </p>
+                      <div>
+                        <time className="text-xs text-slate-700 font-bold">
+                          <p>{formatDate(project.created_at)}</p>
+                        </time>
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -238,9 +247,9 @@ export default function ProjectsList() {
               <button
                 onClick={() => setCurrentPage((p) => p - 1)}
                 disabled={currentPage === 1}
-                className="w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer disabled:opacity-40"
+                className="w-8 h-8 border border-status-todo/30 flex justify-center items-center cursor-pointer disabled:opacity-40"
               >
-                <img src={arrowLeft} className="w-1 h-2" />
+                <img src={arrowLeft} className="w-1 h-2 " />
               </button>
 
               {/* Page Numbers */}
@@ -251,7 +260,7 @@ export default function ProjectsList() {
                   <button
                     key={page}
                     onClick={() => setCurrentPage(page)}
-                    className={`w-8 h-8 border flex justify-center items-center cursor-pointer transition ${
+                    className={`w-8 h-8 border  border-status-todo/30 flex justify-center items-center cursor-pointer transition ${
                       currentPage === page
                         ? 'bg-primary text-white'
                         : 'hover:bg-gray-100'
@@ -266,7 +275,7 @@ export default function ProjectsList() {
               <button
                 onClick={() => setCurrentPage((p) => p + 1)}
                 disabled={currentPage === totalPages}
-                className="w-8 h-8 border border-slate-light flex justify-center items-center cursor-pointer disabled:opacity-40"
+                className="w-8 h-8 border border-status-todo/30 flex justify-center items-center cursor-pointer disabled:opacity-40"
               >
                 <img src={arrowRight} className="w-1 h-2" />
               </button>
