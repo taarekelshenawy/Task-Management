@@ -5,13 +5,15 @@ import Emptystate from '../ui/Emptystate';
 import { Link } from 'react-router-dom';
 import DetailsModal from './DetailsModal';
 import BreadCrumb from '../../shared/BreadCrumb';
-import { getInitials } from '../../utils/Helper';
 import { useRef } from 'react';
 import { getProjectEpics } from '../../store/epicsSlice';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import SearchEpics from './SearchEpics';
 import Pagination from '../../shared/Pagination';
-import { formatDate } from '../../utils/Helper';
+import dropDown from '../../assets/dropDownIcon.png';
+import createIcon from '../../assets/createdIcon.png';
+import dateIcon from '../../assets/dateIcon.png';
+import { getInitials } from '../../utils/Helper';
 
 export default function EpicsList() {
   const [loading, setLoading] = useState(false);
@@ -146,7 +148,7 @@ export default function EpicsList() {
   const pageItemsCount = end - start + 1;
 
   return (
-    <div className="p-7 flex flex-col gap-12">
+    <div className="p-7 flex flex-col gap-5">
       <BreadCrumb
         items={[
           { label: 'PROJECTS', href: '/project' },
@@ -166,7 +168,7 @@ export default function EpicsList() {
         </div>
 
         <Link to={`/project/${projectId}/epics/create`}>
-          <button className="flex items-center gap-2 cursor-pointer bg-primary w-45 h-11 justify-center text-white">
+          <button className="flex items-center gap-2 bg-linear-to-br  from-[#003D9B] to-[#0052CC] cursor-pointer rounded-xs bg-primary w-45 h-11 justify-center text-white">
             + Create New Epic
           </button>
         </Link>
@@ -181,7 +183,7 @@ export default function EpicsList() {
       {loading ? (
         <Skeleton count={3} />
       ) : (
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 mt-14 max-sm:grid-cols-1">
+        <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
           {epics.map((epic) => {
             return (
               <div
@@ -189,39 +191,68 @@ export default function EpicsList() {
                   return (setOpenModal(true), setEpicId(epic.id));
                 }}
                 key={epic.id}
-                className="bg-white cursor-pointer rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
+                className="border-l-4 border-darkGreen p-3.5 flex flex-col gap-4"
+                // className="bg-white cursor-pointer rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
               >
                 {/* TOP */}
                 <div className="flex flex-col gap-4">
-                  <div className="text-xs text-gray-500 font-bold bg-success p-1 w-fit px-2 rounded">
-                    {epic.epic_id}
-                  </div>
-                  <p className="text-sm text-slate-600 font-bold">
-                    {epic.title || 'No description'}
-                  </p>
-                  <p className="text-sm text-slate-600 font-bold">
-                    {epic.description || 'No description'}
-                  </p>
+                  <div className="flex justify-between items-center">
+                    <div className="w-17 h-6 bg-success flex justify-center items-center">
+                      <p className="font-bold text-[10px] text-success-text">
+                        {epic.epic_id}
+                      </p>
+                    </div>
 
-                  {/* Assignee */}
-                  <div className="flex items-center gap-2 text-sm">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-[#65DCA4] text-white text-xs flex items-center justify-center rounded-md font-bold">
-                        {getInitials(epic.assignee?.name)}
-                      </div>
-
-                      <span>{epic.assignee?.name}</span>
+                    <div>
+                      <img src={dropDown} alt="dropdownIcon"></img>
                     </div>
                   </div>
-                </div>
 
-                {/* BOTTOM */}
-                <div className="pt-4 flex justify-between">
-                  <p className="text-xs text-slate-500">Created at</p>
+                  <div>
+                    <h2 className="font-semibold text-xl">{epic.title}</h2>
 
-                  <time className="text-sm font-medium text-slate-700">
-                    {formatDate(epic.created_at)}
-                  </time>
+                    {epic.description && (
+                      <p className="text-sm text-secondary/80 mt-1">
+                        {epic.description}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex gap-4 items-center">
+                    <div className="w-10 h-10 rounded-xl bg-mint-green flex justify-center items-center">
+                      <p className="text-success-text font-bold">
+                        {getInitials(epic.assignee.name)}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <p className="text-[12px]">Assignee</p>
+                      <p className="font-semibold text-sm">
+                        {epic.assignee.name}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <div className="flex gap-2 items-center">
+                      <img src={createIcon} alt="created-icon"></img>
+
+                      <p className="font-medium text-secondary/80">
+                        Created by:{' '}
+                        <span className="text-slate-dark">
+                          {epic.created_by.name}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="flex gap-2 items-center">
+                      <img src={dateIcon} alt="date-icon"></img>
+
+                      <p className="text-secondary/80 text-[11px] font-medium">
+                        {epic.deadline}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             );

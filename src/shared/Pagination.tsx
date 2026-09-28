@@ -23,11 +23,11 @@ export default function Pagination({
         Showing {pageItemsCount} of {totalItems} active projects
       </p>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 ">
         <button
           onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
-          className="w-8 h-8 border flex items-center justify-center"
+          className="w-8 h-8 border cursor-pointer flex items-center justify-center border-status-todo/30 "
         >
           <img src={arrowLeft} className="w-1 h-2" />
         </button>
@@ -41,7 +41,7 @@ export default function Pagination({
                 setCurrentPage(page);
               }
             }}
-            className={`w-8 h-8 border flex items-center justify-center ${
+            className={`w-8 h-8 border cursor-pointer border-status-todo/30  flex items-center justify-center ${
               currentPage === page ? 'bg-blue-800 text-white' : ''
             }`}
           >
@@ -52,7 +52,7 @@ export default function Pagination({
         <button
           disabled={currentPage === totalPages}
           onClick={() => setCurrentPage(currentPage + 1)}
-          className="w-8 h-8 border flex items-center justify-center"
+          className="w-8 h-8 border cursor-pointer border-status-todo/30  flex items-center justify-center"
         >
           <img src={arrowRight} className="w-1 h-2" />
         </button>
