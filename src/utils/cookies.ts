@@ -6,8 +6,6 @@ export const getAccessToken = () => {
 
 export const isTokenExpired = () => {
   const expiresAt = Cookies.get('token_exp');
-  console.log('expired', expiresAt);
-
   if (!expiresAt) return true;
 
   return Date.now() / 1000 > Number(expiresAt);

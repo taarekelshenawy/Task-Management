@@ -26,6 +26,7 @@ export const apiClient = async (url: string, options: RequestInit = {}) => {
       ...options,
       headers: {
         ...options.headers,
+        apikey: import.meta.env.VITE_API_KEY,
         Authorization: `Bearer ${accessToken}`,
       },
     });

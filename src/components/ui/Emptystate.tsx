@@ -14,7 +14,7 @@ export default function Emptystate({
   buttonText,
 }: EmptyStateProps) {
   return (
-    <div className="flex flex-col justify-center items-center gap-5">
+    <div className="flex flex-col justify-center items-center gap-5 mt-16">
       <div className="max-w-75 text-center flex flex-col gap-5">
         <img src={EmptyIcon} className="max-w-[288px]" />
         <h1 className="font-bold text-2xl">{title}</h1>

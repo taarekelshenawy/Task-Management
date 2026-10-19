@@ -15,7 +15,7 @@ export default function TasksHeader({
   const navigate = useNavigate();
   const { projectId } = useParams();
   return (
-    <div className="flex items-center justify-between mb-6 max-sm:flex-wrap gap-5 mt-8">
+    <div className="flex items-center justify-between mb-4 max-sm:flex-wrap gap-5 mt-6">
       <div>
         <h1 className="font-bold text-3xl">Active Workboard</h1>
         <p className="text-[#64748B] max-sm:hidden">
@@ -25,7 +25,7 @@ export default function TasksHeader({
       <input
         onChange={(e) => setSearchValue(e.target.value)}
         placeholder="Search tasks..."
-        className="border rounded px-3 py-2 w-64 bg-surface-high max-sm:w-full"
+        className="rounded-sm px-3 py-2 text-accent font-normal max-w-64 w-full bg-surface-high max-sm:w-full outline-none"
       />
 
       <button className="hidden max-sm:block w-full h-12 bg-primary text-white font-bold rounded text-lg">

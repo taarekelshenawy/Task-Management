@@ -18,6 +18,7 @@ export default function ListView({ searchValue }: { searchValue: string }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [contentRange, setContentRange] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const limit = 10;
   const offset = (currentPage - 1) * limit;
 
@@ -44,6 +45,10 @@ export default function ListView({ searchValue }: { searchValue: string }) {
         setLoading(false);
       } catch (error) {
         console.error('Failed to fetch tasks:', error);
+        if (error instanceof Error) {
+          setError(error?.message);
+        }
+
         setLoading(false);
       }
     };
@@ -57,18 +62,56 @@ export default function ListView({ searchValue }: { searchValue: string }) {
   console.log(allTasks);
 
   // ===== Empty State =====
-  if (allTasks.length === 0 && !loading) {
+  if (allTasks.length === 0 && !loading && !error) {
     return (
       <Emptystate
-        title={searchValue ? 'No tasks found matching your search' : 'No Epics'}
+        title={searchValue ? 'No tasks found matching your search' : 'No Tasks'}
         description={
           searchValue
             ? 'Try a different search term'
-            : 'You don’t have any epics yet. Start by creating your first epic.'
+            : 'You don’t have any epics yet. Start by creating your first task.'
         }
         buttonText="+ Create New Task"
         link={`/project/${projectId}/tasks/new`}
       />
+    );
+  }
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 text-center min-h-[250px] bg-slate-50 rounded-2xl border border-slate-200 shadow-sm my-4">
+        <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mb-3">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+        </div>
+
+        <h3 className="text-base font-semibold text-slate-800 mb-1">
+          تعذر تحميل البيانات
+        </h3>
+
+        <p className="text-sm text-slate-500 max-w-sm mb-4">
+          يبدو أن هناك مشكلة في الاتصال بالإنترنت أو الخادم. يرجى التحقق من
+          الشبكة والمحاولة مرة أخرى.
+        </p>
+
+        <button
+          onClick={() => window.location.reload()} // أو ممكن تستبدلها بدالة الـ refetch لو متاحفة
+          className="px-4 py-2 text-sm font-medium text-white bg-slate-800 hover:bg-slate-700 transition-colors rounded-xl shadow-sm"
+        >
+          إعادة المحاولة
+        </button>
+      </div>
     );
   }
 
@@ -112,7 +155,7 @@ export default function ListView({ searchValue }: { searchValue: string }) {
                     <div className="w-7 h-7 rounded-full bg-surface-high flex items-center justify-center">
                       {getInitials(el.assignee.name)}
                     </div>
-                    <p>{el.assignee.name}</p>
+                    <p>{el.assignee.name ? el.assignee.name : 'unAsssigned'}</p>
                   </div>
                 </td>
                 <td className="py-4">
@@ -123,20 +166,24 @@ export default function ListView({ searchValue }: { searchValue: string }) {
           })}
         </tbody>
 
-        <tfoot>
-          <tr>
-            <td colSpan={6}>
-              {/* Pagination UI only */}
-              <Pagination
-                pageItemsCount={allTasks.length}
-                totalItems={total}
-                currentPage={currentPage}
-                totalPages={totalPages}
-                setCurrentPage={setCurrentPage}
-              />
-            </td>
-          </tr>
-        </tfoot>
+        {allTasks.length <= limit ? (
+          <></>
+        ) : (
+          <tfoot>
+            <tr>
+              <td colSpan={6}>
+                {/* Pagination UI only */}
+                <Pagination
+                  pageItemsCount={allTasks.length}
+                  totalItems={total}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  setCurrentPage={setCurrentPage}
+                />
+              </td>
+            </tr>
+          </tfoot>
+        )}
       </table>
 
       <div className="flex justify-end mt-80">

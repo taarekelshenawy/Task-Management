@@ -1,5 +1,5 @@
 export function getInitials(name: string): string {
-  if (!name) return '';
+  if (!name) return 'UN';
 
   const words = name.trim().split(' ').filter(Boolean);
 

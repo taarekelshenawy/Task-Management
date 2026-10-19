@@ -126,7 +126,7 @@ export default function EpicsList() {
   if (!loading && epics.length === 0) {
     return (
       <Emptystate
-        title={searchValue ? 'No epics found matching your search' : 'No Epics'}
+        title={searchValue ? 'No epics found matching your search' : ''}
         description={
           searchValue
             ? 'Try a different search term'
