@@ -1,7 +1,7 @@
 import StatusColumn from './StatusColumn';
 import { DndContext } from '@dnd-kit/core';
 import { useParams } from 'react-router-dom';
-import { STATUSES } from '../constants/constants';
+import { STATUSES } from '../../constants/constants';
 import useGetAllTasks from '../../hooks/useGetAllTasks';
 import useUpdateTaskStatus from '../../hooks/useUpdateTaskStatus';
 

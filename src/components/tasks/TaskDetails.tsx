@@ -9,7 +9,7 @@ import { getInitials } from '../../utils/Helper';
 import { updateTask } from '../../services/taskService';
 import { useParams } from 'react-router-dom';
 import type { TaskDetailsProps } from '../../types/tasks';
-import { STATUS_OPTIONS } from '../constants/constants';
+import { STATUS_OPTIONS } from '../../constants/constants';
 import { useAppSelector } from '../../store/hooks';
 import ProjectMembersLoader from '../../shared/ProjectMembersLoader';
 import UnassignedIcon from '../../assets/unassigned.svg';

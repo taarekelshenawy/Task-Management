@@ -5,24 +5,24 @@ import 'react-day-picker/style.css';
 import { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { format } from 'date-fns';
-import { statisticStatusOptions } from '../constants/constants';
+import { statisticStatusOptions } from '../../constants/constants';
 import useGetTaskStatistics from '../../hooks/useGetTasksStatistics';
 import { differenceInCalendarDays } from 'date-fns';
 import { toast } from 'react-toastify';
 import useGetTasksCountPerProject from '../../hooks/useGetTasksCountPerProject';
 import { PieChart, Pie, Cell } from 'recharts';
-import { STATUS_COLORS } from '../constants/constants';
 import StatisticsCards from './StatisticsCards';
 import StatisticsCalender from './StatisticsCalender';
 import ProjectCounts from './ProjectCounts';
 import { startOfWeek, endOfWeek } from 'date-fns';
 import { ResponsiveContainer } from 'recharts';
 import ChartData from './ChartData';
+import { STATUS_COLORS_Charts } from '../../constants/constants';
 
 export default function Statictics() {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
-  const [open, setOpen] = useState(false);
+  const [openCalender, setOpenCalender] = useState(false);
 
   const initialRange: DateRange = {
     from: startOfWeek(new Date(), { weekStartsOn: 6 }),
@@ -88,15 +88,15 @@ export default function Statictics() {
           Manage your deadlines and track team velocity.
         </p>
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center bg-surface-low p-4 rounded-lg max-sm:flex-col max-sm:gap-2 max-sm:items-start">
         <div
           onClick={() => {
-            setOpen(true);
+            setOpenCalender(!openCalender);
             setDraftRange(undefined);
           }}
           className="rounded-md px-4 py-2 cursor-pointer relative"
         >
-          <p className="font-extrabold text-slate-dark">
+          <p className="font-extrabold text-slate-dark text-sm">
             {appliedRange?.from && appliedRange?.to
               ? `${format(appliedRange.from, 'MMM dd')} - ${format(
                   appliedRange.to,
@@ -105,9 +105,9 @@ export default function Statictics() {
               : 'Select Date Range'}
           </p>
 
-          {open && (
+          {openCalender && (
             <div
-              className="absolute top-14 p-3 bg-white"
+              className="absolute top-14  bg-white"
               onClick={(e) => e.stopPropagation()}
             >
               <DayPicker
@@ -130,7 +130,7 @@ export default function Statictics() {
                     setStartDate(format(range.from, 'yyyy-MM-dd'));
                     setEndDate(format(range.to, 'yyyy-MM-dd'));
 
-                    setOpen(false);
+                    setOpenCalender(false);
                     return;
                   }
 
@@ -200,7 +200,7 @@ export default function Statictics() {
                     {chartData.map((entry) => (
                       <Cell
                         key={entry.name}
-                        fill={STATUS_COLORS[entry.name] ?? '#CBD5E1'}
+                        fill={STATUS_COLORS_Charts[entry.name] ?? '#CBD5E1'}
                       />
                     ))}
                   </Pie>

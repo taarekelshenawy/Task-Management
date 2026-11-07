@@ -1,4 +1,5 @@
-import { STATUS_COLORS } from '../constants/constants';
+// import { STATUS_COLORS } from '../../constants/constants';
+import { statusColor } from '../../constants/constants';
 
 type ChartDataProps = {
   item: {
@@ -24,7 +25,7 @@ export default function ChartData({ item, total }: ChartDataProps) {
           className="h-full rounded-full"
           style={{
             width: `${perCentage(item.value)}%`,
-            backgroundColor: STATUS_COLORS[item.name],
+            backgroundColor: statusColor[item.name],
           }}
         />
       </div>

@@ -2,7 +2,7 @@ import TaskCard from './TaskCard';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { TaskProps } from '../../types/tasks';
 import { Link } from 'react-router-dom';
-import { statusColor } from '../constants/constants';
+import { statusColor } from '../../constants/constants';
 import { useDroppable } from '@dnd-kit/core';
 
 type StatusColumnProps = {

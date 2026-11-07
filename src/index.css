@@ -32,6 +32,8 @@
   --error-background: #ffdad6;
   --warning: #ffb300;
   --mint-green: #65dca4;
+    --brand-blue-light:#0052CC1A;
+  --brand-green-light: #006844;
 
   /* shadow */
   --app-shadow: 0 1px 2px 0px #0000000d;
@@ -42,6 +44,7 @@
   --status-in-progress: #003d9b;
   --status-blocked: #ba1a1a;
   --status-default: #4f5f7b;
+
 }
 
 /*^-------------------------- tailwind theme --------------------------- */
@@ -62,22 +65,27 @@
   --color-slate-md: var(--slate-md);
   --color-slate-light: var(--slate-light);
   --color-slate-lighter: var(--slate-lighter);
-  --color-slate-grey: var(--slate-grey) /* Semantic Colors */
-    --color-success: var(--success);
+  --color-slate-grey: var(--slate-grey);
+   /* Semantic Colors */
+  --color-success: var(--success);
   --color-success-text: var(--success-text);
   --color-error: var(--error);
   --color-error-dark: var(--error-dark);
   --color-error-background: var(--error-background);
   --color-warning: var(--warning);
+  --color-brand-blue-light:var(--brand-blue-light);
+  --color-brand-green-light:var(--brand-green-light);
+
 
   /* shadow */
   --shadow-form: var(--form-shadow);
 
-  --color-status-todo: #c3c6d6;
-  --color-status-in-progress: #003d9b;
-  --color-status-blocked: #ba1a1a;
-  --color-status-default: #4f5f7b;
+  --color-status-todo: var(--status-todo);
+  --color-status-in-progress:var(--status-in-progress);
+  --color-status-blocked:var(--status-blocked);
+  --color-status-default:var(--status-default);
   --color-mint-green: #65dca4;
+ 
 }
 
 body {

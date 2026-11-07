@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { STATUS_COLORS_Charts } from '../../constants/constants';
 
 type StatisticsCalenderProps = {
   item: {
@@ -7,10 +8,11 @@ type StatisticsCalenderProps = {
   };
 };
 export default function StatisticsCalender({ item }: StatisticsCalenderProps) {
+  
   return (
     <div
       key={item.day}
-      className="w-52 min-h-96 rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
+      className=" min-h-96 rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
     >
       {/* Header */}
       <div className="p-4">
@@ -31,13 +33,13 @@ export default function StatisticsCalender({ item }: StatisticsCalenderProps) {
           Object.entries(item.statuses).map(([status, count]) => (
             <div
               key={status}
-              className="flex items-center justify-between rounded-lg bg-gray-100 px-3 py-2"
+              className={`flex items-start gap-2 justify-between rounded-lg bg-gray-100 px-3 py-2`}
             >
-              <span className="text-sm font-medium">
+              <span className={`text-sm font-bold`} style={{color:STATUS_COLORS_Charts[status]}}>
                 {status.replaceAll('_', ' ')}
               </span>
 
-              <span className="rounded-full bg-blue-500 px-2 py-0.5 text-xs text-white">
+              <span className="rounded-full  px-2 py-0.5 text-xs text-slate-dark font-bold">
                 {count}
               </span>
             </div>

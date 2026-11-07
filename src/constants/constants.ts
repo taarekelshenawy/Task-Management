@@ -9,7 +9,7 @@ export const STATUSES = [
   'DONE',
 ];
 
-export const statusColor = {
+export const statusColor:Record<string, string> = {
   TO_DO: 'bg-status-todo',
   IN_PROGRESS: 'bg-status-in-progress',
   BLOCKED: 'bg-status-blocked',
@@ -45,9 +45,9 @@ export const statisticStatusOptions = [
   { value: 'DONE', label: 'DONE' },
 ];
 
-export const STATUS_COLORS: Record<string, string> = {
+export const STATUS_COLORS_Charts: Record<string, string> = {
   TO_DO: '#3B82F6',
-  IN_PROGRESS: '#F59E0B',
+  IN_PROGRESS: '#003d9b',
   DONE: '#22C55E',
   OVERDUE: '#EF4444',
 };

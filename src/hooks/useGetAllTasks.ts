@@ -1,5 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
-import { STATUSES } from '../components/constants/constants';
+import { STATUSES } from '../constants/constants';
 import { fetchTasks } from '../services/taskService';
 
 export default function useGetAllTasks(
