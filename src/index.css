@@ -32,7 +32,7 @@
   --error-background: #ffdad6;
   --warning: #ffb300;
   --mint-green: #65dca4;
-    --brand-blue-light:#0052CC1A;
+  --brand-blue-light: #0052cc1a;
   --brand-green-light: #006844;
 
   /* shadow */
@@ -44,7 +44,6 @@
   --status-in-progress: #003d9b;
   --status-blocked: #ba1a1a;
   --status-default: #4f5f7b;
-
 }
 
 /*^-------------------------- tailwind theme --------------------------- */
@@ -66,26 +65,24 @@
   --color-slate-light: var(--slate-light);
   --color-slate-lighter: var(--slate-lighter);
   --color-slate-grey: var(--slate-grey);
-   /* Semantic Colors */
+  /* Semantic Colors */
   --color-success: var(--success);
   --color-success-text: var(--success-text);
   --color-error: var(--error);
   --color-error-dark: var(--error-dark);
   --color-error-background: var(--error-background);
   --color-warning: var(--warning);
-  --color-brand-blue-light:var(--brand-blue-light);
-  --color-brand-green-light:var(--brand-green-light);
-
+  --color-brand-blue-light: var(--brand-blue-light);
+  --color-brand-green-light: var(--brand-green-light);
 
   /* shadow */
   --shadow-form: var(--form-shadow);
 
   --color-status-todo: var(--status-todo);
-  --color-status-in-progress:var(--status-in-progress);
-  --color-status-blocked:var(--status-blocked);
-  --color-status-default:var(--status-default);
+  --color-status-in-progress: var(--status-in-progress);
+  --color-status-blocked: var(--status-blocked);
+  --color-status-default: var(--status-default);
   --color-mint-green: #65dca4;
- 
 }
 
 body {

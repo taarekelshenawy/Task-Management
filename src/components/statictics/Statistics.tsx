@@ -29,7 +29,7 @@ export default function Statictics() {
     to: endOfWeek(new Date(), { weekStartsOn: 6 }),
   };
 
-  const [appliedRange, setAppliedRange] = useState(initialRange);
+  const [appliedRange, setAppliedRange] = useState<DateRange>(initialRange);
   const [draftRange, setDraftRange] = useState<DateRange | undefined>(
     initialRange,
   );
@@ -52,21 +52,15 @@ export default function Statictics() {
     selectedStatus,
   );
 
-  const statuses: Record<string, number> = {};
+  interface ChartDataItem {
+    name: string;
+    value: number;
+  }
 
-  data?.daily.forEach(
-    (day: { day: string; statuses: Record<string, number> }) => {
-      Object.entries(day.statuses as Record<string, number>).forEach(
-        ([status, count]) => {
-          statuses[status] = (statuses[status] || 0) + count;
-        },
-      );
-    },
-  );
-
-  const chartData = Object.entries(statuses).map(([status, count]) => ({
-    name: status,
-    value: count,
+  const totals: ChartDataItem = data?.totals;
+  const chartData = Object.entries(totals || {}).map(([name, value]) => ({
+    name,
+    value,
   }));
 
   const projectOptions = [
@@ -77,8 +71,7 @@ export default function Statictics() {
     })) ?? []),
   ];
 
-  const total = chartData.reduce((sum, item) => sum + item.value, 0);
-
+  const total = data?.total_tasks;
   return (
     <div className="flex flex-col w-full overflow-hidden p-3 gap-10">
       <ProjectHeader />
@@ -92,6 +85,7 @@ export default function Statictics() {
         <div
           onClick={() => {
             setOpenCalender(!openCalender);
+
             setDraftRange(undefined);
           }}
           className="rounded-md px-4 py-2 cursor-pointer relative"
@@ -124,7 +118,6 @@ export default function Statictics() {
                       return;
                     }
 
-                    setDraftRange(range);
                     setAppliedRange(range);
 
                     setStartDate(format(range.from, 'yyyy-MM-dd'));

@@ -8,7 +8,6 @@ type StatisticsCalenderProps = {
   };
 };
 export default function StatisticsCalender({ item }: StatisticsCalenderProps) {
-  
   return (
     <div
       key={item.day}
@@ -35,7 +34,10 @@ export default function StatisticsCalender({ item }: StatisticsCalenderProps) {
               key={status}
               className={`flex items-start gap-2 justify-between rounded-lg bg-gray-100 px-3 py-2`}
             >
-              <span className={`text-sm font-bold`} style={{color:STATUS_COLORS_Charts[status]}}>
+              <span
+                className={`text-sm font-bold`}
+                style={{ color: STATUS_COLORS_Charts[status] }}
+              >
                 {status.replaceAll('_', ' ')}
               </span>
 

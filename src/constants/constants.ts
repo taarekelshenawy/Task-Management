@@ -9,7 +9,7 @@ export const STATUSES = [
   'DONE',
 ];
 
-export const statusColor:Record<string, string> = {
+export const statusColor: Record<string, string> = {
   TO_DO: 'bg-status-todo',
   IN_PROGRESS: 'bg-status-in-progress',
   BLOCKED: 'bg-status-blocked',

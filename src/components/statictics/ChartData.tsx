@@ -1,10 +1,9 @@
-// import { STATUS_COLORS } from '../../constants/constants';
-import { statusColor } from '../../constants/constants';
+import { STATUS_COLORS_Charts } from '../../constants/constants';
 
 type ChartDataProps = {
   item: {
-    value: number;
     name: string;
+    value: number;
   };
   total: number;
 };
@@ -14,6 +13,7 @@ export default function ChartData({ item, total }: ChartDataProps) {
     const result = (item / total) * 100;
     return result;
   };
+
   return (
     <div className="flex flex-col gap-2 ">
       <div className="flex justify-between">
@@ -25,7 +25,7 @@ export default function ChartData({ item, total }: ChartDataProps) {
           className="h-full rounded-full"
           style={{
             width: `${perCentage(item.value)}%`,
-            backgroundColor: statusColor[item.name],
+            backgroundColor: `${STATUS_COLORS_Charts[item.name]}`,
           }}
         />
       </div>
