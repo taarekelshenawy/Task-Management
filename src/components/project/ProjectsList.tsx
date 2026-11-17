@@ -178,7 +178,7 @@ export default function ProjectsList() {
                 <Link to={`/project/${project.id}/epics`}>
                   <div
                     key={project.id || `${project.name}-${project.created_at}`}
-                    className="bg-white max-w-76 max-h-80 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
+                    className="bg-white max-h-80 rounded-lg p-6 flex flex-col justify-between shadow-sm min-h-55"
                   >
                     <div>
                       <div className="flex justify-between items-start">
