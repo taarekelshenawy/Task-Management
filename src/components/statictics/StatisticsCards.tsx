@@ -14,8 +14,10 @@ export default function StatisticsCards({ data }: StatisticsCardsProps) {
     <div className="grid grid-cols-3 gap-10">
       <div className="flex justify-between rounded bg-white p-4 items-center  max-sm:flex-col-reverse max-sm:gap-2 max-sm:items-start ">
         <div>
-          <p className="font-bold text-slate-dark/60 text-sm">TOTAL TASKS</p>
-          <p className="text-3xl font-bold mt-2 text-slate-dark">
+          <p className="font-bold text-slate-dark/60 text-sm max-sm:text-[10px]">
+            TOTAL TASKS
+          </p>
+          <p className="text-3xl max-sm:text-xl font-bold mt-2 text-slate-dark">
             {data?.total_tasks}
           </p>
         </div>
@@ -25,10 +27,10 @@ export default function StatisticsCards({ data }: StatisticsCardsProps) {
       </div>
       <div className="flex justify-between rounded bg-white p-4 items-center max-sm:flex-col-reverse max-sm:gap-2 max-sm:items-start ">
         <div>
-          <p className="font-bold text-slate-dark/60 text-sm">
+          <p className="font-bold text-slate-dark/60 text-sm max-sm:text-[10px]">
             COMPLETED TASKS
           </p>
-          <p className="text-3xl font-bold mt-2 text-slate-dark">
+          <p className="text-3xl font-bold max-sm:text-xl mt-2 text-slate-dark">
             {data?.done_tasks}
           </p>
         </div>
@@ -38,8 +40,10 @@ export default function StatisticsCards({ data }: StatisticsCardsProps) {
       </div>
       <div className="flex justify-between bg-white p-4 rounded items-center max-sm:flex-col-reverse max-sm:gap-2 max-sm:items-start">
         <div>
-          <p className="font-bold text-slate-dark/60 text-sm">OVERDUE TASKS</p>
-          <p className="text-3xl font-bold mt-2 text-status-blocked">
+          <p className="font-bold text-slate-dark/60 text-sm max-sm:text-[10px]">
+            OVERDUE TASKS
+          </p>
+          <p className="text-3xl font-bold mt-2 max-sm:text-xl text-status-blocked">
             {data?.overdue_tasks}
           </p>
         </div>

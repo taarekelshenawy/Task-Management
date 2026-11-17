@@ -11,12 +11,12 @@ export default function ProjectCounts({ project }: ProjectProps) {
   return (
     <div
       key={project.project_name}
-      className="flex items-center justify-between min-w-72 rounded-lg p-4"
+      className="flex items-center justify-between rounded-lg"
     >
-      <div className="flex items-center gap-16">
-        <p className="font-semibold text-slate-dark">{project.project_name}</p>
+      <div className="flex items-center justify-between w-full gap-16 max-sm:text-[10px] font-bold">
+        <p className=" text-slate-dark">{project.project_name}</p>
 
-        <p className="text-sm font-bold">{project.tasks_count} Tasks</p>
+        <p>{project.tasks_count} Tasks</p>
       </div>
     </div>
   );

@@ -163,7 +163,7 @@ export default function Statictics() {
       <StatisticsCards data={data} />
 
       {/* calender */}
-      <div className="flex gap-5 items-center">
+      <div className="flex gap-3 lg:items-center sm:flex-col lg:flex-row max-sm:flex-col">
         {data?.daily.map(
           (item: { day: string; statuses: Record<string, number> }) => (
             <StatisticsCalender item={item} />
@@ -171,16 +171,16 @@ export default function Statictics() {
         )}
       </div>
 
-      <div className="flex items-center justify-between px-8 mt-20">
+      <div className="flex  md:flex-row sm:flex-col max-sm:flex-col items-start justify-between  px-8 mt-20  gap-6 ">
         {/* Left Side */}
-        <div className="flex flex-col flex-1">
+        <div className="flex flex-col flex-2 bg-white rounded-lg p-8 max-sm:p-5 sm:w-full  max-sm:w-full">
           <h2 className="text-2xl font-bold text-slate-dark mb-6">
             Tasks by Status
           </h2>
 
-          <div className="flex items-center gap-8">
+          <div className="flex items-center justify-between gap-3 ">
             {/* Pie Chart */}
-            <div className="relative h-64 w-80 shrink-0">
+            <div className="relative h-64 w-80 max-sm:w-45  shrink-0">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -216,7 +216,7 @@ export default function Statictics() {
         </div>
 
         {/* Projects */}
-        <div className="flex flex-col gap-4  ">
+        <div className="flex flex-col gap-4 flex-1 bg-white rounded-lg p-8 sm:w-full max-sm:w-full">
           <h2 className="font-bold text-xl">All Projects</h2>
           {projectCounts?.map((project) => (
             <ProjectCounts project={project} />

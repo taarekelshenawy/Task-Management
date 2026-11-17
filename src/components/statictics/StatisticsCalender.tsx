@@ -11,7 +11,7 @@ export default function StatisticsCalender({ item }: StatisticsCalenderProps) {
   return (
     <div
       key={item.day}
-      className=" min-h-96 rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
+      className=" lg:min-h-96 rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden"
     >
       {/* Header */}
       <div className="p-4">
